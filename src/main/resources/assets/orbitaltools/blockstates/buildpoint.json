@@ -1,0 +1,11 @@
+{
+	"variants": {
+		"enumstates=everything": { "model": "orbitaltools:buildpoint" },
+		"enumstates=everything_minus_pierce": { "model": "orbitaltools:buildpoint" },
+		"enumstates=add_structures": { "model": "orbitaltools:buildpoint" },
+		"enumstates=windows_rot_0": { "model": "orbitaltools:buildpoint" },
+		"enumstates=solar_panels": { "model": "orbitaltools:buildpoint" },
+		"enumstates=only_greenhouse": { "model": "orbitaltools:buildpoint" },
+		"enumstates=only_pierce": { "model": "orbitaltools:buildpoint" }
+	}
+}

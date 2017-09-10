@@ -1,0 +1,16 @@
+[
+{
+  "modid": "orbitaltools",
+  "name": "Orbital Tools",
+  "description": "Prefab for mod about space",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["kremnev8"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

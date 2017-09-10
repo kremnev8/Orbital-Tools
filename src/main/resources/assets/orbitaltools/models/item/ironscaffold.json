@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"side": "orbitaltools:blocks/iron_scaffold_sides",
+		"end": "orbitaltools:blocks/iron_scaffold_bottomtop"
+	}
+}

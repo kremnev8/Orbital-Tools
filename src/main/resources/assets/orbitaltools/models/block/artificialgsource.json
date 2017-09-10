@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "side": "orbitaltools:blocks/artificialGSmap2",
+		"top": "orbitaltools:blocks/artificialGSmap1",
+		"bottom": "orbitaltools:blocks/machine"
+    }
+}

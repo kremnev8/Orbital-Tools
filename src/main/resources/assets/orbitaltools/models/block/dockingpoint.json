@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "side": "orbitaltools:blocks/machine",
+		"top": "orbitaltools:blocks/machine_fuel_input",
+		"bottom": "orbitaltools:blocks/dockimg"
+    }
+}

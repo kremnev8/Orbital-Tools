@@ -1,0 +1,115 @@
+﻿
+orbitaltools.item.Builder.name=Строитель
+orbitaltools.item.ironScaffold.name=Железные леса
+orbitaltools.item.dockingComponent.name=Компонент стыковочного шлюза
+orbitaltools.item.brokenTin.name=Поврежеденная оловянная пластина
+orbitaltools.item.brokenSteel.name=Поврежеденная стальная пластина
+orbitaltools.item.brokenAluminum.name=Поврежеденная алюминиевая пластина
+orbitaltools.item.debugTool.name=Дебаг тул
+orbitaltools.item.Jetpack.name=Космический джетпак
+orbitaltools.item.schematicJetpack.name=Схема для верстака NASA
+orbitaltools.item.smallEngine.name=Маленький двигатель
+orbitaltools.item.Omni-Dir_Engine_Set.name=Всенаправлнный набор двигателей
+orbitaltools.item.emptyIdea.name=Замысел
+orbitaltools.item.filledIdea.name=Наброски
+orbitaltools.item.AGMotorMap.name=Гравитационное кольцо
+orbitaltools.item.steelIngot.name=Стальной слиток
+orbitaltools.item.AltMotor.name=Мотор
+orbitaltools.item.AltCoil.name=Катушка
+
+orbitaltools.block.buildPoint=Точка строительства
+orbitaltools.tile.dockingPoint=Стыковочный шлюз
+orbitaltools.tile.infoBlock=Info Block
+orbitaltools.tile.removeInfoBlock=Бортовой журнал
+orbitaltools.tile.artificialGsource=Источник искусственной гравитаций
+orbitaltools.tile.armorStand=Стойка для брони
+
+orbitaltools.descr_shift.Builder.name=Строитель позволяет строить разные модули на космических станциях
+orbitaltools.descr_shift.brokenTin.name=Она не выглядит пригодной для использования...
+orbitaltools.descr_shift.brokenSteel.name=Она не выглядит пригодной для использования...
+orbitaltools.descr_shift.brokenAluminum.name=Она не выглядит пригодной для использования...
+orbitaltools.descr_shift.Jetpack.name=Космический джетпак - это продвинутое устройство с помощью которого можно свободно перемешаться в условиях микрогравитации
+
+orbitaltools.descr_shift.dockingPoint.name=Стыковочный шлюз предназначен для пристыковки кораблей на космическую станцию. обычно его используют вместе одноименным модулем
+orbitaltools.descr_shift.artificialGsource.name=Данное устройство позволяет создать на космической станций искусственную гравитацию
+orbitaltools.descr_shift.armorStand.name=Данная стойка может заряжать броню а так заправлять некоторые устройства
+
+schematic.jetpack.name=Джетпак
+gui.rocket.warning.nopad.name=У меня нету взлетной площадки! Если я нажму запуск снова, пути назад не будет.
+choreo.messages.undock.name=Ракета начинает отстыковку!
+choreo.messages.burn.name=Ракета начинает 10 секундный маневр для изменения орбиты!
+
+builder.hall.name=Зал
+builder.corner.name=Угол
+builder.crossroad.name=Перекресток
+builder.airlock.name=Шлюз
+builder.window.name=Окно
+builder.cupola.name=Купол
+builder.dockport.name=Стыковочный модуль
+builder.greenhouse.name=Теплица
+builder.pierce.name="Пирс"
+builder.name=Строитель
+builder.successfully=Сервер успешно построил
+builder.failed=Строительство провалилось!
+builder.failed.noitems=Строительство провалилось! Недостаточно ресурсов для строительства.
+builder.failed.itemsreturn=Большинство предметов былы вернуты, но некоторые оказались повреждены...
+builder.solarpanel.name=Солнечная панель
+builder.thall.name=Т-коридор
+builder.bighall.name=Большой зал
+
+builder.build_button.name=Построить
+
+builder.window.rot0= в стене
+builder.window.rot1=-тупик
+
+builder.solarpanel.rot0=Базовая 
+builder.solarpanel.rot1=Продвинутая 
+
+builder.solarpanel.rot0_short=Базовая 
+builder.solarpanel.rot1_short=Продв. 
+
+builder.side_info.name=Имя структуры
+builder.side_info.connections=Соединений
+builder.side_info.add_connections=Доп. соединений
+builder.side_info.special_func=Особая функция
+builder.side_info.special_func.none=нет
+builder.side_info.required=Необходимые предметы
+
+builder.side_info.short.name=Имя
+builder.side_info.short.connections=Соединений
+builder.side_info.short.add_connections=Доп. соед.
+builder.side_info.short.special_func=Функция
+builder.side_info.short.required=Необходимые предметы
+
+builder.side_info.funcs.airlock.name=Встроенный шлюз
+builder.side_info.funcs.cupola.name=Вид на землю
+builder.side_info.funcs.dockport.name=+1 место для стыковки
+builder.side_info.funcs.greenhouse.name=Выращивание растений
+builder.side_info.funcs.solar.name=Генератор
+builder.side_info.funcs.pierce.name=Выход в космос
+
+builder.deconstruct.failed=Разборка провалилась!
+builder.deconstruct.partfailed=Разборка частично провалилась!
+builder.deconstruct.successfully=Сервер успешно разобрал выбранные структуры
+
+remover.name=Деконструктор
+remover.deconstruct_button.name=Разобрать
+
+remover.no_selected.name=Не выбрано ни одной структуры!
+remover.no_linked_tile.name=Не найден связанный TileEntityInfo блок!
+
+remover.haschilds_tip.name=Эта структура имеет дочерние объекты. чтобы ее удалить, вам надо сначала удалить все её дочерние объекты
+
+modificator.name=Настройщик
+modificator.direction.name=напр.
+modificator.rotation.name=повр.
+modificator.children.name=Дочерние
+modificator.additional.name=Дополнительные
+modificator.notready.name=Данный инструмент в данный момент находиться в активной разработке и получить доступ к нему нельзя!
+
+ForgeDirs.DOWN.name=Внизу(Down)
+ForgeDirs.UP.name=Ввреху(Up)
+ForgeDirs.NORTH.name=Север(North)
+ForgeDirs.SOUTH.name=Юг(South)
+ForgeDirs.WEST.name=Запад(West)
+ForgeDirs.EAST.name=Восток(East)

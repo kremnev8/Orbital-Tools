@@ -1,0 +1,115 @@
+
+orbitaltools.item.builder.name=Builder
+orbitaltools.item.ironscaffold.name=Iron Scaffold
+orbitaltools.item.dockingcomponent.name=Docking Port Component
+orbitaltools.item.brokentin.name=Broken Tin Plate
+orbitaltools.item.brokensteel.name=Broken Steel Plate
+orbitaltools.item.brokenaluminum.name=Broken Aluminum Plate
+orbitaltools.item.debugtool.name=Debug Tool
+orbitaltools.item.jetpack.name=Space Jetpack
+orbitaltools.item.schematicjetpack.name=NASA Workbench Schematic
+orbitaltools.item.smallengine.name=Small Engine
+orbitaltools.item.omni-dir_engine_set.name=Omni-directional Engines set
+orbitaltools.item.emptyidea.name=Empty Idea
+orbitaltools.item.filledidea.name=Filled Idea
+orbitaltools.item.agmotormap.name=Rotating Gravity Ring
+orbitaltools.item.steelingot.name=Steel ingot
+orbitaltools.item.altmotor.name=Motor
+orbitaltools.item.altcoil.name=Coil
+
+orbitaltools.block.buildpoint=Build Point
+orbitaltools.tile.dockingpoint=Docking Port
+orbitaltools.tile.infoblock=Info Block
+orbitaltools.tile.removeinfoblock=Logbook
+orbitaltools.tile.artificialgsource=Artificial Gravity Source
+orbitaltools.tile.armorstand=Armor Stand
+
+orbitaltools.descr_shift.builder.name=Builder allows you to build space station modules
+orbitaltools.descr_shift.brokentin.name=it not seems applicable...
+orbitaltools.descr_shift.brokensteel.name=it not seems applicable...
+orbitaltools.descr_shift.brokenaluminum.name=it not seems applicable...
+orbitaltools.descr_shift.jetpack.name=Space jetpack is a complex device intended to fly free within microgravity environment
+
+orbitaltools.descr_shift.dockingpoint.name=Docking port used to dock spaceships to space staion. usually it used with Docking port module
+orbitaltools.descr_shift.artificialgsource.name=this device allows to create artificial gravity on space staion
+orbitaltools.descr_shift.armorstand.name=This armor stand can charge armor and fuel some devices
+
+schematic.jetpack.name=Jetpack
+gui.rocket.warning.nopad.name=I don't have a landing pad! If I press launch again, there's no going back!
+choreo.messages.undock.name=Rocket Starting Undocking sequence!
+choreo.messages.burn.name=Rocket Starting 10 seconds burn to change orbit!
+
+builder.hall.name=Hall
+builder.corner.name=Corner
+builder.crossroad.name=Crossroad
+builder.airlock.name=Airlock
+builder.window.name=Window
+builder.cupola.name=Cupola
+builder.dockport.name=Dock Port
+builder.greenhouse.name=Greenhouse
+builder.pierce.name="Pierce"
+builder.name=Builder
+builder.successfully=Server successfully builded
+builder.failed=Building failed!
+builder.failed.noitems=Building failed! Not enough items to build structure.
+builder.failed.itemsreturn=Most items has been returned, but some get damaged...
+builder.solarpanel.name=Solar Panel
+builder.thall.name=T Hall
+builder.bighall.name=Bighall
+builder.build_button.name=Build
+
+builder.window.rot0= in wall
+builder.window.rot1=-stub
+
+builder.solarpanel.rot0=Basic 
+builder.solarpanel.rot1=Advanced 
+
+builder.solarpanel.rot0_short=Basic 
+builder.solarpanel.rot1_short=Adv. 
+
+builder.side_info.name=Structure name
+builder.side_info.connections=Connections
+builder.side_info.add_connections=Add connections
+builder.side_info.special_func=Special function
+builder.side_info.special_func.none=none
+builder.side_info.required=Required items
+
+builder.side_info.short.name=Name
+builder.side_info.short.connections=Connections
+builder.side_info.short.add_connections=Add connect.
+builder.side_info.short.special_func=Function
+builder.side_info.short.required=Required items
+
+builder.side_info.funcs.airlock.name=inline Airlock
+builder.side_info.funcs.cupola.name=Earth view
+builder.side_info.funcs.dockport.name=+1 Docking slot
+builder.side_info.funcs.greenhouse.name=Plants Growing
+builder.side_info.funcs.solar.name=Generator
+builder.side_info.funcs.pierce.name=Exit into space
+
+builder.deconstruct.failed=Deconstruction failed!
+builder.deconstruct.partfailed=Deconstruction partially failed!
+builder.deconstruct.successfully=Server successfully deconstructed selected structures
+
+remover.name=Remover
+remover.deconstruct_button.name=Deconstruct
+
+remover.no_selected.name=No selected structures found!
+remover.no_linked_tile.name=No linked TileEntityInfo block found!
+
+remover.haschilds_tip.name=This structure have child structures. Before it can be removed, you need to remove all its child structures 
+
+modificator.name=Modificator
+modificator.direction.name=dir.
+modificator.rotation.name=rot.
+modificator.children.name=Children
+modificator.additional.name=Additional
+modificator.notready.name=This tool is not fully implemented!
+
+
+ForgeDirs.DOWN.name=Down
+ForgeDirs.UP.name=Up
+ForgeDirs.NORTH.name=North
+ForgeDirs.SOUTH.name=South
+ForgeDirs.WEST.name=West
+ForgeDirs.EAST.name=East

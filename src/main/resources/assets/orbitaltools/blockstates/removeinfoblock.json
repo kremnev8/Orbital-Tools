@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "normal": { "model": "orbitaltools:removeinfoblock" },
+		"facing=east": { "model": "orbitaltools:removeinfoblock"},
+		"facing=south": { "model": "orbitaltools:removeinfoblock", "y": 90 },
+		"facing=west": { "model": "orbitaltools:removeinfoblock", "y": 180 },
+		"facing=north": { "model": "orbitaltools:removeinfoblock", "y": 270 }
+    }
+}
