@@ -18,9 +18,8 @@ import net.orbitallabs.renderer.animations.AnimationHandlerJetpack;
 
 public class SpaceJetpackCapability implements IStorage<ISpaceJetpackState> {
 	
-	
 	@CapabilityInject(ISpaceJetpackState.class)
-	static Capability<ISpaceJetpackState> SpaceJetpackCapability = null;
+	public static Capability<ISpaceJetpackState> SpaceJetpackCapability = null;
 	
 	public interface ISpaceJetpackState {
 		public AnimationHandler getAnimationHandler();

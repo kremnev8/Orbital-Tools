@@ -2,11 +2,10 @@
 package net.orbitallabs.items;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,38 +17,31 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.orbitallabs.ClientProxy;
 import net.orbitallabs.dimensions.WorldProviderOrbitModif;
-import net.orbitallabs.items.SpaceJetpackCapability.SpaceJetpackState;
-import net.orbitallabs.renderer.animations.AnimationHandlerJetpack;
+import net.orbitallabs.network.PacketHandler;
+import net.orbitallabs.network.packets.JetpackUseFuelPacket;
+import net.orbitallabs.network.packets.SyncPressedKeysPacket;
 import net.orbitallabs.utils.OrbitalModInfo;
 
-public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySerializable<NBTTagCompound> {
+public class ItemSpaceJetpack extends ItemArmorMod {
 	
 	static final ArmorMaterial material = EnumHelper.addArmorMaterial("JETPACK", "", 500, new int[] { 0, 0, 0, 0 }, 0,
 			SoundEvent.REGISTRY.getObject(new ResourceLocation("item.armor.equip_iron")), 5);
 	
-	public SpaceJetpackState state;
-	
 	public boolean activated = false;
 	
 	public static List<Integer> KeysPressed = new ArrayList();
-	
-	public FluidTank RCSFuel = new FluidTank(1750 * ConfigManagerCore.rocketFuelFactor);
 	
 	public double usedFuelAm = 0;
 	
@@ -69,7 +61,6 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 		this.setNoRepair();
 		this.setMaxDamage(0);
 		this.setShowDesrc(true);
-		state = new SpaceJetpackState();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -102,6 +93,7 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 			ticks_from_sent--;
 			return;
 		}
+		SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) itemStack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
 		
 		//	if (RCSFuel.getFluid() == null)this.RCSFuel.fill(new FluidStack(GalacticraftCore.fluidFuel, RCSFuel.getCapacity()), true);
 		NBTTagCompound tag = new NBTTagCompound();
@@ -112,43 +104,19 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 		if (itemStack.hasTagCompound())
 		{
 			this.readFromNBT(tag);
-			if (this.activated && world.isRemote && !state.getAnimationHandler().isAnimationActive("Enabled idle") && !state.getAnimationHandler().isAnimationActive("Enable")
-					&& !state.getAnimationHandler().isAnimationActive("Disable"))
-			{
-				state.getAnimationHandler().clearAnimations();
-				state.getAnimationHandler().activateAnimation("Enabled idle", 0);
-			} else if (!this.activated && world.isRemote && !state.getAnimationHandler().isAnimationActive("Disabled idle")
-					&& !state.getAnimationHandler().isAnimationActive("Disable") && !state.getAnimationHandler().isAnimationActive("Enable"))
-			{
-				state.getAnimationHandler().clearAnimations();
-				state.getAnimationHandler().activateAnimation("Disabled idle", 0);
-			}
-		} else if (world.isRemote)
-		{
-			//PacketHandler.sendToServer(new SyncPressedKeysPacket(false));
-			state.getAnimationHandler().clearAnimations();
-			state.getAnimationHandler().activateAnimation("Disabled idle", 0);
-			ticks_from_sent = 5;
 		}
-		/*	if (needSave)
+		if (needSave)
+		{
+			if (!world.isRemote)
 			{
-				if (!world.isRemote)
-				{
-					if (itemStack.hasTagCompound())
-					{
-						this.writeToNBT(itemStack.stackTagCompound);
-					} else
-					{
-						itemStack.stackTagCompound = new NBTTagCompound();
-						this.writeToNBT(itemStack.stackTagCompound);
-					}
-				} else
-				{
-					PacketHandler.sendToServer(new SyncPressedKeysPacket(activated));
-					ticks_from_sent = 5;
-				}
-				this.needSave = false;
-			}*/
+				cap.markDirty();
+			} else
+			{
+				PacketHandler.sendToServer(new SyncPressedKeysPacket(activated));
+				ticks_from_sent = 5;
+			}
+			this.needSave = false;
+		}
 		
 		if (world.isRemote)
 		{
@@ -236,9 +204,9 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 			
 			if (usedFuelAm >= 10)
 			{
-				//	player.addChatComponentMessage(new ChatComponentText("Used 10 mb of fuel!"));
+				//player.sendMessage(new TextComponentString("Used 10 mb of fuel!"));
 				usedFuelAm = 0;
-				//	PacketHandler.sendToServer(new JetpackUseFuelPacket());
+				PacketHandler.sendToServer(new JetpackUseFuelPacket());
 			}
 			
 		}
@@ -251,6 +219,9 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 	
 	public boolean isDisabled(EntityPlayer player, boolean useage)
 	{
+		ItemStack stack = player.inventory.armorItemInSlot(2);
+		SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) stack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+		
 		if (player.world.provider instanceof WorldProviderOrbitModif)
 		{
 			WorldProviderOrbitModif prow = (WorldProviderOrbitModif) player.world.provider;
@@ -263,7 +234,7 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 		{
 			return true;
 		}
-		if (RCSFuel.getFluidAmount() == 0)
+		if (cap.getTank().getFluidAmount() == 0)
 		{
 			return true;
 		}
@@ -277,19 +248,11 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 	public void readFromNBT(NBTTagCompound tag)
 	{
 		activated = tag.getBoolean("Enabled");
-		if (tag.hasKey("fuelTank"))
-		{
-			this.RCSFuel.readFromNBT(tag.getCompoundTag("fuelTank"));
-		}
 	}
 	
 	public void writeToNBT(NBTTagCompound tag)
 	{
 		tag.setBoolean("Enabled", activated);
-		if (this.RCSFuel.getFluid() != null)
-		{
-			tag.setTag("fuelTank", this.RCSFuel.writeToNBT(new NBTTagCompound()));
-		}
 	}
 	
 	public void markDirty()
@@ -302,20 +265,20 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 		this.updateValues = true;
 	}
 	
-	public void setActive(boolean state)
+	public void setActive(boolean cap)
 	{
-		//	PacketHandler.sendToServer(new SyncPressedKeysPacket(state));
-		activated = state;
+		PacketHandler.sendToServer(new SyncPressedKeysPacket(cap));
+		activated = cap;
 		ticks_from_sent = 5;
 	}
 	
-	//	@Override
-	//	public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
-	//	{
-	//		return new FluidHandlerItemStack(stack, capacity);
-	//	}
-	
 	@Override
+	public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
+	{
+		return new SpaceJetpackItemStackCap(stack);
+	}
+	
+	/*@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing)
 	{
 		if (capability == SpaceJetpackCapability.SpaceJetpackCapability)
@@ -330,16 +293,16 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 	{
 		if (capability == SpaceJetpackCapability.SpaceJetpackCapability)
 		{
-			return (T) state;
+			return (T) cap;
 		}
 		return null;
-	}
+	}*/
 	
-	@Override
+	/*@Override
 	public NBTTagCompound serializeNBT()
 	{
 		NBTTagCompound properties = new NBTTagCompound();
-		HashMap<String, Float> anims = ((AnimationHandlerJetpack) state.getAnimationHandler()).getCurrentActiveAnimations();
+		HashMap<String, Float> anims = ((AnimationHandlerJetpack) cap.getAnimationHandler()).getCurrentActiveAnimations();
 		if (!anims.isEmpty())
 		{
 			Set an = anims.keySet();
@@ -374,12 +337,12 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ICapabilitySeriali
 						String[] kkvv = kv.split("-");
 						String k = kkvv[0];
 						Float v = Float.valueOf(kkvv[1]);
-						state.getAnimationHandler().activateAnimation(k, v);
+						cap.getAnimationHandler().activateAnimation(k, v);
 					}
 				}
 			}
 		}
 		
-	}
+	}*/
 	
 }

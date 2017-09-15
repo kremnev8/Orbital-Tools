@@ -14,6 +14,8 @@ public class Config {
 	public static boolean makeSpaceStructureControlBlocksUnbreakable;
 	public static boolean disableUnstableContent;
 	
+	public static boolean forceEnableSteelIngot;
+	
 	public static final String DIMENSIONS = "dimensions";
 	
 	public Config()
@@ -33,14 +35,19 @@ public class Config {
 			idDimensionMarsSpaceStationStatic = cfg
 					.get(DIMENSIONS, "idDimensionMarsSpaceStationStatic", 41, "WorldProvider ID for Static Space Stations (advanced: do not change unless you have conflicts)")
 					.getInt(41);
-			alterOverworldSpaceStation = cfg.get(DIMENSIONS, "alterOverworldSpaceStation", true, "if set to true Earth space station will be changed my variant").getBoolean(true);
+			alterOverworldSpaceStation = cfg.get(DIMENSIONS, "alterOverworldSpaceStation", true, "if set to true Earth space station will be changed to my variant")
+					.getBoolean(true);
 			
 			makeSpaceStructureControlBlocksUnbreakable = cfg.get(Configuration.CATEGORY_GENERAL, "makeControlBlocksUnbreakable", true,
 					"if set to true all blocks which are used to control space station building will be unbreakable (advanced: do not change unless you know what you doing)")
 					.getBoolean(true);
 			disableUnstableContent = cfg
 					.get(Configuration.CATEGORY_GENERAL, "disableUnstableContent", true,
-							"if set to true blocks, items and other work in progrees content will be enabled (advanced: before doing so recommended to make backup)")
+							"if set to false blocks, items and other work in progrees content will be enabled (advanced: before doing so recommended to make backup)")
+					.getBoolean(true);
+			forceEnableSteelIngot = cfg
+					.get(Configuration.CATEGORY_GENERAL, "forceEnableSteelIngot", true,
+							"if set to true Steel Ingot will be enabeled even when it is not needed(Recomended before adding new mods with Steel to set this to true)")
 					.getBoolean(true);
 			
 		} catch (Exception e)

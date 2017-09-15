@@ -3,10 +3,15 @@ package net.orbitallabs.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.orbitallabs.items.SpaceJetpackCapability;
+import net.orbitallabs.items.SpaceJetpackItemStackCap;
+import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.utils.OTLoger;
 
 public class AnimationTellServerPacket implements IMessage {
@@ -45,15 +50,19 @@ public class AnimationTellServerPacket implements IMessage {
 			if (ctx.getServerHandler().playerEntity != null)
 			{
 				EntityPlayer player = ctx.getServerHandler().playerEntity;
-				//ExtendedPlayer prop = ExtendedPlayer.get(player);
+				ItemStack stack = player.inventory.armorItemInSlot(2);
+				SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) stack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+				if (cap == null) return null;
 				if (pkt.act)
 				{
-					//	prop.getAnimationHandler().activateAnimation(pkt.name, 0);
+					cap.getAnimationHandler().activateAnimation(pkt.name, 0);
 				} else
 				{
-					//	prop.getAnimationHandler().stopAnimation(pkt.name);
+					cap.getAnimationHandler().stopAnimation(pkt.name);
 				}
-				//PacketHandler.sendToDimension(new OtherPlayerAnimationPacket(pkt.name, player.getCommandSenderName(), pkt.act), player.worldObj.provider.dimensionId);
+				cap.markDirty();
+				PacketHandler.sendToDimension(new OtherPlayerAnimationPacket(pkt.name, player.getDisplayName().getUnformattedText(), pkt.act),
+						player.world.provider.getDimension());
 				//GLoger.logInfo("packet+1");
 			} else
 			{

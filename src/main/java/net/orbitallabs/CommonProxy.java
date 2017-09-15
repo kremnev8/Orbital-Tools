@@ -62,7 +62,7 @@ public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		
+		//OTLoger.logInfo("pre init : ingotSteel -" + Boolean.toString(OreDictionary.doesOreNameExist("ingotSteel")));
 		PacketHandler.register();
 		Config.init("orbitaltools");
 		BlockMod.init();
@@ -74,6 +74,7 @@ public class CommonProxy {
 	
 	public void init(FMLInitializationEvent event)
 	{
+		//OTLoger.logInfo("init : ingotSteel -" + Boolean.toString(OreDictionary.doesOreNameExist("ingotSteel")));
 		NetworkRegistry.INSTANCE.registerGuiHandler(OrbitalTools.instance, new GuiHandler());
 		
 		SchematicRegistry.registerSchematicRecipe(new SchematicJetpack());
@@ -201,7 +202,7 @@ public class CommonProxy {
 	
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		
+		//OTLoger.logInfo("post init : ingotSteel -" + Boolean.toString(OreDictionary.doesOreNameExist("ingotSteel")));
 	}
 	
 	public void spawnParticle(String particleID, Vector3 position, Vector3 motion, Object[] otherInfo)

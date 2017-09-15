@@ -12,7 +12,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
+import net.orbitallabs.utils.Config;
 import net.orbitallabs.utils.IDescrObject;
+import net.orbitallabs.utils.OTLoger;
 import net.orbitallabs.utils.OrbitalModInfo;
 
 public class ItemMod extends Item implements IDescrObject {
@@ -77,13 +79,14 @@ public class ItemMod extends Item implements IDescrObject {
 		filledIdea = new ItemMod("filledidea");
 		
 		rotatingRing = new ItemMod("agmotormap");
-		if (OreDictionary.doesOreNameExist("ingotSteel"))
+		if (OreDictionary.doesOreNameExist("ingotSteel") && !Config.forceEnableSteelIngot)
 		{
 			ItemStack stack = OreDictionary.getOres("ingotSteel").get(0);
 			ingSteel = stack.getItem();
 			ingSteelMeta = stack.getItemDamage();
 		} else
 		{
+			OTLoger.logInfo("adding Steel ingot");
 			ingSteel = new ItemMod("steelingot");
 			OreDictionary.registerOre("ingotSteel", ingSteel);
 		}

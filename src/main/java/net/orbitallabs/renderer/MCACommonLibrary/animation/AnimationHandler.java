@@ -97,6 +97,8 @@ public abstract class AnimationHandler {
 	
 	public void animationsUpdate()
 	{
+		
+		this.updateAnim(animatedEntity, animCurrentFrame);
 		int lastSize = animCurrentChannels.size();
 		for (Iterator<Channel> it = animCurrentChannels.iterator(); it.hasNext();)
 		{
@@ -110,7 +112,6 @@ public abstract class AnimationHandler {
 				anim = it.next();
 			} catch (ConcurrentModificationException e)
 			{
-				e.printStackTrace();
 				return;
 			}
 			if (anim != null)
@@ -118,8 +119,11 @@ public abstract class AnimationHandler {
 				try
 				{
 					float prevFrame = animCurrentFrame.get(anim.name);
-					//	this.updateAnim(animatedEntity, anim, animCurrentFrame);
 					boolean animStatus = updateAnimation(animatedEntity, anim, animPrevTime, animCurrentFrame);
+					if (!animStatus)
+					{
+						int i = 0;
+					}
 					if (animCurrentFrame.get(anim.name) != null)
 					{
 						fireAnimationEvent(anim, prevFrame, animCurrentFrame.get(anim.name));
@@ -201,7 +205,7 @@ public abstract class AnimationHandler {
 		}
 	}
 	
-	public abstract boolean updateAnim(IMCAnimatedEntity entity, Channel channel, HashMap<String, Float> prevFrameAnim);
+	public abstract boolean updateAnim(IMCAnimatedEntity entity, HashMap<String, Float> prevFrameAnim);
 	
 	/** Update animation values. Return false if the animation should stop. */
 	public static boolean updateAnimation(IMCAnimatedEntity entity, Channel channel, HashMap<String, Long> prevTimeAnim, HashMap<String, Float> prevFrameAnim)

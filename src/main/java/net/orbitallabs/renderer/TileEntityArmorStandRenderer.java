@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
@@ -144,9 +145,9 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 				if (helmModel != null)
 				{
 					this.steve.inventory.armorInventory.set(aType.getIndex(), helmStack);
-					//this.renderSteve = true;
-					bindTexture(new ResourceLocation(helmTexture));
-					helmModel.render(steve, steve.limbSwing, steve.limbSwingAmount, steve.getAge(), steve.rotationYawHead, 0, 0.0625F);
+					this.renderSteve = true;
+					//bindTexture(new ResourceLocation(helmTexture));
+					//helmModel.render(steve, steve.limbSwing, steve.limbSwingAmount, steve.getAge(), steve.rotationYawHead, 0, 0.0625F);
 				} else
 				{
 					GL11.glScalef(1.02F, 1.02F, 1.02F);
@@ -203,9 +204,9 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 				if (cuirassModel != null)
 				{
 					this.steve.inventory.armorInventory.set(aType.getIndex(), chestStack);
-					//this.renderSteve = true;
-					bindTexture(new ResourceLocation(cuirassTexture));
-					cuirassModel.render(steve, steve.limbSwing, steve.limbSwingAmount, steve.getAge(), steve.rotationYawHead, 0, 0.0625F);
+					this.renderSteve = true;
+					//bindTexture(new ResourceLocation(cuirassTexture));
+					//cuirassModel.render(steve, steve.limbSwing, steve.limbSwingAmount, steve.getAge(), steve.rotationYawHead, 0, 0.0625F);
 				} else
 				{
 					GL11.glScalef(1.12F, 1.12F, 1.12F);
@@ -267,9 +268,9 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 				if (greavesModel != null)
 				{
 					this.steve.inventory.armorInventory.set(aType.getIndex(), legginsStack);
-					//this.renderSteve = true;
-					bindTexture(new ResourceLocation(greavesTexture));
-					greavesModel.render(steve, steve.limbSwing, steve.limbSwingAmount, steve.getAge(), steve.rotationYawHead, 0, 0.0625F);
+					this.renderSteve = true;
+					//bindTexture(new ResourceLocation(greavesTexture));
+					//greavesModel.render(steve, steve.limbSwing, steve.limbSwingAmount, steve.getAge(), steve.rotationYawHead, 0, 0.0625F);
 				} else
 				{
 					GL11.glScalef(1.05F, 1.05F, 1.05F);
@@ -331,9 +332,9 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 				if (bootsModel != null)
 				{
 					this.steve.inventory.armorInventory.set(aType.getIndex(), bootsStack);
-					//this.renderSteve = true;
-					bindTexture(new ResourceLocation(bootsTexture));
-					bootsModel.render(steve, steve.limbSwing, steve.limbSwingAmount, steve.getAge(), steve.rotationYawHead, 0, 0.0625F);
+					this.renderSteve = true;
+					//bindTexture(new ResourceLocation(bootsTexture));
+					//bootsModel.render(steve, steve.limbSwing, steve.limbSwingAmount, steve.getAge(), steve.rotationYawHead, 0, 0.0625F);
 				} else
 				{
 					bindTexture(new ResourceLocation(bootsTexture));
@@ -355,12 +356,9 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 		}
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
-		//	GL11.glRotatef(this.degreeAngle, 0.0F, 2.0F, 0.0F);
-		//	GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glTranslatef(0, -0.01F, 0);
 		rot = te.getBlockMetadata();
 		GL11.glPushMatrix();
-		//GL11.glTranslated(dx, dy, dz);
 		GL11.glTranslatef(0.5F, 1.5F, 0.5F);
 		if (rot == 0)
 		{
@@ -375,7 +373,6 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 		{
 			GL11.glRotatef(180, -1.0F, 0.0F, -1.0F);
 		}
-		// GL11.glTranslatef(0F, 0F, 0.1F);
 		
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -452,56 +449,25 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 		
 		GL11.glEnable(GL11.GL_LIGHTING);
 		
-		//GL11.glTranslatef(0, 0.01F, 0);
-		GL11.glPopMatrix();
-		/*if (this.renderSteve)
+		if (this.renderSteve)
 		{
 			GL11.glPushMatrix();
-			GL11.glTranslatef((float) 0.5F, (float) 1.75F, (float) 0.5F);
+			GL11.glTranslatef((float) 0.5F, (float) 0.15F, (float) 0.5F);
 			GL11.glScalef(1.0F, -1.0F, -1.0F);
 			GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(this.degreeAngle - 180, 0.0F, 1.0F, 0.0F);
 			
-			//	mng.renderEntityStatic(this.steve, partialTicks, false);
-			
 			float f = steve.prevRotationYaw + (steve.rotationYaw - steve.prevRotationYaw) * partialTicks;
 			int i = steve.getBrightnessForRender(partialTicks);
 			
-			EntityPlayer player = Minecraft.getMinecraft().player;
-			
 			int j = i % 65536;
 			int k = i / 65536;
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			mng.doRenderEntity(steve, 0, 0, 0, f, partialTicks, true);
-			
 			GL11.glPopMatrix();
-		}*/
-		//GL11.glTranslatef(0, -0.01F, 0);
+		}
+		GL11.glPopMatrix();
 	}
-	
-	/*
-	 * public void renderText(String text, String text2, String text3, String
-	 * text4, String text5, int numlines, double yadjust, double zadjust) {
-	 * FontRenderer fontRender = func_147498_b(); GL11.glDepthMask(false);
-	 * 
-	 * GL11.glScalef(0.005F, 0.005F, 0.005F); GL11.glTranslated(0.0D, 100.0D +
-	 * yadjust, -45.0D + zadjust);
-	 * 
-	 * int adjust = fontRender.func_78256_a(text) / 2;
-	 * fontRender.func_85187_a(text, -adjust, 0, Config.color,
-	 * Config.textshadow); if (numlines > 1) { int adjust2 =
-	 * fontRender.func_78256_a(text2) / 2; fontRender.func_85187_a(text2,
-	 * -adjust2, 10, Config.color2, Config.textshadow); } if (numlines > 2) {
-	 * int adjust3 = fontRender.func_78256_a(text3) / 2;
-	 * fontRender.func_85187_a(text3, -adjust3, 20, Config.color2,
-	 * Config.textshadow); } if (numlines > 3) { int adjust4 =
-	 * fontRender.func_78256_a(text4) / 2; fontRender.func_85187_a(text4,
-	 * -adjust4, 30, Config.color2, Config.textshadow); } if (numlines > 4) {
-	 * int adjust5 = fontRender.func_78256_a(text5) / 2;
-	 * fontRender.func_85187_a(text5, -adjust5, 40, Config.color2,
-	 * Config.textshadow); } GL11.glDepthMask(true); }
-	 */
 	
 	public String getArmor(String itemStackName, EntityEquipmentSlot aType)
 	{

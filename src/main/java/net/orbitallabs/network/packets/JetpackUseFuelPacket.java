@@ -3,12 +3,13 @@ package net.orbitallabs.network.packets;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.orbitallabs.items.ItemMod;
-import net.orbitallabs.items.ItemSpaceJetpack;
+import net.orbitallabs.items.SpaceJetpackCapability;
+import net.orbitallabs.items.SpaceJetpackItemStackCap;
 
 public class JetpackUseFuelPacket implements IMessage {
 	public JetpackUseFuelPacket()
@@ -37,18 +38,11 @@ public class JetpackUseFuelPacket implements IMessage {
 				{
 					if (player.inventory.armorItemInSlot(2) != null && player.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
 					{
-						ItemSpaceJetpack jetpack = (ItemSpaceJetpack) player.inventory.armorItemInSlot(2).getItem();
 						ItemStack is = player.inventory.armorItemInSlot(2);
+						SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) is.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
 						
-						jetpack.RCSFuel.drain(10, true);
-						if (is.hasTagCompound())
-						{
-							jetpack.writeToNBT(is.getTagCompound());
-						} else
-						{
-							is.setTagCompound(new NBTTagCompound());
-							jetpack.writeToNBT(is.getTagCompound());
-						}
+						cap.RCSFuel.drain(10, true);
+						cap.markDirty();
 					}
 				}
 			}

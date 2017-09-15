@@ -6,8 +6,13 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.orbitallabs.items.ItemSpaceJetpack;
+import net.orbitallabs.items.SpaceJetpackCapability;
+import net.orbitallabs.items.SpaceJetpackItemStackCap;
 import net.orbitallabs.renderer.MCAClientLibrary.MCAModelRenderer;
+import net.orbitallabs.renderer.MCACommonLibrary.animation.AnimationHandler;
 import net.orbitallabs.renderer.MCACommonLibrary.math.Matrix4f;
 import net.orbitallabs.renderer.MCACommonLibrary.math.Quaternion;
 
@@ -222,12 +227,13 @@ public class ModelJetpack extends ModelBiped {
 				// GL11.glRotatef(180, 0F, 0F, 1F);
 				GL11.glTranslatef(0.0F, 0.0F, -0.12F);
 				// GL11.glTranslatef(0, 0, 180 * 0.0625F);
-				//	ItemSpaceJetpack item = (ItemSpaceJetpack) pl.getCurrentArmor(2).getItem();
-				//	ExtendedPlayer prop = ExtendedPlayer.get(pl);
-				//	if (prop != null)
-				//	{TODO: animations
-				//		AnimationHandler.performAnimationInModel(parts, prop);
-				//	}
+				ItemStack item = pl.inventory.armorItemInSlot(2);
+				SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) item.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+				
+				if (cap != null)
+				{
+					AnimationHandler.performAnimationInModel(parts, cap);
+				}
 				GL11.glDisable(GL11.GL_CULL_FACE);
 				// render(par7, (ItemSpaceJetpack)
 				// pl.getCurrentArmor(2).getItem());

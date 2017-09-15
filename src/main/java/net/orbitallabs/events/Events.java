@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -49,6 +50,8 @@ import net.orbitallabs.dimensions.WorldProviderOrbitModif;
 import net.orbitallabs.entity.EntityRocketFakeTiered;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.items.ItemSpaceJetpack;
+import net.orbitallabs.items.SpaceJetpackCapability;
+import net.orbitallabs.items.SpaceJetpackItemStackCap;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.LaunchRocketPacket;
 import net.orbitallabs.network.packets.SetThirdPersonPacket;
@@ -371,16 +374,17 @@ public class Events {
 			
 			drawTexturedModalRect(xPos, yPos, 0, 0, 19, 47);
 			
-			ItemSpaceJetpack jetpack = (ItemSpaceJetpack) mc.player.inventory.armorItemInSlot(2).getItem();
+			ItemStack jetpack = mc.player.inventory.armorItemInSlot(2);
+			SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) jetpack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
 			
 			int fuelLevel;
 			
-			if (jetpack.RCSFuel.getCapacity() <= 0)
+			if (cap.RCSFuel.getCapacity() <= 0)
 			{
 				fuelLevel = 0;
 			} else
 			{
-				fuelLevel = jetpack.RCSFuel.getFluidAmount() * 44 / jetpack.RCSFuel.getCapacity() / ConfigManagerCore.rocketFuelFactor;
+				fuelLevel = cap.RCSFuel.getFluidAmount() * 44 / cap.RCSFuel.getCapacity() / ConfigManagerCore.rocketFuelFactor;
 			}
 			drawTexturedModalRect(xPos + 1, yPos + 1 + 44 - fuelLevel, 19, 45 - fuelLevel, 44, fuelLevel);
 			

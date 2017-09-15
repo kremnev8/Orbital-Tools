@@ -148,7 +148,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public ItemStack getStackInSlot(int par1)
 	{
-		if (par1 < this.getSizeInventory())
+		if (par1 > 0 && par1 < this.getSizeInventory())
 		{
 			return this.chestContents.get(par1);
 		}
@@ -158,7 +158,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public ItemStack decrStackSize(int par1, int par2)
 	{
-		if (par1 < this.getSizeInventory())
+		if (par1 > 0 && par1 < this.getSizeInventory())
 		{
 			if (this.chestContents.get(par1) != null)
 			{
@@ -208,7 +208,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
-		if (par1 < this.getSizeInventory())
+		if (par1 > 0 && par1 < this.getSizeInventory())
 		{
 			this.chestContents.set(par1, par2ItemStack);
 			
@@ -941,9 +941,13 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public ItemStack removeStackFromSlot(int index)
 	{
-		ItemStack stack = chestContents.get(index).copy();
-		chestContents.set(index, ItemStack.EMPTY);
-		return stack;
+		if (index > 0 && index < this.getSizeInventory())
+		{
+			ItemStack stack = chestContents.get(index).copy();
+			chestContents.set(index, ItemStack.EMPTY);
+			return stack;
+		}
+		return ItemStack.EMPTY;
 	}
 	
 	@Override

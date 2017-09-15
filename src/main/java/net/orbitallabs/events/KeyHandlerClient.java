@@ -9,14 +9,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
 import net.orbitallabs.entity.EntityRocketFakeTiered;
 import net.orbitallabs.entity.EntityRocketFakeTiered.EnumLaunchPhase;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.items.ItemSpaceJetpack;
+import net.orbitallabs.items.SpaceJetpackCapability;
+import net.orbitallabs.items.SpaceJetpackItemStackCap;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.DismountPacket;
 import net.orbitallabs.network.packets.OpenRocketFuelGuiPacket;
+import net.orbitallabs.renderer.animations.AnimationHandlerJetpack;
 import net.orbitallabs.utils.OrbitalModInfo;
 
 public class KeyHandlerClient extends KeyHandler {
@@ -85,22 +90,29 @@ public class KeyHandlerClient extends KeyHandler {
 			} else if (kb.getKeyCode() == TestAnim.getKeyCode() && playerBase.inventory.armorItemInSlot(2) != null
 					&& playerBase.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
 			{
-				ItemSpaceJetpack jetpack = (ItemSpaceJetpack) playerBase.inventory.armorItemInSlot(2).getItem();
-				//ExtendedPlayer prop = ExtendedPlayer.get(playerBase);
-				/*TODO: jetpack key system
-				if (prop.getAnimationHandler().isAnimationActive("Enabled idle"))
+				ItemStack stack = playerBase.inventory.armorItemInSlot(2);
+				ItemSpaceJetpack jetpack = (ItemSpaceJetpack) stack.getItem();
+				
+				SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) stack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+				if (cap != null)
 				{
-					jetpack.setActive(false);
-					((AnimationHandlerJetpack) prop.getAnimationHandler()).activateAnimation("Disable", 0, true);
-				} else if (prop.getAnimationHandler().isAnimationActive("Disabled idle"))
-				{
-					jetpack.setActive(true);
-					((AnimationHandlerJetpack) prop.getAnimationHandler()).activateAnimation("Enable", 0, true);
-				} else if (prop.getAnimationHandler().animCurrentChannels.size() == 0)
-				{
-					jetpack.setActive(true);
-					((AnimationHandlerJetpack) prop.getAnimationHandler()).activateAnimation("Enable", 0, true);
-				}*/
+					if (cap.getAnimationHandler().isAnimationActive("Enabled idle"))
+					{
+						jetpack.setActive(false);
+						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Disable", 0, true);
+						//cap.markDirty();
+					} else if (cap.getAnimationHandler().isAnimationActive("Disabled idle"))
+					{
+						jetpack.setActive(true);
+						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Enable", 0, true);
+						//cap.markDirty();
+					} else if (cap.getAnimationHandler().animCurrentChannels.size() == 0)
+					{
+						jetpack.setActive(true);
+						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Enable", 0, true);
+						//	cap.markDirty();
+					}
+				}
 			}
 		}
 		

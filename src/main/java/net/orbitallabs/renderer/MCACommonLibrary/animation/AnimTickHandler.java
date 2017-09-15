@@ -1,6 +1,7 @@
 package net.orbitallabs.renderer.MCACommonLibrary.animation;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -29,20 +30,26 @@ public class AnimTickHandler {
 		{
 			if (event.phase == Phase.START)
 			{
-				for (IMCAnimatedEntity entity : activeEntities)
+				try
 				{
-					entity.getAnimationHandler().animationsUpdate();
+					for (IMCAnimatedEntity entity : activeEntities)
+					{
+						entity.getAnimationHandler().animationsUpdate();
+						
+						//	if(((Entity)entity).isDead) {
+						//		removableEntities.add(entity);
+						//}
+					}
 					
-					//	if(((Entity)entity).isDead) {
-					//		removableEntities.add(entity);
-					//}
-				}
-				
-				for (IMCAnimatedEntity entity : removableEntities)
+					for (IMCAnimatedEntity entity : removableEntities)
+					{
+						activeEntities.remove(entity);
+					}
+					removableEntities.clear();
+				} catch (ConcurrentModificationException e)
 				{
-					activeEntities.remove(entity);
+					
 				}
-				removableEntities.clear();
 			}
 		}
 	}
