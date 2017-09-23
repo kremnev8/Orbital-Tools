@@ -31,6 +31,7 @@ public class AnimationHandlerJetpack extends AnimationHandler {
 	
 	public void activateAnimation(String name, float startingFrame, boolean tellServer)
 	{
+		//OTLoger.logInfo("Activated: " + name);
 		if (name.equals("Enable") && this.animCurrentFrame.containsKey("Disabled idle"))
 		{
 			this.stopAnimation("Disabled idle");
@@ -131,6 +132,7 @@ public class AnimationHandlerJetpack extends AnimationHandler {
 	@Override
 	public void stopAnimation(String name)
 	{
+		//OTLoger.logInfo("Stopped: " + name);
 		this.stopAnimation(name, true);
 	}
 }

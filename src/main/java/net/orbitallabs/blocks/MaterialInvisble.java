@@ -16,10 +16,8 @@ public class MaterialInvisble extends Material {
 		return false;
 	}
 	
-	/**
-	 * Will prevent grass from growing on dirt underneath and kill any grass below it if it returns true
-	 */
-	public boolean getCanBlockGrass()
+	@Override
+	public boolean isReplaceable()
 	{
 		return false;
 	}

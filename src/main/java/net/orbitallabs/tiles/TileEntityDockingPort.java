@@ -370,7 +370,6 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 				}
 			}
 		}
-		// alfa compactability. deleting all invalid entities
 		if (this.isInvalid())
 		{
 			this.world.setBlockToAir(pos);
@@ -381,9 +380,9 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 		{
 			if (rocket.launchPhase == EnumLaunchPhase.FLYAWAY.ordinal() || rocket.launchPhase == EnumLaunchPhase.LAUNCHED.ordinal())
 			{
-				this.setInventorySlotContents(this.getSizeInventory() - 3, null);
+				this.setInventorySlotContents(this.getSizeInventory() - 3, ItemStack.EMPTY);
 			}
-			this.setInventorySlotContents(this.getSizeInventory() - 2, null);
+			this.setInventorySlotContents(this.getSizeInventory() - 2, ItemStack.EMPTY);
 			this.fuelTank.drain(this.fuelTank.getCapacity(), true);
 			rocket = null;
 		}
@@ -481,7 +480,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 				}
 			}
 		}
-		if (this.getStackInSlot(this.getSizeInventory() - 2) != null)
+		if (this.getStackInSlot(this.getSizeInventory() - 2) != ItemStack.EMPTY)
 		{
 			if (this.getStackInSlot(this.getSizeInventory() - 2).getItemDamage() > 4)
 			{
@@ -503,7 +502,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 			}
 		}
 		// start massive check for rocket item
-		if (this.getStackInSlot(this.getSizeInventory() - 2) != null)
+		if (this.getStackInSlot(this.getSizeInventory() - 2) != ItemStack.EMPTY)
 		{
 			if (this.getStackInSlot(this.getSizeInventory() - 2).getItem() == GCItems.rocketTier1
 					|| this.getStackInSlot(this.getSizeInventory() - 2).getItem() == MarsItems.rocketMars
@@ -524,10 +523,8 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 				if (rocket == null && !world.isRemote)
 				{
 					int tier = EntityRocketFakeTiered.getTierFromItem(this.getStackInSlot(this.getSizeInventory() - 2));
-					double hight = 1.8D;
-					if (tier == 2) hight = 1.9D;
-					else if (tier == 3) hight = 2.4D;
-					rocket = new EntityRocketFakeTiered(world, pos.getX() + 0.5D, pos.getY() - hight, pos.getZ() + 0.5D, tier, this);
+					
+					rocket = new EntityRocketFakeTiered(world, pos.getX() + 0.5D, pos.getY() - EntityRocketFakeTiered.getDockingOffset(tier), pos.getZ() + 0.5D, tier, this);
 					// creating fuel tank for rocket fuel size
 					this.fuelTank = new FluidTank(rocket.getFuelTankCapacity() * ConfigManagerCore.rocketFuelFactor);
 					
@@ -555,6 +552,17 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 					if (rocket.getTier() != tier || anotherItem)
 					{
 						rocket.setTier(tier);
+						
+						if (tier == 1)
+						{
+							rocket.setSize(1.2F, 3.5F);
+						} else if (tier == 2)
+						{
+							rocket.setSize(1.2F, 4.5F);
+						} else if (tier == 3)
+						{
+							rocket.setSize(1.8F, 6F);
+						}
 						// updating fuel tank also
 						this.fuelTank = new FluidTank(rocket.getFuelTankCapacity() * ConfigManagerCore.rocketFuelFactor);
 						
@@ -571,10 +579,8 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 						}
 						rocket.fuelTank = fuelTank;
 						// and repositioning
-						double hight = 1.8D;
-						if (tier == 2) hight = 1.9D;
-						else if (tier == 3) hight = 2.4D;
-						rocket.setPositionAndRotation(pos.getX() + 0.5D, pos.getY() - hight, pos.getZ() + 0.5D, rocket.rotationYaw, rocket.rotationPitch);
+						rocket.setPositionAndRotation(pos.getX() + 0.5D, pos.getY() - EntityRocketFakeTiered.getDockingOffset(tier), pos.getZ() + 0.5D, rocket.rotationYaw,
+								rocket.rotationPitch);
 					}
 				}
 				

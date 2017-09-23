@@ -96,7 +96,8 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 		this.launchPhase = EnumLaunchPhase.DOCKED.ordinal();
 		this.preventEntitySpawning = true;
 		this.ignoreFrustumCheck = true;
-		this.yOffset = 2.2F;
+		//this.yOffset = 2.2F;
+		this.setSize(1.2F, 3.2F);
 	}
 	
 	public EntityRocketFakeTiered(World world, double posX, double posY, double posZ, int tier)
@@ -105,10 +106,10 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 		this.setTier(tier);
 		if (tier == 1)
 		{
-			this.setSize(1.1F, 3.0F);
+			this.setSize(1.2F, 3.5F);
 		} else if (tier == 2)
 		{
-			this.setSize(1.2F, 5.0F);
+			this.setSize(1.2F, 4.5F);
 		} else if (tier == 3)
 		{
 			this.setSize(1.8F, 6F);
@@ -133,6 +134,20 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 		dockport = te;
 	}
 	
+	@Override
+	public boolean isInRangeToRenderDist(double distance)
+	{
+		double d0 = this.getEntityBoundingBox().getAverageEdgeLength();
+		
+		if (Double.isNaN(d0))
+		{
+			d0 = 1.0D;
+		}
+		
+		d0 = d0 * 64.0D * 5.0;
+		return distance < d0 * d0;
+	}
+	
 	public void setTier(int tier)
 	{
 		this.rocketTier = tier;
@@ -155,6 +170,32 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 		{
 			return 3;
 		} else return -1;
+	}
+	
+	public void setSize(float width, float height)
+	{
+		if (width != this.width || height != this.height)
+		{
+			float f = this.width;
+			this.width = width;
+			this.height = height;
+			
+			if (this.width < f)
+			{
+				double d0 = (double) width / 2.0D;
+				this.setEntityBoundingBox(new AxisAlignedBB(this.posX - d0, this.posY, this.posZ - d0, this.posX + d0, this.posY + (double) this.height, this.posZ + d0));
+				return;
+			}
+			
+			AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
+			this.setEntityBoundingBox(new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + (double) this.width,
+					axisalignedbb.minY + (double) this.height, axisalignedbb.minZ + (double) this.width));
+			
+			if (this.width > f && !this.firstUpdate && !this.world.isRemote)
+			{
+				this.move(MoverType.SELF, (double) (f - this.width), 0.0D, (double) (f - this.width));
+			}
+		}
 	}
 	
 	public int getFuelTankCapacity()
@@ -189,6 +230,11 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 		return this.fuelTank.drain(amount * ConfigManagerCore.rocketFuelFactor, true);
 	}
 	
+	public Entity getRider()
+	{
+		return this.getPassengers().size() > 0 ? getPassengers().get(0) : null;
+	}
+	
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
 	{
@@ -198,7 +244,7 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 			return false;
 		}
 		
-		if (this.getPassengers().get(0) != null && this.getPassengers().get(0) instanceof EntityPlayerMP)
+		if (getRider() != null && getRider() instanceof EntityPlayerMP)
 		{
 			if (!this.world.isRemote && !shouldIgnoreShiftExit())
 			{
@@ -233,7 +279,7 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 	
 	public void QuitRocket(EntityPlayer player)
 	{
-		if (this.getPassengers().get(0) != null && this.getPassengers().get(0) instanceof EntityPlayerMP)
+		if (getRider() != null && getRider() instanceof EntityPlayerMP)
 		{
 			if (!this.world.isRemote)
 			{
@@ -283,12 +329,6 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 	@Override
 	protected void entityInit()
 	{
-	}
-	
-	@Override
-	public AxisAlignedBB getCollisionBox(Entity par1Entity)
-	{
-		return null;
 	}
 	
 	@Override
@@ -492,9 +532,9 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 				
 				if (flag || this.shipDamage > 90)
 				{
-					if (this.getPassengers().get(0) != null)
+					if (getRider() != null)
 					{
-						QuitRocket((EntityPlayer) this.getPassengers().get(0));
+						QuitRocket((EntityPlayer) getRider());
 					}
 					
 					if (flag)
@@ -575,9 +615,9 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 		
 		super.onUpdate();
 		
-		if (this.getPassengers().get(0) != null)
+		if (this.getPassengers().size() > 0 && getRider() != null)
 		{
-			this.getPassengers().get(0).fallDistance = 0.0F;
+			getRider().fallDistance = 0.0F;
 			
 			if (!this.world.isRemote && this.dockport == null && dockPos != null && dockPos.length > 0)
 			{
@@ -634,9 +674,7 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 			
 		}
 		
-		AxisAlignedBB box = null;
-		
-		box = this.getCollisionBoundingBox().expand(0.5D, 2.0D, 0.5D);
+		AxisAlignedBB box = this.getEntityBoundingBox().expand(0.2D, 0.2D, 0.2D);
 		
 		final List<?> var15 = this.world.getEntitiesWithinAABBExcludingEntity(this, box);
 		
@@ -646,7 +684,7 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 			{
 				final Entity var17 = (Entity) var15.get(var52);
 				
-				if (var17 != this.getPassengers().get(0))
+				if (!this.getPassengers().contains(var17))
 				{
 					var17.applyEntityCollision(this);
 				}
@@ -676,9 +714,9 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 			}
 		}
 		
-		if (this.getPassengers().get(0) != null && launchPhase != EnumLaunchPhase.DOCKED.ordinal())
+		if (getRider() != null && launchPhase != EnumLaunchPhase.DOCKED.ordinal())
 		{
-			EntityPlayer player = (EntityPlayer) this.getPassengers().get(0);
+			EntityPlayer player = (EntityPlayer) getRider();
 		}
 		if (this.world.isRemote)
 		{
@@ -784,19 +822,19 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 	@Override
 	public double getMountedYOffset()
 	{//-0.15D;
-		if (this.rocketTier == 3)
+		if (this.rocketTier == 2 || this.rocketTier == 3)
 		{
-			return -0.75D;
+			return 0.7D;
 		}
-		return -0.9D;
+		return 0.4D;
 		
 	}
 	
 	public void onReachAtmosphere()
 	{
-		if (dockport != null && this.getPassengers().get(0) != null)
+		if (dockport != null && getRider() != null)
 		{
-			EntityPlayer player = (EntityPlayer) this.getPassengers().get(0);
+			EntityPlayer player = (EntityPlayer) getRider();
 			GCPlayerStats stats = GCPlayerStats.get((EntityPlayerMP) player);
 			NonNullList<ItemStack> rcStacks = NonNullList.withSize(2 + dockport.addSlots, ItemStack.EMPTY);
 			
@@ -930,12 +968,25 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 		this.posZ = buffer.readDouble();
 	}
 	
+	public static float getDockingOffset(int tier)
+	{
+		float hight = 3.3F;
+		if (tier == 2) hight = 4.3F;
+		else if (tier == 3) hight = 3.9F;
+		return hight;
+		
+	}
+	
 	public float getRenderOffsetY()
 	{
 		if (this.getTier() == 3)
 		{
-			return -1F;
-		} else return -0.1F;
+			return 0F;
+		}
+		if (this.getTier() == 1)
+		{
+			return 1.5F;
+		} else return 1.1F;
 	}
 	
 }

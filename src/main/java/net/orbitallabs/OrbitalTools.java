@@ -24,7 +24,15 @@ public class OrbitalTools {
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		proxy.preInit(event);
+		//		try
+		//		{
+		//			DictionaryGenerator.main(null);
+		//		} catch (Exception e)
+		//		{
+		//			e.printStackTrace();
+		//		}
 		//GameRegistry.registerTileEntity(TileEntityCauldron.class, "Cauldron");
+		//	EnumHelper.addEnum(enumType, enumName, paramTypes, paramValues)
 		
 	}
 	

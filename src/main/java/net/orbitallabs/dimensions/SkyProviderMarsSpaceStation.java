@@ -40,6 +40,10 @@ public class SkyProviderMarsSpaceStation extends IRenderHandler {
 	public int glSkyList;
 	public int glSkyList2;
 	private float sunSize;
+	public float spinAngle = 0;
+	public float spinDeltaPerTick = 0;
+	private float prevPartialTicks = 0;
+	private long prevTick;
 	
 	public SkyProviderMarsSpaceStation(ResourceLocation planet, IGalacticraftWorldProvider marsProvider)
 	{
@@ -135,6 +139,26 @@ public class SkyProviderMarsSpaceStation extends IRenderHandler {
 		float f8;
 		float f9;
 		float f10;
+		
+		GL11.glPushMatrix();
+		
+		//Code for rendering spinning spacestations
+		float deltaTick = partialTicks - this.prevPartialTicks;
+		//while (deltaTick < 0F) deltaTick += 1.0F;
+		this.prevPartialTicks = partialTicks;
+		long curTick = Minecraft.getMinecraft().world.getTotalWorldTime();
+		int tickDiff = (int) (curTick - this.prevTick);
+		this.prevTick = curTick;
+		if (tickDiff > 0 && tickDiff < 20)
+		{
+			deltaTick += tickDiff;
+		}
+		this.spinAngle = this.spinAngle - this.spinDeltaPerTick * deltaTick;
+		while (this.spinAngle < -180F)
+		{
+			this.spinAngle += 360F;
+		}
+		GL11.glRotatef(this.spinAngle, 0.0F, 1.0F, 0.0F);
 		
 		float f18 = world.getStarBrightness(partialTicks);
 		
@@ -279,7 +303,7 @@ public class SkyProviderMarsSpaceStation extends IRenderHandler {
 		if (this.planetToRender != null)
 		{
 			final float var20 = 400.0F + (float) Minecraft.getMinecraft().player.posY / 2F;
-			GL11.glPushMatrix();
+			//GL11.glPushMatrix();
 			GL11.glTranslatef(0.0F, -var20 / 10, 0.0F);
 			float scale = 100 * (0.3F - var20 / 10000.0F);
 			scale = Math.max(scale, 0.2F);
@@ -302,13 +326,13 @@ public class SkyProviderMarsSpaceStation extends IRenderHandler {
 		}
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glPopMatrix();
+		//GL11.glPopMatrix();
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_FOG);
-		GL11.glPopMatrix();
+		//GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3f(0.0F, 0.0F, 0.0F);
 		double d0 = mc.player.getPosition().getY() - world.getHorizon();
@@ -348,10 +372,10 @@ public class SkyProviderMarsSpaceStation extends IRenderHandler {
 		
 		GL11.glColor3f(f1, f2, f3);
 		
-		GL11.glPushMatrix();
-		GL11.glTranslatef(0.0F, -((float) (d0 - 16.0D)), 0.0F);
-		GL11.glCallList(this.glSkyList2);
-		GL11.glPopMatrix();
+		//GL11.glPushMatrix();
+		//GL11.glTranslatef(0.0F, -((float) (d0 - 16.0D)), 0.0F);
+		//GL11.glCallList(this.glSkyList2);
+		//GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);

@@ -224,7 +224,7 @@ public class ModelJetpack extends ModelBiped {
 				GL11.glPushMatrix();
 				isSneak = pl.isSneaking();
 				setRotationAngles(entity, par2, par3, par4, par5, par6, par7);
-				// GL11.glRotatef(180, 0F, 0F, 1F);
+				//GL11.glRotatef(180, 0F, 0F, 1F);
 				GL11.glTranslatef(0.0F, 0.0F, -0.12F);
 				// GL11.glTranslatef(0, 0, 180 * 0.0625F);
 				ItemStack item = pl.inventory.armorItemInSlot(2);

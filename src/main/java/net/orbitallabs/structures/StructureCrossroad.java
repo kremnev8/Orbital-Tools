@@ -2118,7 +2118,7 @@ public class StructureCrossroad extends Structure {
 			if (te != null)
 			{
 				Structure Nstr = Structure.FindStructure("stub");
-				Nstr.Configure(new int[] { 0, 1, 2 }, 0, EnumFacing.UP);
+				Nstr.Configure(new BlockPos(0, 1, 2), 0, EnumFacing.UP);
 				te.ChildObjects.add(Nstr);
 			}
 			
@@ -2423,7 +2423,7 @@ public class StructureCrossroad extends Structure {
 		{
 			return false;
 		}
-		if (dir == EnumFacing.WEST || dir == EnumFacing.EAST || dir == EnumFacing.NORTH || dir == EnumFacing.SOUTH) return true;
+		if (dir == EnumFacing.WEST || dir == EnumFacing.EAST || dir == EnumFacing.NORTH || dir == EnumFacing.SOUTH || dir == EnumFacing.UP) return true;
 		else return false;
 	}
 	

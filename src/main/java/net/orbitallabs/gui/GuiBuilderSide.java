@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL12;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.IInventory;
@@ -260,7 +261,6 @@ public class GuiBuilderSide extends GuiModule {
 			
 			boolean st = ((SlotGhost) slot).state;
 			this.drawTexturedModalRect(i, j, 86 + (st ? 18 : 0), 3, 16, 16);
-			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 		// slot selection
@@ -269,11 +269,13 @@ public class GuiBuilderSide extends GuiModule {
 			theSlot = slot;
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GlStateManager.enableBlend();
 			int j1 = slot.xPos;
 			int k1 = slot.yPos;
 			GL11.glColorMask(true, true, true, false);
 			this.drawGradientRect(j1, k1, j1 + 16, k1 + 16, -2130706433, -2130706433);
 			GL11.glColorMask(true, true, true, true);
+			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 		}

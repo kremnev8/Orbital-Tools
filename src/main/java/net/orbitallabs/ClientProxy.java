@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.orbitallabs.entity.EntityMod;
 import net.orbitallabs.events.Events;
 import net.orbitallabs.events.KeyHandlerClient;
 import net.orbitallabs.gui.GuiBuilder;
@@ -29,7 +31,7 @@ public class ClientProxy extends CommonProxy {
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		super.preInit(event);
-		
+		EntityMod.init(Side.CLIENT);
 	}
 	
 	@Override
@@ -55,9 +57,10 @@ public class ClientProxy extends CommonProxy {
 		//	RenderPlayerAPI.register(GliderModInfo.MOD_ID, RendererPlayer.class);
 		//	ModelPlayerAPI.register(GliderModInfo.MOD_ID, GliderModelPlayerBase.class);
 		
+		//	Layer
+		
 		ClientRegistry.registerKeyBinding(KeyHandlerClient.TestAnim);
 		
-		//	EntityMod.init(Side.CLIENT);
 		GuiBuilder.init();
 	}
 	

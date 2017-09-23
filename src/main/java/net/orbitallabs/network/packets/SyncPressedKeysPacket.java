@@ -3,12 +3,13 @@ package net.orbitallabs.network.packets;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.orbitallabs.items.ItemMod;
-import net.orbitallabs.items.ItemSpaceJetpack;
+import net.orbitallabs.items.SpaceJetpackCapability;
+import net.orbitallabs.items.SpaceJetpackItemStackCap;
 import net.orbitallabs.utils.OTLoger;
 
 public class SyncPressedKeysPacket implements IMessage {
@@ -49,18 +50,10 @@ public class SyncPressedKeysPacket implements IMessage {
 				{
 					if (player.inventory.armorItemInSlot(2) != null && player.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
 					{
-						ItemSpaceJetpack jetpack = (ItemSpaceJetpack) player.inventory.armorItemInSlot(2).getItem();
 						ItemStack is = player.inventory.armorItemInSlot(2);
+						SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) is.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
 						
-						jetpack.activated = pkt.active;
-						if (is.hasTagCompound())
-						{
-							jetpack.writeToNBT(is.getTagCompound());
-						} else
-						{
-							is.setTagCompound(new NBTTagCompound());
-							jetpack.writeToNBT(is.getTagCompound());
-						}
+						cap.setState(pkt.active);
 					}
 				}
 				

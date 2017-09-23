@@ -38,9 +38,11 @@ minecraft {
 
 jar {
   manifest {
-      attributes 'FMLCorePlugin': 'net.glider.src.handlers.hooks.GliderHookLoader'
+      attributes 'FMLCorePlugin': 'net.orbitallabs.hooks.OrbitalHookLoader'
       attributes 'FMLCorePluginContainsFMLMod': 'true'
+	  attributes 'FMLAT': 'orbat.cfg'
   }
+  
 }
 
 repositories {

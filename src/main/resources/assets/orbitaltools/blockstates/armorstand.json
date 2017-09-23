@@ -1,0 +1,8 @@
+{
+    "variants": {
+		"facing=east": { "model": "orbitaltools:invis"},
+		"facing=south": { "model": "orbitaltools:invis"},
+		"facing=west": { "model": "orbitaltools:invis"},
+		"facing=north": { "model": "orbitaltools:invis"}
+    }
+}

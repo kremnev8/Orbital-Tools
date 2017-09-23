@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import micdoodle8.mods.galacticraft.api.entity.IRocketType;
 import micdoodle8.mods.galacticraft.api.event.oxygen.GCCoreOxygenSuffocationEvent;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.GCBlocks;
 import micdoodle8.mods.galacticraft.core.GCFluids;
 import micdoodle8.mods.galacticraft.core.dimension.WorldProviderOverworldOrbit;
@@ -24,7 +25,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -35,7 +35,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -55,6 +55,7 @@ import net.orbitallabs.items.SpaceJetpackItemStackCap;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.LaunchRocketPacket;
 import net.orbitallabs.network.packets.SetThirdPersonPacket;
+import net.orbitallabs.network.packets.SyncPlayerFallPacket;
 import net.orbitallabs.tiles.TileEntityDockingPort;
 import net.orbitallabs.utils.OTLoger;
 import net.orbitallabs.utils.OrbitalModInfo;
@@ -102,6 +103,10 @@ public class Events {
 			if (player != null)
 			{
 				GCPlayerStats playerStats = GCPlayerStats.get((EntityPlayerMP) player);
+				if (playerStats.getRocketStacks().size() <= 1)
+				{
+					return;
+				}
 				OTLoger.logInfo("Player just docked to Space Station");
 				OTLoger.logInfo("info:");
 				
@@ -208,40 +213,44 @@ public class Events {
 									chest = new TileEntityParaChest();
 									world.setTileEntity(pos, chest);
 								}
-								chest.setSizeInventory(playerStats.getRocketStacks().size() + 1);
 								NonNullList<ItemStack> RCis = playerStats.getRocketStacks();
 								
-								for (int i2 = 0; i2 < RCis.size() - 2; i2++)
+								if (RCis.size() >= 2)
 								{
-									chest.setInventorySlotContents(i2, RCis.get(i2));
-								}
-								chest.setInventorySlotContents(chest.getSizeInventory() - 3, RCis.get(RCis.size() - 2));
-								chest.setInventorySlotContents(chest.getSizeInventory() - 2, RCis.get(RCis.size() - 1));
-								boolean preFueled = false;
-								ItemStack rocketI = RCis.get(RCis.size() - 1);
-								if (rocketI != null)
-								{
-									int type = rocketI.getItemDamage();
-									if (type == IRocketType.EnumRocketType.PREFUELED.getIndex())
-									{
-										preFueled = true;
-									}
-								}
-								int tier = EntityRocketFakeTiered.getTierFromItem(rocketI);
-								chest.fuelTank = new FluidTank((1000 + (tier > 1 ? 500 : 0)) * ConfigManagerCore.rocketFuelFactor);
-								
-								if (preFueled)
-								{
+									chest.setSizeInventory(playerStats.getRocketStacks().size() + 1);
 									
-									chest.fuelTank.fill(new FluidStack(GCFluids.fluidFuel, chest.fuelTank.getCapacity()), true);
-								} else
-								{
-									// reading fuel from item NBT
-									chest.fuelTank.fill(new FluidStack(GCFluids.fluidFuel, playerStats.getFuelLevel()), true);
+									for (int i2 = 0; i2 < RCis.size() - 2; i2++)
+									{
+										chest.setInventorySlotContents(i2, RCis.get(i2));
+									}
+									chest.setInventorySlotContents(chest.getSizeInventory() - 3, RCis.get(RCis.size() - 2));
+									chest.setInventorySlotContents(chest.getSizeInventory() - 2, RCis.get(RCis.size() - 1));
+									boolean preFueled = false;
+									ItemStack rocketI = RCis.get(RCis.size() - 1);
+									if (rocketI != null)
+									{
+										int type = rocketI.getItemDamage();
+										if (type == IRocketType.EnumRocketType.PREFUELED.getIndex())
+										{
+											preFueled = true;
+										}
+									}
+									int tier = EntityRocketFakeTiered.getTierFromItem(rocketI);
+									chest.fuelTank = new FluidTank((1000 + (tier > 1 ? 500 : 0)) * ConfigManagerCore.rocketFuelFactor);
+									
+									if (preFueled)
+									{
+										
+										chest.fuelTank.fill(new FluidStack(GCFluids.fluidFuel, chest.fuelTank.getCapacity()), true);
+									} else
+									{
+										// reading fuel from item NBT
+										chest.fuelTank.fill(new FluidStack(GCFluids.fluidFuel, playerStats.getFuelLevel()), true);
+									}
+									playerStats.setRocketStacks(NonNullList.withSize(1, ItemStack.EMPTY));
+									playerStats.setFuelLevel(0);
+									OTLoger.logInfo("Created a chest with rocket items");
 								}
-								playerStats.setRocketStacks(NonNullList.withSize(1, ItemStack.EMPTY));
-								playerStats.setFuelLevel(0);
-								OTLoger.logInfo("Created a chest with rocket items");
 								break;
 								
 							}
@@ -294,10 +303,11 @@ public class Events {
 				
 				if (mc.player.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
 				{
-					ItemSpaceJetpack jetpack = (ItemSpaceJetpack) mc.player.inventory.armorItemInSlot(2).getItem();
-					if (!(jetpack.KeysPressed.equals(keys)) && jetpack.activated)
+					SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) mc.player.inventory.armorItemInSlot(2).getCapability(SpaceJetpackCapability.SpaceJetpackCapability,
+							EnumFacing.UP);
+					if (!(ItemSpaceJetpack.KeysPressed.equals(keys)) && cap.isEnabled())
 					{
-						jetpack.KeysPressed = keys;
+						ItemSpaceJetpack.KeysPressed = keys;
 						//jetpack.markDirty();
 					}
 				}
@@ -379,7 +389,7 @@ public class Events {
 			
 			int fuelLevel;
 			
-			if (cap.RCSFuel.getCapacity() <= 0)
+			if (cap.getTank().getCapacity() <= 0)
 			{
 				fuelLevel = 0;
 			} else
@@ -399,7 +409,7 @@ public class Events {
 	{
 		GL11.glPushMatrix();
 		
-		final EntityPlayer player = event.getEntityPlayer();
+		EntityPlayer player = event.getEntityPlayer();
 		
 		if (player.getRidingEntity() instanceof EntityRocketFakeTiered && player == Minecraft.getMinecraft().player)
 		{
@@ -411,6 +421,7 @@ public class Events {
 			GL11.glRotatef(anglePitch, 0.0F, 0.0F, 1.0F);
 			GL11.glTranslatef(0, entity.getRotateOffset() + 1.6200000047683716F, 0);
 		}
+		
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -418,17 +429,32 @@ public class Events {
 	public void onRenderPlayerPost(RenderPlayerEvent.Post event)
 	{
 		GL11.glPopMatrix();
+		
 	}
-	
-	ResourceLocation capKey = new ResourceLocation(OrbitalModInfo.MOD_ID);
 	
 	@SubscribeEvent
-	public void attachItemCaps(AttachCapabilitiesEvent<Item> e)
+	public void onEntityFall(LivingFallEvent event)
 	{
-		if (e.getObject() != null && e.getObject() instanceof ItemSpaceJetpack)
+		if (event.getEntity().world.isRemote && event.getEntityLiving() instanceof EntityPlayer)
 		{
-			//	e.addCapability(capKey, (ItemSpaceJetpack) ItemMod.spaceJetpack);
+			PacketHandler
+					.sendToServer(new SyncPlayerFallPacket(event.getDistance() * ((IGalacticraftWorldProvider) event.getEntityLiving().world.provider).getFallDamageModifier()));
 		}
 	}
+	
+	//	@SubscribeEvent
+	//	public void frefallm(ZeroGravityEvent.InFreefall e)
+	//	{
+	//		if (e.provider instanceof WorldProviderOrbitModif)
+	//		{
+	//			if (WorldProviderOrbitModif.artificialG > 0.2)
+	//			{
+	//				e.setCanceled(true);
+	//			}
+	//		}
+	//	}
+	
+	//RenderHandEvent
+	//RenderPlayerEvent.Pre, RPE.Specials.Pre
 	
 }

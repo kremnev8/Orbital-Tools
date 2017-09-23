@@ -15,7 +15,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
 import net.orbitallabs.entity.EntityRocketFakeTiered;
 import net.orbitallabs.entity.EntityRocketFakeTiered.EnumLaunchPhase;
 import net.orbitallabs.items.ItemMod;
-import net.orbitallabs.items.ItemSpaceJetpack;
 import net.orbitallabs.items.SpaceJetpackCapability;
 import net.orbitallabs.items.SpaceJetpackItemStackCap;
 import net.orbitallabs.network.PacketHandler;
@@ -91,24 +90,23 @@ public class KeyHandlerClient extends KeyHandler {
 					&& playerBase.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
 			{
 				ItemStack stack = playerBase.inventory.armorItemInSlot(2);
-				ItemSpaceJetpack jetpack = (ItemSpaceJetpack) stack.getItem();
 				
 				SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) stack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
 				if (cap != null)
 				{
 					if (cap.getAnimationHandler().isAnimationActive("Enabled idle"))
 					{
-						jetpack.setActive(false);
+						cap.setState(false);
 						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Disable", 0, true);
 						//cap.markDirty();
 					} else if (cap.getAnimationHandler().isAnimationActive("Disabled idle"))
 					{
-						jetpack.setActive(true);
+						cap.setState(true);
 						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Enable", 0, true);
 						//cap.markDirty();
 					} else if (cap.getAnimationHandler().animCurrentChannels.size() == 0)
 					{
-						jetpack.setActive(true);
+						cap.setState(true);
 						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Enable", 0, true);
 						//	cap.markDirty();
 					}

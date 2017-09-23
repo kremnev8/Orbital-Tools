@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
-FMLCorePlugin: net.glider.src.handlers.hooks.GliderHookLoader
+FMLCorePlugin: net.orbitallabs.hooks.OrbitalHookLoader
 FMLCorePluginContainsFMLMod: true
+AccessTransformer: orbat.cfg
 Created-By: 1.7.0 (Oracle Corporation)

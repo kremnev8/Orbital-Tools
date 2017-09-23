@@ -7,13 +7,17 @@ import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.Satellite;
 import micdoodle8.mods.galacticraft.api.recipe.SchematicRegistry;
+import micdoodle8.mods.galacticraft.api.recipe.SpaceStationRecipe;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.AtmosphereInfo;
+import micdoodle8.mods.galacticraft.api.world.SpaceStationType;
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.GCBlocks;
 import micdoodle8.mods.galacticraft.core.GCItems;
 import micdoodle8.mods.galacticraft.core.dimension.TeleportTypeSpaceStation;
+import micdoodle8.mods.galacticraft.core.items.ItemBasic;
 import micdoodle8.mods.galacticraft.core.recipe.NasaWorkbenchRecipe;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
 import net.minecraft.entity.player.EntityPlayer;
@@ -189,9 +193,19 @@ public class CommonProxy {
 		final HashMap<Object, Integer> inputMap = new HashMap<Object, Integer>();
 		inputMap.put(new ItemStack(GCItems.basicItem, 1, 7), 64);
 		inputMap.put(new ItemStack(Items.GLOWSTONE_DUST), 8);
-		inputMap.put(new ItemStack(GCItems.basicItem, 1, 13), 5);
+		//	inputMap.put(new ItemStack(GCItems.basicItem, 1, 13), 5);
 		inputMap.put(new ItemStack(ItemMod.ironScaffold, 1, ItemMod.scaffold_meta), 48);
 		inputMap.put(new ItemStack(MarsItems.marsItemBasic, 1, 2), 8);
+		if (ConfigManagerCore.recipesRequireGCAdvancedMetals)
+		{
+			inputMap.put(new ItemStack(GCItems.basicItem, 1, ItemBasic.WAFER_ADVANCED), 5);
+		} else
+		{
+			inputMap.put("waferAdvanced", 5);
+		}
+		GalacticraftRegistry
+				.registerSpaceStation(new SpaceStationType(Config.idDimensionMarsSpaceStation, MarsModule.planetMars.getDimensionID(), new SpaceStationRecipe(inputMap)));
+		
 		//Hooks.ignoreThis = true;
 		//	GalacticraftRegistry.registerSpaceStation(new SpaceStationType(ConfigManagerCore.idDimensionOverworldOrbit, ConfigManagerCore.idDimensionOverworld, new SpaceStationRecipe(inputMap)));
 		//Hooks.ignoreThis = false;

@@ -229,7 +229,7 @@ public class GuiBuilder extends GuiModular {
 	{
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
-		if (mc.player.inventory.getItemStack() == null && sideinv.theSlot != null && sideinv.theSlot.slotNumber < sideinv.shownItems.length
+		if (mc.player.inventory.getItemStack().isEmpty() && sideinv.theSlot != null && sideinv.theSlot.slotNumber < sideinv.shownItems.length
 				&& sideinv.shownItems[sideinv.theSlot.slotNumber] != null)
 		{
 			this.renderToolTip(sideinv.shownItems[sideinv.theSlot.slotNumber], mouseX, mouseY);
@@ -326,12 +326,15 @@ public class GuiBuilder extends GuiModular {
 			((GuiButton) buttonList.get(Bid)).enabled = false;
 		} else
 		{
-			if (sideinv.currentPossible)
+			if (buttonList.size() > Bid)
 			{
-				((GuiButton) buttonList.get(Bid)).enabled = true;
-			} else
-			{
-				((GuiButton) buttonList.get(Bid)).enabled = false;
+				if (sideinv.currentPossible)
+				{
+					((GuiButton) buttonList.get(Bid)).enabled = true;
+				} else
+				{
+					((GuiButton) buttonList.get(Bid)).enabled = false;
+				}
 			}
 		}
 		

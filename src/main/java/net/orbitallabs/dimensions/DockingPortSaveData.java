@@ -55,6 +55,12 @@ public class DockingPortSaveData extends WorldSavedData {
 			}
 		}
 		this.GraviySources = gravityS;
+		
+		if (nbt.getBoolean("UPDATED_GVALUE"))
+		{
+			WorldProviderOrbitModif.artificialG = nbt.getDouble("Artificial_GRAVITY");
+			WorldProviderOrbitModif.updatedList = nbt.getBoolean("UPDATED_GVALUE");
+		}
 	}
 	
 	@Override
@@ -73,6 +79,8 @@ public class DockingPortSaveData extends WorldSavedData {
 			nbtlist.appendTag(new NBTTagIntArray(GraviySources.get(i)));
 		}
 		nbt.setTag("GRAVITYSOURCES", nbtlist);
+		nbt.setBoolean("UPDATED_GVALUE", WorldProviderOrbitModif.updatedList);
+		nbt.setDouble("Artificial_GRAVITY", WorldProviderOrbitModif.artificialG);
 		return nbt;
 	}
 	

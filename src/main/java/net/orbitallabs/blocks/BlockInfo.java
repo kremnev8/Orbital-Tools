@@ -7,12 +7,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.orbitallabs.tiles.TileEntityInfo;
 
 public class BlockInfo extends BlockContainerMod {
 	
 	public static final Material invis = new MaterialInvisble(MapColor.AIR);
+	
+	public AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 	
 	public BlockInfo(String uln)
 	{
@@ -27,6 +32,18 @@ public class BlockInfo extends BlockContainerMod {
 	//{
 	//	return AABB;
 	//}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		return box;
+	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
+	{
+		return null;
+	}
 	
 	@Override
 	public boolean isOpaqueCube(IBlockState state)

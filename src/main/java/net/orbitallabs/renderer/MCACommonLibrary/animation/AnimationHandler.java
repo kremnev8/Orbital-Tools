@@ -122,6 +122,7 @@ public abstract class AnimationHandler {
 					boolean animStatus = updateAnimation(animatedEntity, anim, animPrevTime, animCurrentFrame);
 					if (!animStatus)
 					{
+						//OTLoger.logInfo("Animation " + anim.name + " either ended or was stopped by MCA code");
 						int i = 0;
 					}
 					if (animCurrentFrame.get(anim.name) != null)

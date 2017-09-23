@@ -2,6 +2,7 @@
 package net.orbitallabs.utils;
 
 import java.util.Iterator;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentBase;
 
@@ -82,6 +83,6 @@ public class LocalizedChatComponent extends TextComponentBase {
 	public String getUnformattedComponentText()
 	{
 		
-		return text.getInput();
+		return I18n.format(text.getInput());
 	}
 }

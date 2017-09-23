@@ -20,7 +20,7 @@ import net.orbitallabs.network.packets.DockItemSyncPacket;
 import net.orbitallabs.network.packets.GetWorldGravityDataPacket;
 import net.orbitallabs.network.packets.GravityChangePacket;
 import net.orbitallabs.network.packets.InvScalePacket;
-import net.orbitallabs.network.packets.JetpackUseFuelPacket;
+import net.orbitallabs.network.packets.JetpackFueluseSync;
 import net.orbitallabs.network.packets.LaunchRocketPacket;
 import net.orbitallabs.network.packets.MountPacket;
 import net.orbitallabs.network.packets.OpenBuilderGuiPacket;
@@ -66,7 +66,8 @@ public final class PacketHandler {
 		HANDLER.registerMessage(SyncPlayerFallPacket.Handler.class, SyncPlayerFallPacket.class, 16, Side.SERVER);
 		HANDLER.registerMessage(SyncPressedKeysPacket.Handler.class, SyncPressedKeysPacket.class, 17, Side.SERVER);
 		
-		HANDLER.registerMessage(JetpackUseFuelPacket.Handler.class, JetpackUseFuelPacket.class, 18, Side.SERVER);
+		//HANDLER.registerMessage(JetpackUseFuelPacket.Handler.class, JetpackUseFuelPacket.class, 18, Side.SERVER);
+		HANDLER.registerMessage(JetpackFueluseSync.Handler.class, JetpackFueluseSync.class, 18, Side.SERVER);
 		
 		HANDLER.registerMessage(OpenBuilderGuiPacket.Handler.class, OpenBuilderGuiPacket.class, 19, Side.CLIENT);
 		

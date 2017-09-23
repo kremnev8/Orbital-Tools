@@ -13,7 +13,6 @@ import micdoodle8.mods.galacticraft.core.blocks.BlockMulti.EnumBlockMultiType;
 import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlockWithInventory;
 import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.miccore.Annotations.NetworkedField;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +35,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.orbitallabs.blocks.BlockContainerMod;
 import net.orbitallabs.items.ItemSpaceJetpack;
+import net.orbitallabs.items.SpaceJetpackCapability;
+import net.orbitallabs.items.SpaceJetpackItemStackCap;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.ArmorStandItemSyncPacket;
 
@@ -58,11 +59,17 @@ public class TileEntityArmorStand extends TileBaseElectricBlockWithInventory imp
 		storage.setMaxExtract(500F);
 	}
 	
+	boolean swapped = false;
+	
 	@Override
 	public boolean onActivated(EntityPlayer player)
 	{
-		
-		NonNullList<ItemStack> stand = this.items;
+		if (swapped)
+		{
+			swapped = false;
+			return false;
+		}
+		NonNullList<ItemStack> stand = items;
 		NonNullList<ItemStack> playerS = NonNullList.withSize(player.inventory.armorInventory.size(), ItemStack.EMPTY);
 		Collections.copy(playerS, player.inventory.armorInventory);
 		
@@ -80,6 +87,8 @@ public class TileEntityArmorStand extends TileBaseElectricBlockWithInventory imp
 			this.setInventorySlotContents(1, playerS.get(2));
 			this.setInventorySlotContents(0, playerS.get(3));
 		}
+		PacketHandler.sendToDimension(new ArmorStandItemSyncPacket(items, pos.getX(), pos.getY(), pos.getZ()), world.provider.getDimension());
+		swapped = true;
 		
 		return true;
 	}
@@ -92,6 +101,7 @@ public class TileEntityArmorStand extends TileBaseElectricBlockWithInventory imp
 		if ((ticks % 100 == 0 || ticks <= 20) && !world.isRemote)
 		{
 			PacketHandler.sendToDimension(new ArmorStandItemSyncPacket(items, pos.getX(), pos.getY(), pos.getZ()), world.provider.getDimension());
+			swapped = false;
 		}
 		
 		for (int i = 0; i < items.size(); i++)
@@ -276,34 +286,16 @@ public class TileEntityArmorStand extends TileBaseElectricBlockWithInventory imp
 				Item i = armor.getItem();
 				if (i instanceof ItemSpaceJetpack)
 				{
-					FluidTank tank = new FluidTank(1750 * ConfigManagerCore.rocketFuelFactor);
-					if (armor.hasTagCompound())
-					{
-						if (armor.getTagCompound().hasKey("fuelTank"))
-						{
-							tank.readFromNBT(armor.getTagCompound().getCompoundTag("fuelTank"));
-						}
-					}
+					SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) armor.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+					
+					FluidTank tank = cap.getTank();
 					int amount = tank.fill(fluid, doFill);
 					if (!doFill)
 					{
 						return amount;
 					} else
 					{
-						if (armor.hasTagCompound())
-						{
-							if (tank.getFluid() != null)
-							{
-								armor.getTagCompound().setTag("fuelTank", tank.writeToNBT(new NBTTagCompound()));
-							}
-						} else
-						{
-							armor.setTagCompound(new NBTTagCompound());
-							if (tank.getFluid() != null)
-							{
-								armor.getTagCompound().setTag("fuelTank", tank.writeToNBT(new NBTTagCompound()));
-							}
-						}
+						armor.setTagCompound(cap.serializeNBT());
 						return amount;
 					}
 				}

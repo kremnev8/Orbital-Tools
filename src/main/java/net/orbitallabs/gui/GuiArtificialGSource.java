@@ -45,8 +45,8 @@ public class GuiArtificialGSource extends GuiContainerGC {
 		final int y = (this.height - this.ySize) / 2;
 		
 		List<String> electricityDesc = new ArrayList<String>();
-		electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
-		electricityDesc.add(EnumColor.YELLOW + GCCoreUtil.translate("gui.energyStorage.desc.1")
+		electricityDesc.add(GCCoreUtil.translate("gui.energy_storage.desc.0"));
+		electricityDesc.add(EnumColor.YELLOW + GCCoreUtil.translate("gui.energy_storage.desc.1")
 				+ ((int) Math.floor(this.Gsource.getEnergyStoredGC()) + " / " + (int) Math.floor(this.Gsource.getMaxEnergyStoredGC())));
 		this.electricInfoRegion.tooltipStrings = electricityDesc;
 		this.electricInfoRegion.xPosition = (this.width - this.xSize) / 2 + 112;
@@ -100,7 +100,7 @@ public class GuiArtificialGSource extends GuiContainerGC {
 		final int var6 = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(var5, var6 + 5, 0, 0, this.xSize, 144);
 		List<String> electricityDesc = new ArrayList<String>();
-		electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
+		electricityDesc.add(GCCoreUtil.translate("gui.energy_storage.desc.0"));
 		EnergyDisplayHelper.getEnergyDisplayTooltip(this.Gsource.getEnergyStoredGC(), this.Gsource.getMaxEnergyStoredGC(), electricityDesc);
 		this.electricInfoRegion.tooltipStrings = electricityDesc;
 		

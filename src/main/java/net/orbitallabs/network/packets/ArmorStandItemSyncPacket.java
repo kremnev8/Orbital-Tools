@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.orbitallabs.tiles.TileEntityArmorStand;
-import net.orbitallabs.utils.OTLoger;
 
 public class ArmorStandItemSyncPacket implements IMessage {
 	private NonNullList<ItemStack> items;
@@ -92,7 +91,7 @@ public class ArmorStandItemSyncPacket implements IMessage {
 			
 			if (tile == null)
 			{
-				OTLoger.logInfo("NULL tile entity reference in Armor stand item sync update packet! Please report to dev!");
+				//	OTLoger.logInfo("NULL tile entity reference in Armor stand item sync update packet! Please report to dev!");
 			} else
 			{
 				tile.items = pkt.items;

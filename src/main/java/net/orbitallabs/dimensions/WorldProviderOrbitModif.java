@@ -7,20 +7,20 @@ import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.client.CloudRenderer;
 import micdoodle8.mods.galacticraft.core.dimension.WorldProviderOverworldOrbit;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStatsClient;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.orbitallabs.CommonProxy;
+import net.orbitallabs.network.PacketHandler;
+import net.orbitallabs.network.packets.ClientGravityDataRecivePacket;
 import net.orbitallabs.tiles.TileEntityGravitySource;
 import net.orbitallabs.utils.OTLoger;
 
@@ -36,6 +36,13 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 	private static double pPrevMotionX;
 	public static double pPrevMotionY;
 	private static double pPrevMotionZ;
+	
+	public static final float MIN_GRAVITY_VAL = 0.36F;
+	
+	public World getWorld()
+	{
+		return world;
+	}
 	
 	@Override
 	public void setDimension(int var1)
@@ -159,10 +166,34 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 						sum += forces.next();
 					}
 					artificialG = sum;
-					//	PacketHandler.sendToDimension(new ClientGravityDataRecivePacket(ArtificialForces), this.dimensionId);
+					PacketHandler.sendToDimension(new ClientGravityDataRecivePacket(ArtificialForces), getDimension());
+					savef.markDirty();
 				}
 				
 			}
+		}
+		
+		if (this.world.isRemote && updatedList && !updateddouble)
+		{
+			
+			double sum = 0;
+			try
+			{
+				if (ArtificialForces != null)
+				{
+					for (int i = 0; i < ArtificialForces.size(); i++)
+					{
+						sum += ArtificialForces.get(i);
+					}
+				}
+			} catch (Exception e)
+			{
+				OTLoger.logWarn("Someting Really strange:");
+				e.printStackTrace();
+			}
+			artificialG = sum;
+			updateddouble = true;
+			
 		}
 		
 	}
@@ -198,16 +229,17 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 		return new BlockPos(0, 64, 0);
 	}
 	
-	/*	public ChunkCoordinates getRandomizedSpawnPoint()
-		{
-			ChunkCoordinates chunkcoordinates = new ChunkCoordinates(this.world.getSpawnPoint());
-			
-			chunkcoordinates.posX = 0;
-			chunkcoordinates.posZ = 0;
-			chunkcoordinates.posY = 64;
-			
-			return chunkcoordinates;
-		}*/
+	@Override
+	public BlockPos getSpawnPoint()
+	{
+		return new BlockPos(0, 64, 0);
+	}
+	
+	public BlockPos getRandomizedSpawnPoint()
+	{
+		BlockPos ret = this.world.getSpawnPoint();
+		return ret;
+	}
 	
 	//Overriding only in case the Galacticraft API is not up-to-date
 	//(with up-to-date API this makes zero difference)
@@ -225,16 +257,10 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 		return this.spaceStationDimensionID;
 	}
 	
-	//	@Override
-	//	public String getDimensionName()
-	///	{
-	//		return "Space Station " + this.spaceStationDimensionID;
-	//	}
-	
 	@Override
 	public float getGravity()
 	{
-		return (float) (0.08F * (1 - artificialG));
+		return (float) (0.08F * (1.0F - (float) (artificialG)));
 	}
 	
 	@Override
@@ -270,7 +296,7 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 	@Override
 	public float getFallDamageModifier()
 	{
-		return (float) (artificialG > 0.5D ? (1F * artificialG) - 0.2D : 0.4F);
+		return (float) artificialG;
 	}
 	
 	@Override
@@ -279,60 +305,20 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 		return 50.0F;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
-	public void postVanillaMotion(EntityPlayerSP p)
+	public void setSpinDeltaPerTick(float angle)
 	{
-		if (updatedList && !updateddouble)
-		{
-			
-			double sum = 0;
-			try
-			{
-				if (ArtificialForces != null)
-				{
-					for (int i = 0; i < ArtificialForces.size(); i++)
-					{
-						sum += ArtificialForces.get(i);
-					}
-				}
-			} catch (Exception e)
-			{
-				OTLoger.logWarn("Someting Really strange:");
-				e.printStackTrace();
-			}
-			artificialG = sum;
-			updateddouble = true;
-			
-		}
-		
-		if (artificialG < 0.5D)
-		{
-			//	super.postVanillaMotion(p);
-			GCPlayerStatsClient stats = GCPlayerStatsClient.get(p);
-			
-			//	if (stats.inFreefall && p.capabilities.isCreativeMode && (p.getCurrentArmor(2) != null && p.getCurrentArmor(2).getItem() == ItemMod.spaceJetpack))
-			///	{
-			//		FreefallHandler.freefallMotion(p);
-			//	}
-		}
-		
+		SkyProviderMarsSpaceStation skyProvider = ((SkyProviderMarsSpaceStation) this.getSkyRenderer());
+		if (skyProvider != null) skyProvider.spinDeltaPerTick = angle;
 	}
 	
-	public void readFromNBT(NBTTagCompound nbt)
+	@Override
+	@SideOnly(Side.CLIENT)
+	public float getSkyRotation()
 	{
-		//	super.readFromNBT(nbt);
-		if (nbt.getBoolean("UPDATED_GVALUE"))
-		{
-			artificialG = nbt.getDouble("Artificial_GRAVITY");
-			updatedList = nbt.getBoolean("UPDATED_GVALUE");
-		}
+		SkyProviderMarsSpaceStation skyProvider = ((SkyProviderMarsSpaceStation) this.getSkyRenderer());
+		return skyProvider.spinAngle;
 	}
 	
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		//	super.writeToNBT(nbt);
-		nbt.setBoolean("UPDATED_GVALUE", updatedList);
-		nbt.setDouble("Artificial_GRAVITY", artificialG);
-		
-	}
 }

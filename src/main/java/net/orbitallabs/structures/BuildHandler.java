@@ -504,84 +504,86 @@ public class BuildHandler {
 				}
 				str4.Build(world, dir, bpos);
 				
-				EnumFacing[] dirs = str4.getDirs(dir);
-				for (int i = 0; i < 3; i++)
+				if (dir != EnumFacing.UP)
 				{
-					EnumFacing Ndir = dirs[i];
-					BlockPos pos = str4.ChangePosForDir(dir, Ndir, bpos);
-					
-					// no if's for each dir!
-					BlockPos Spos;
-					if (IPoint != null)
+					EnumFacing[] dirs = str4.getDirs(dir);
+					for (int i = 0; i < 3; i++)
 					{
-						Spos = new BlockPos(IPoint);
-						Spos = FacingUtils.IncreaseByDir(dir, Spos, 9);
-						Spos = FacingUtils.IncreaseByDir(Ndir, Spos, 9);
-					} else
-					{
-						Spos = new BlockPos(0, 0, 0);
-					}
-					
-					boolean Conect = false;
-					if (Matrix != null)
-					{
-						if (MatrixHelper.FindPointInMatrix(Matrix, Spos) != null)
+						EnumFacing Ndir = dirs[i];
+						BlockPos pos = str4.ChangePosForDir(dir, Ndir, bpos);
+						
+						// no if's for each dir!
+						BlockPos Spos;
+						if (IPoint != null)
 						{
-							te = (TileEntityInfo) world.getTileEntity(Spos);
-							if (te != null)
+							Spos = new BlockPos(IPoint);
+							Spos = FacingUtils.IncreaseByDir(dir, Spos, 9);
+							Spos = FacingUtils.IncreaseByDir(Ndir, Spos, 9);
+						} else
+						{
+							Spos = new BlockPos(0, 0, 0);
+						}
+						
+						boolean Conect = false;
+						if (Matrix != null)
+						{
+							if (MatrixHelper.FindPointInMatrix(Matrix, Spos) != null)
 							{
-								if ((te.Object.getUnlocalizedName().equals("hall") || te.Object.getUnlocalizedName().equals("hallairlock"))
-										&& te.Object.placementDir.getOpposite() == Ndir)
+								te = (TileEntityInfo) world.getTileEntity(Spos);
+								if (te != null)
 								{
-									Conect = true;
-								} else if (te.Object.getUnlocalizedName().equals("corner")
-										&& str3.onTurn(te.Object.placementDir, te.Object.placementRotation).getOpposite() == Ndir)
-								{
-									Conect = true;
-								} else if (te.Object.getUnlocalizedName().equals("crossroad") || te.Object.getUnlocalizedName().equals("bighall"))
-								{
-									EnumFacing[] dirs1 = str4.getDirs(te.Object.placementDir);
-									for (int i2 = 0; i2 < 3; i2++)
+									if ((te.Object.getUnlocalizedName().equals("hall") || te.Object.getUnlocalizedName().equals("hallairlock"))
+											&& te.Object.placementDir.getOpposite() == Ndir)
 									{
-										EnumFacing STdir = dirs1[i2];
-										if (STdir.getOpposite() == Ndir) Conect = true;
+										Conect = true;
+									} else if (te.Object.getUnlocalizedName().equals("corner")
+											&& str3.onTurn(te.Object.placementDir, te.Object.placementRotation).getOpposite() == Ndir)
+									{
+										Conect = true;
+									} else if (te.Object.getUnlocalizedName().equals("crossroad") || te.Object.getUnlocalizedName().equals("bighall"))
+									{
+										EnumFacing[] dirs1 = str4.getDirs(te.Object.placementDir);
+										for (int i2 = 0; i2 < 3; i2++)
+										{
+											EnumFacing STdir = dirs1[i2];
+											if (STdir.getOpposite() == Ndir) Conect = true;
+										}
+									} else if (te.Object.getUnlocalizedName().equals("thall"))
+									{
+										str10.setRotation(te.Object.placementRotation);
+										EnumFacing[] dirs1 = str10.getDirs(te.Object.placementDir);
+										for (int i2 = 0; i2 < 2; i2++)
+										{
+											EnumFacing STdir = dirs1[i2];
+											if (STdir.getOpposite() == Ndir) Conect = true;
+										}
 									}
-								} else if (te.Object.getUnlocalizedName().equals("thall"))
-								{
-									str10.setRotation(te.Object.placementRotation);
-									EnumFacing[] dirs1 = str10.getDirs(te.Object.placementDir);
-									for (int i2 = 0; i2 < 2; i2++)
+									if (Conect)
 									{
-										EnumFacing STdir = dirs1[i2];
-										if (STdir.getOpposite() == Ndir) Conect = true;
-									}
-								}
-								if (Conect)
-								{
-									BlockPos Ipos = FacingUtils.IncreaseByDir(dir, IPoint, 9);
-									TileEntityInfo Ite = (TileEntityInfo) world.getTileEntity(Ipos);
-									if (Ite != null)
-									{
-										
-										Ite.Object.connections.add(te.Object);
+										BlockPos Ipos = FacingUtils.IncreaseByDir(dir, IPoint, 9);
+										TileEntityInfo Ite = (TileEntityInfo) world.getTileEntity(Ipos);
+										if (Ite != null)
+										{
+											
+											Ite.Object.connections.add(te.Object);
+										}
 									}
 								}
 							}
 						}
+						if (!Conect)
+						{
+							str1.Build(world, Ndir, pos);
+						} else
+						{
+							// no if's for each dir!
+							pos = FacingUtils.IncreaseByDir(Ndir.getOpposite(), pos, 2);
+							str3.ClearWay(world, Ndir, pos);
+						}
+						
 					}
-					if (!Conect)
-					{
-						str1.Build(world, Ndir, pos);
-					} else
-					{
-						// no if's for each dir!
-						pos = FacingUtils.IncreaseByDir(Ndir.getOpposite(), pos, 2);
-						str3.ClearWay(world, Ndir, pos);
-					}
-					
+					str2.ClearWay(world, dir, bpos);
 				}
-				str2.ClearWay(world, dir, bpos);
-				
 				return true;
 			}
 		case "hallairlock":
