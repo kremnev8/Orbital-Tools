@@ -1,7 +1,5 @@
 package net.orbitallabs.structures;
 
-import java.util.ArrayList;
-import java.util.List;
 import micdoodle8.mods.galacticraft.core.GCBlocks;
 import micdoodle8.mods.galacticraft.core.GCItems;
 import net.minecraft.block.Block;
@@ -9,14 +7,16 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.OreDictItemStack;
 
-public class StructurePierce extends Structure {
+public class StructurePirs extends Structure {
 	
-	public StructurePierce()
+	public StructurePirs()
 	{
 		super(false);
 	}
@@ -281,14 +281,14 @@ public class StructurePierce extends Structure {
 	
 	/**
 	 * @param meta
-	 *            0 - everything, 1 - everything excluding pierce, 2 - only add
+	 *            0 - everything, 1 - everything excluding pirs, 2 - only add
 	 *            structures, 3 - only window(only rot == 0), 4 - solar panels,
-	 *            5 - greenhouse, 6 - pierce
+	 *            5 - greenhouse, 6 - pirs
 	 */
 	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos spos, int meta)
 	{
-		if (meta != 0 && meta != 6 && meta != -1)
+		if (meta != EnumBlockPointStates.PIRS.getMeta() && meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -310,28 +310,28 @@ public class StructurePierce extends Structure {
 	@Override
 	public String getName()
 	{
-		return I18n.format("builder.pierce.name");
+		return I18n.format("builder.pirs.name");
 	}
 	
 	@Override
 	public String getUnlocalizedName()
 	{
-		return "pierce";
+		return "pirs";
 	}
 	
 	@Override
 	public Structure copy()
 	{
-		StructurePierce Nstr = new StructurePierce();
+		StructurePirs Nstr = new StructurePirs();
 		if (this.placementPos == null) placementPos = BlockPos.ORIGIN;
 		Nstr.Configure(new BlockPos(placementPos), placementRotation, placementDir);
 		return Nstr;
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 8, 7), "plateTin"));
 		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 4, ItemMod.scaffold_meta)));
 		
@@ -342,7 +342,7 @@ public class StructurePierce extends Structure {
 	public StructureData getStructureData()
 	{
 		StructureData data = super.getStructureData();
-		data.specialFunc = I18n.format("builder.side_info.funcs.pierce.name");
+		data.specialFunc = I18n.format("builder.side_info.funcs.pirs.name");
 		return data;
 	}
 	
