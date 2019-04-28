@@ -25,6 +25,8 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.orbitallabs.ClientProxy;
+import net.orbitallabs.items.AnimationCapabilityProvider.IAnimationCapability;
+import net.orbitallabs.items.SpaceJetpackStorage.ISpaceJetpackState;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.JetpackFueluseSync;
 import net.orbitallabs.utils.OrbitalModInfo;
@@ -35,10 +37,6 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ISpaceJetpack {
 			SoundEvent.REGISTRY.getObject(new ResourceLocation("item.armor.equip_iron")), 5);
 	
 	public static List<Integer> KeysPressed = new ArrayList();
-	
-	//private int ticks_from_sent = 0;
-	
-	//private ScoreObjective obj;
 	
 	public ItemSpaceJetpack(String uln)
 	{
@@ -72,34 +70,24 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ISpaceJetpack {
 	//TODO create control Gui
 	
 	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+	public void onArmorTick(World world, EntityPlayer player, ItemStack stack)
 	{
 		
-		SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) itemStack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+		ISpaceJetpackState cap = stack.getCapability(SpaceJetpackProvider.SpaceJetpackCapability, EnumFacing.UP);
+		IAnimationCapability anim = stack.getCapability(AnimationCapabilityProvider.AnimCap, EnumFacing.UP);
 		
-		if (!world.isRemote)
+		if (anim.getAnimationHandler().notinited)
 		{
-			if (cap.usedFuel >= 10)
-			{
-				int use = cap.getTank().drain((int) cap.usedFuel, true).amount;
-				cap.usedFuel -= use;
-				cap.markDirty();
-			}
+			anim.getAnimationHandler().activateAnimation(cap.isEnabled() ? "Enabled idle" : "Disabled idle", 0);
+			anim.getAnimationHandler().notinited = false;
 		}
 		
 	}
 	
-	//	public void setActive(ItemStack stack, boolean state)
-	//	{
-	//		SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) stack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
-	//		cap.setState(state);
-	//		ticks_from_sent = 5;
-	//	}
-	
 	@Override
 	public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
 	{
-		return new SpaceJetpackItemStackCap(stack, nbt);
+		return new SpaceJetpackProvider();
 	}
 	
 	@Override
@@ -207,7 +195,7 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ISpaceJetpack {
 			//	player.motionX = 0;
 			//	player.motionZ = 0;
 		}
-		SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) itemStack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+		ISpaceJetpackState cap = itemStack.getCapability(SpaceJetpackProvider.SpaceJetpackCapability, EnumFacing.UP);
 		
 		if (cap.isEnabled() && !isDisabled(player, itemStack, true))
 		{

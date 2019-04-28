@@ -11,8 +11,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.OreDictItemStack;
 
@@ -2500,7 +2503,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x - 4, y - 2, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y - 2, z + 2, block1, 7, 2);
 				BuildHandler.setBlock(world, x - 4, y - 1, z + 2, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x - 4, y, z + 2, 3);
+				BuildHandler.buildBuildPoint(world, x - 4, y, z + 2, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x - 4, y + 1, z + 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y + 2, z - 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y + 2, z - 3, block2, 4, 2);
@@ -2509,7 +2512,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x - 4, y + 2, z + 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x - 4, y + 3, z - 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x - 4, y + 3, z - 1, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x - 4, y + 3, z, 4);
+				BuildHandler.buildBuildPoint(world, x - 4, y + 3, z, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x - 4, y + 3, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 3, y - 2, z - 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 3, y - 2, z - 3, block2, 4, 2);
@@ -2616,7 +2619,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x - 6, y + 0, z - 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 6, y + 0, z - 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 6, y + 0, z - 1, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x - 6, y, z, 3);
+				BuildHandler.buildBuildPoint(world, x - 6, y, z, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x - 6, y + 0, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 6, y + 0, z + 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 6, y + 0, z + 3, block2, 4, 2);
@@ -2679,7 +2682,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x - 4, y + 2, z + 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y + 3, z - 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x - 4, y + 3, z - 1, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x - 4, y + 3, z, 4);
+				BuildHandler.buildBuildPoint(world, x - 4, y + 3, z, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x - 4, y + 3, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y + 3, z + 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x - 3, y - 2, z - 4, block2, 4, 2);
@@ -2865,7 +2868,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x - 4, y - 2, z + 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y - 2, z + 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y - 1, z - 2, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x - 4, y, z - 2, 3);
+				BuildHandler.buildBuildPoint(world, x - 4, y, z - 2, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x - 4, y + 1, z - 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y + 2, z - 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x - 4, y + 2, z - 1, block6, 2, 2);
@@ -2873,7 +2876,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x - 4, y + 2, z + 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y + 2, z + 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y + 3, z - 1, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x - 4, y + 3, z + 0, 4);
+				BuildHandler.buildBuildPoint(world, x - 4, y + 3, z + 0, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x - 4, y + 3, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 4, y + 3, z + 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x - 3, y - 2, z - 2, block1, 6, 2);
@@ -3053,7 +3056,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 4, y - 2, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y - 2, z + 2, block1, 7, 2);
 				BuildHandler.setBlock(world, x + 4, y - 1, z + 2, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 4, y + 0, z + 2, 3);
+				BuildHandler.buildBuildPoint(world, x + 4, y + 0, z + 2, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x + 4, y + 1, z + 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y + 2, z - 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y + 2, z - 3, block2, 4, 2);
@@ -3062,7 +3065,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 4, y + 2, z + 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 4, y + 3, z - 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 4, y + 3, z - 1, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 4, y + 3, z + 0, 4);
+				BuildHandler.buildBuildPoint(world, x + 4, y + 3, z + 0, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 4, y + 3, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 5, y - 2, z - 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 5, y - 2, z - 3, block2, 4, 2);
@@ -3256,7 +3259,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 4, y + 2, z + 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y + 3, z - 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 4, y + 3, z - 1, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 4, y + 3, z + 0, 4);
+				BuildHandler.buildBuildPoint(world, x + 4, y + 3, z + 0, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 4, y + 3, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y + 3, z + 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 5, y - 2, z - 4, block2, 4, 2);
@@ -3302,7 +3305,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 6, y + 0, z - 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 6, y + 0, z - 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 6, y + 0, z - 1, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 6, y + 0, z + 0, 3);
+				BuildHandler.buildBuildPoint(world, x + 6, y + 0, z + 0, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x + 6, y + 0, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 6, y + 0, z + 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 6, y + 0, z + 3, block2, 4, 2);
@@ -3418,7 +3421,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 4, y - 2, z + 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y - 2, z + 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y - 1, z - 2, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 4, y + 0, z - 2, 3);
+				BuildHandler.buildBuildPoint(world, x + 4, y + 0, z - 2, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x + 4, y + 1, z - 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y + 2, z - 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 4, y + 2, z - 1, block6, 2, 2);
@@ -3426,7 +3429,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 4, y + 2, z + 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y + 2, z + 4, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y + 3, z - 1, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 4, y + 3, z + 0, 42);
+				BuildHandler.buildBuildPoint(world, x + 4, y + 3, z + 0, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 4, y + 3, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 4, y + 3, z + 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 5, y - 2, z - 2, block1, 6, 2);
@@ -3626,7 +3629,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 0, y + 2, z + 8, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 3, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z + 4, 4);
+				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z + 4, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 5, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 6, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 1, y - 2, z + 0, block2, 4, 2);
@@ -3672,7 +3675,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 2, y + 0, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 2, y + 0, z + 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 2, y + 0, z + 3, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 2, y + 0, z + 4, 3);
+				BuildHandler.buildBuildPoint(world, x + 2, y + 0, z + 4, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x + 2, y + 0, z + 5, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 2, y + 0, z + 6, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 2, y + 0, z + 7, block2, 4, 2);
@@ -3722,7 +3725,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x - 2, y + 0, z + 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 2, y + 0, z + 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 2, y + 0, z + 3, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x - 2, y + 0, z + 4, 3);
+				BuildHandler.buildBuildPoint(world, x - 2, y + 0, z + 4, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x - 2, y + 0, z + 5, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 2, y + 0, z + 6, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 2, y + 0, z + 7, block2, 4, 2);
@@ -3786,7 +3789,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 0, y + 2, z + 8, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 3, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z + 4, 4);
+				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z + 4, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 5, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 6, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 1, y - 2, z + 0, block2, 4, 2);
@@ -3974,7 +3977,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 0, y - 2, z + 5, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y - 2, z + 6, block1, 7, 2);
 				BuildHandler.setBlock(world, x + 0, y - 1, z + 6, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 0, y + 0, z + 6, 3);
+				BuildHandler.buildBuildPoint(world, x + 0, y + 0, z + 6, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x + 0, y + 1, z + 6, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 2, z + 0, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 2, z + 1, block2, 4, 2);
@@ -3983,7 +3986,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 0, y + 2, z + 6, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 2, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 3, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z + 4, 4);
+				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z + 4, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 0, y + 3, z + 5, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 1, y - 2, z + 0, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 1, y - 2, z + 1, block2, 4, 2);
@@ -4093,7 +4096,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x - 2, y + 0, z - 7, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 2, y + 0, z - 6, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 2, y + 0, z - 5, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x - 2, y + 0, z - 4, 3);
+				BuildHandler.buildBuildPoint(world, x - 2, y + 0, z - 4, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x - 2, y + 0, z - 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 2, y + 0, z - 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x - 2, y + 0, z - 1, block2, 4, 2);
@@ -4157,7 +4160,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 0, y + 2, z + 0, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 6, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 5, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z - 4, 4);
+				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z - 4, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 1, y - 2, z - 8, block2, 4, 2);
@@ -4343,7 +4346,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 0, y - 2, z - 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y - 2, z + 0, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y - 1, z - 6, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 0, y + 0, z - 6, 3);
+				BuildHandler.buildBuildPoint(world, x + 0, y + 0, z - 6, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x + 0, y + 1, z - 6, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 2, z - 6, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 0, y + 2, z - 5, block6, 2, 2);
@@ -4351,7 +4354,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 0, y + 2, z - 1, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 2, z + 0, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 5, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z - 4, 4);
+				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z - 4, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 1, y - 2, z - 6, block1, 6, 2);
@@ -4546,7 +4549,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 0, y + 2, z + 0, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 6, block1, 2, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 5, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z - 4, 4);
+				BuildHandler.buildBuildPoint(world, x + 0, y + 3, z - 4, EnumBlockPointStates.SOLARPANELS);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 0, y + 3, z - 2, block1, 3, 2);
 				BuildHandler.setBlock(world, x + 1, y - 2, z - 8, block2, 4, 2);
@@ -4593,7 +4596,7 @@ public class StructureThall extends StructureRotatable {
 				BuildHandler.setBlock(world, x + 2, y + 0, z - 7, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 2, y + 0, z - 6, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 2, y + 0, z - 5, block2, 4, 2);
-				BuildHandler.buildBuildPoint(world, x + 2, y + 0, z - 4, 3);
+				BuildHandler.buildBuildPoint(world, x + 2, y + 0, z - 4, EnumBlockPointStates.WINDOWS0);
 				BuildHandler.setBlock(world, x + 2, y + 0, z - 3, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 2, y + 0, z - 2, block2, 4, 2);
 				BuildHandler.setBlock(world, x + 2, y + 0, z - 1, block2, 4, 2);
@@ -4622,9 +4625,17 @@ public class StructureThall extends StructureRotatable {
 	}
 	
 	@Override
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		ArrayList<AxisAlignedBB> list = new ArrayList<>();
+		list.add(createBoundingBox(dir, pos, new int[] { 5, 6, 5, 2, -2, 2 }));
+		return list;
+	}
+	
+	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos spos, int meta)
 	{
-		if (meta != 0 && meta != 1 && meta != -1)
+		if (meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -4657,15 +4668,15 @@ public class StructureThall extends StructureRotatable {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 64, 7), "plateTin"));
-		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 16, 7), "plateTin"));
-		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 32, ItemMod.scaffold_meta)));
+		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 48, ItemMod.scaffold_meta)));
 		items.add(new OreDictItemStack(new ItemStack(Items.GLOWSTONE_DUST, 4)));
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 4, 13)));
 		items.add(new OreDictItemStack(new ItemStack(MarsItems.marsItemBasic, 4, 2)));
+		items.add(new OreDictItemStack(new ItemStack(GCItems.battery, 1, 0)));
 		
 		return items;
 	}

@@ -10,8 +10,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.OreDictItemStack;
 
@@ -128,7 +131,7 @@ public class StructureCupola extends Structure {
 			BuildHandler.setBlock(world, x + -1, y + 0, z + 2, block1, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z + -2, block1, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z + -1, block1, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y, z, 2);
+			BuildHandler.buildBuildPoint(world, x, y, z, EnumBlockPointStates.ADDSTRUCTURES);
 			BuildHandler.setBlock(world, x + 0, y + 0, z + 1, block1, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z + 2, block1, 4, 2);
 			BuildHandler.setBlock(world, x + 1, y + 0, z + -2, block1, 4, 2);
@@ -252,9 +255,17 @@ public class StructureCupola extends Structure {
 	}
 	
 	@Override
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		ArrayList<AxisAlignedBB> list = new ArrayList<>();
+		//	list.add(createBoundingBox(dir, pos, new int[] { 5, 6, 5, 2, -2, 2 }));
+		return list;
+	}
+	
+	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos pos, int meta)
 	{
-		if (meta != 2 && meta != 0 && meta != -1)
+		if (meta != EnumBlockPointStates.ADDSTRUCTURES.getMeta() && meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -297,6 +308,18 @@ public class StructureCupola extends Structure {
 	}
 	
 	@Override
+	public boolean haveReplaceableItems()
+	{
+		return true;
+	}
+	
+	@Override
+	public String getGuiCheckboxText()
+	{
+		return I18n.format("builder.side_info.checkbox.window.name");
+	}
+	
+	@Override
 	public boolean isHidden()
 	{
 		return hidden;
@@ -315,9 +338,9 @@ public class StructureCupola extends Structure {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 18, 7), "plateTin"));
 		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 8, ItemMod.scaffold_meta)));
 		items.add(new OreDictItemStack(new ItemStack(Blocks.GLASS, 9)));

@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.orbitallabs.utils.Config;
 
 public class BlockBuildPoint extends BlockMod {
 	
@@ -22,8 +23,16 @@ public class BlockBuildPoint extends BlockMod {
 	public BlockBuildPoint(String uln)
 	{
 		super(uln);
+		this.hasSubtypes = true;
 		this.setCreativeTab(CreativeTabs.REDSTONE);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(propertyStates, EnumBlockPointStates.EVERYTHINGMINUSPIERCE));
+		if (Config.makeSpaceStructureControlBlocksUnbreakable) this.setBlockUnbreakable();
+		this.setDefaultState(this.blockState.getBaseState().withProperty(propertyStates, EnumBlockPointStates.EVERYTHING));
+	}
+	
+	@Override
+	public boolean HasSubtypes()
+	{
+		return true;
 	}
 	
 	public IBlockState getStateFromMeta(int meta)
@@ -47,7 +56,16 @@ public class BlockBuildPoint extends BlockMod {
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list)
 	{
-		list.add(new ItemStack(item, 1, 0));
+		if (!hasSubtypes)
+		{
+			for (int i = 0; i < 6; i++)
+			{
+				list.add(new ItemStack(item, 1, i));
+			}
+		} else
+		{
+			list.add(new ItemStack(item, 1, 0));
+		}
 	}
 	
 	@Override
@@ -70,13 +88,14 @@ public class BlockBuildPoint extends BlockMod {
 	public enum EnumBlockPointStates implements IStringSerializable
 	{
 		
-		EVERYTHING(0, "everything"), EVERYTHINGMINUSPIERCE(1, "everything_minus_pierce"), ADDSTRUCTURES(2, "add_structures"), WINDOWS0(3, "windows_rot_0"), SOLARPANELS(4,
-				"solar_panels"), GREENHOUSE(5, "only_greenhouse"), PIERCE(6, "only_pierce");
+		EVERYTHING(0, "everything"), ADDSTRUCTURES(1, "add_structures"), WINDOWS0(2, "windows_rot_0"), SOLARPANELS(3, "solar_panels"), GREENHOUSE(4, "only_greenhouse"), PIRS(5,
+				"only_pirs");
 		
 		private int meta;
 		private String name;
+		public static int UNKNOWN = -1;
 		
-		public static final EnumBlockPointStates[] VALUES = new EnumBlockPointStates[7];
+		public static final EnumBlockPointStates[] VALUES = new EnumBlockPointStates[6];
 		
 		private EnumBlockPointStates(int meta, String name)
 		{

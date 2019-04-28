@@ -1,19 +1,21 @@
 package net.orbitallabs.hooklib.minecraft;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
-import org.apache.commons.io.IOUtils;
 import net.minecraftforge.fml.common.asm.transformers.DeobfuscationTransformer;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.orbitallabs.hooklib.asm.AsmHook;
+import net.orbitallabs.hooklib.asm.ClassMetadataReader;
 import net.orbitallabs.hooklib.asm.HookClassTransformer;
-import net.orbitallabs.hooklib.asm.ReadClassHelper;
 
+/**
+ * Удобная базовая реализация IFMLLoadingPlugin для использования HookLib.
+ * Регистрировать хуки и контейнеры нужно в registerHooks().
+ */
 public abstract class HookLoader implements IFMLLoadingPlugin {
 	
-	private static DeobfuscationTransformer deobfuscationTransformer;
+	static DeobfuscationTransformer deobfuscationTransformer;
+	
+	private static ClassMetadataReader deobfuscationMetadataReader;
 	
 	static
 	{
@@ -21,35 +23,33 @@ public abstract class HookLoader implements IFMLLoadingPlugin {
 		{
 			deobfuscationTransformer = new DeobfuscationTransformer();
 		}
+		deobfuscationMetadataReader = new DeobfuscationMetadataReader();
 	}
 	
-	private static HookClassTransformer getTransformer()
+	public static HookClassTransformer getTransformer()
 	{
 		return PrimaryClassTransformer.instance.registeredSecondTransformer ? MinecraftClassTransformer.instance : PrimaryClassTransformer.instance;
 	}
 	
+	/**
+	 * Регистрирует вручную созданный хук
+	 */
 	public static void registerHook(AsmHook hook)
 	{
 		getTransformer().registerHook(hook);
 	}
 	
+	/**
+	 * Деобфусцирует класс с хуками и регистрирует хуки из него
+	 */
 	public static void registerHookContainer(String className)
 	{
-		try
-		{
-			InputStream classData = ReadClassHelper.getClassData(className);
-			byte[] bytes = IOUtils.toByteArray(classData);
-			classData.close();
-			if (deobfuscationTransformer != null)
-			{
-				bytes = deobfuscationTransformer.transform(className, className, bytes);
-			}
-			ByteArrayInputStream newData = new ByteArrayInputStream(bytes);
-			getTransformer().registerHookContainer(newData);
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		getTransformer().registerHookContainer(className);
+	}
+	
+	public static ClassMetadataReader getDeobfuscationMetadataReader()
+	{
+		return deobfuscationMetadataReader;
 	}
 	
 	// 1.6.x only

@@ -10,18 +10,28 @@ import net.orbitallabs.tiles.TileEntityGravitySource;
 
 public class GravityChangePacket implements IMessage {
 	
+	private double Value;
+	
 	public GravityChangePacket()
 	{
+		Value = 1;
 	}
 	
-	@Override
-	public void fromBytes(ByteBuf buf)
+	public GravityChangePacket(double value)
 	{
+		Value = value;
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf)
 	{
+		buf.writeDouble(Value);
+	}
+	
+	@Override
+	public void fromBytes(ByteBuf buf)
+	{
+		Value = buf.readDouble();
 	}
 	
 	public static class Handler implements IMessageHandler<GravityChangePacket, IMessage> {
@@ -35,7 +45,9 @@ public class GravityChangePacket implements IMessage {
 				if (player.openContainer instanceof ContainerArtificialGSource)
 				{
 					if (((ContainerArtificialGSource) player.openContainer).tileEntity instanceof TileEntityGravitySource)
-						((TileEntityGravitySource) ((ContainerArtificialGSource) player.openContainer).tileEntity).gA_changed = true;
+					{
+						((TileEntityGravitySource) ((ContainerArtificialGSource) player.openContainer).tileEntity).SettedGA = pkt.Value;
+					}
 				}
 			}
 			

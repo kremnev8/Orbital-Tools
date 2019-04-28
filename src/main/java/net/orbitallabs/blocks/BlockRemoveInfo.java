@@ -18,12 +18,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.orbitallabs.tiles.TileEntityRemoveInfo;
+import net.orbitallabs.utils.Config;
 
 public class BlockRemoveInfo extends BlockContainerMod {
 	
 	public BlockRemoveInfo(String uln)
 	{
 		super(uln);
+		if (Config.makeSpaceStructureControlBlocksUnbreakable) this.setBlockUnbreakable();
 		this.setCreativeTab(CreativeTabs.REDSTONE);
 	}
 	

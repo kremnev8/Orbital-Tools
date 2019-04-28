@@ -12,21 +12,22 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.config.GuiSlider.ISlider;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.GravityChangePacket;
 import net.orbitallabs.tiles.TileEntityGravitySource;
 import net.orbitallabs.utils.OrbitalModInfo;
 
-public class GuiArtificialGSource extends GuiContainerGC {
+public class GuiArtificialGSource extends GuiContainerGC implements ISlider {
 	private static final ResourceLocation texture = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/gui/ArtificialGsource.png");
 	
 	private final TileEntityGravitySource Gsource;
 	
-	private GuiSlider slider;
+	private CustomGuiSlider slider;
 	private GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion((this.width - this.xSize) / 2 + 112, (this.height - this.ySize) / 2 + 65, 56, 9,
 			new ArrayList<String>(), this.width, this.height, this);
 	
-	private double lastVal = 0D;
+	private double ClientGvalue = 1D;
 	private boolean updated = false;
 	
 	public GuiArtificialGSource(InventoryPlayer player, TileEntityGravitySource tile)
@@ -34,9 +35,9 @@ public class GuiArtificialGSource extends GuiContainerGC {
 		super(new ContainerArtificialGSource(player, tile));
 		this.Gsource = tile;
 		this.ySize = 144;
+		ClientGvalue = tile.SettedGA;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui()
 	{
@@ -54,9 +55,8 @@ public class GuiArtificialGSource extends GuiContainerGC {
 		this.electricInfoRegion.parentWidth = this.width;
 		this.electricInfoRegion.parentHeight = this.height;
 		this.infoRegions.add(this.electricInfoRegion);
-		this.buttonList.add(slider = new GuiSlider(0, x + 13, y + 15, 150, 20, "Gravity add:", "", 0, 1.5, (double) Math.round(Gsource.SettedGA * 100) / 100, true, true));
+		this.buttonList.add(slider = new CustomGuiSlider(0, x + 13, y + 15, 150, 20, "Gravity add:", "", 0, 1.5D, ClientGvalue, true, true, 2, this));
 		this.buttonList.add(new GuiButton(1, x + 13, y + 38, 70, 20, "Reset"));
-		lastVal = slider.getValue();
 	}
 	
 	@Override
@@ -70,9 +70,9 @@ public class GuiArtificialGSource extends GuiContainerGC {
 	{
 		switch (button.id) {
 		case 1:
-			Gsource.ClientVal = 1D;
-			slider.sliderValue = (1D - 0) / (1.5 - 0);
-			slider.displayString = slider.dispString + 1D + slider.suffix;
+			ClientGvalue = 1D;
+			slider.setValue(ClientGvalue);
+			PacketHandler.sendToServer(new GravityChangePacket(ClientGvalue));
 			break;
 		}
 		
@@ -81,19 +81,6 @@ public class GuiArtificialGSource extends GuiContainerGC {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
 	{
-		if (slider.getValue() != lastVal)
-		{
-			lastVal = slider.getValue();
-			Gsource.ClientVal = (double) Math.round(slider.getValue() * 100) / 100;
-			PacketHandler.sendToServer(new GravityChangePacket());
-		}
-		if (Gsource.SettedGA != lastVal && !updated)
-		{
-			slider.sliderValue = (Gsource.SettedGA - 0) / (1.5 - 0);
-			slider.displayString = slider.dispString + (double) Math.round(slider.getValue() * 100) / 100 + slider.suffix;
-			updated = true;
-		}
-		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(texture);
 		final int var5 = (this.width - this.xSize) / 2;
@@ -110,5 +97,13 @@ public class GuiArtificialGSource extends GuiContainerGC {
 		}
 		
 		this.drawTexturedModalRect(var5 + 113, var6 + 44, 176, 0, Math.min(this.Gsource.getScaledElecticalLevel(54), 54), 7);
+	}
+	
+	@Override
+	public void onChangeSliderValue(GuiSlider slider)
+	{
+		ClientGvalue = slider.getValue();
+		PacketHandler.sendToServer(new GravityChangePacket(ClientGvalue));
+		
 	}
 }

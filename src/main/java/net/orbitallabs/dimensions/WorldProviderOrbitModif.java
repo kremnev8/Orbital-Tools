@@ -10,6 +10,7 @@ import micdoodle8.mods.galacticraft.core.dimension.WorldProviderOverworldOrbit;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -150,9 +151,9 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 					this.ArtificialForces.clear();
 					for (int i = 0; i < savef.GraviySources.size(); i++)
 					{
-						if (this.world.getTileEntity(new BlockPos(savef.GraviySources.get(i)[0], savef.GraviySources.get(i)[1], savef.GraviySources.get(i)[2])) != null)
+						if (this.world.getTileEntity(savef.GraviySources.get(i)) != null)
 						{
-							TileEntity te = this.world.getTileEntity(new BlockPos(savef.GraviySources.get(i)[0], savef.GraviySources.get(i)[1], savef.GraviySources.get(i)[2]));
+							TileEntity te = this.world.getTileEntity(savef.GraviySources.get(i));
 							if (te instanceof TileEntityGravitySource)
 							{
 								ArtificialForces.add(((TileEntityGravitySource) te).gravityAddition);
@@ -166,6 +167,19 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 						sum += forces.next();
 					}
 					artificialG = sum;
+					
+					if (artificialG > 0 && savef.frozenSands.size() > 0)
+					{
+						for (int i = 0; i < savef.frozenSands.size(); i++)
+						{
+							if (world.getBlockState(savef.frozenSands.get(i)).getBlock() != Blocks.AIR)
+							{
+								world.scheduleUpdate(savef.frozenSands.get(i), world.getBlockState(savef.frozenSands.get(i)).getBlock(), 2);
+							}
+						}
+						savef.frozenSands.clear();
+					}
+					
 					PacketHandler.sendToDimension(new ClientGravityDataRecivePacket(ArtificialForces), getDimension());
 					savef.markDirty();
 				}
@@ -225,7 +239,6 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 	@Override
 	public BlockPos getSpawnCoordinate()
 	{
-		// TODO Автоматически созданная заглушка метода
 		return new BlockPos(0, 64, 0);
 	}
 	
@@ -255,6 +268,12 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 	public int getRespawnDimension(EntityPlayerMP player)
 	{
 		return this.spaceStationDimensionID;
+	}
+	
+	@Override
+	public float getArrowGravity()
+	{
+		return (float) (0.05D * artificialG);
 	}
 	
 	@Override

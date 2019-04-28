@@ -2,13 +2,6 @@
 package net.orbitallabs.renderer.animations;
 
 import java.util.HashMap;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.orbitallabs.items.SpaceJetpackItemStackCap;
-import net.orbitallabs.network.PacketHandler;
-import net.orbitallabs.network.packets.AnimationTellServerPacket;
-import net.orbitallabs.network.packets.SyncPressedKeysPacket;
 import net.orbitallabs.renderer.MCACommonLibrary.IMCAnimatedEntity;
 import net.orbitallabs.renderer.MCACommonLibrary.animation.AnimationHandler;
 import net.orbitallabs.renderer.MCACommonLibrary.animation.Channel;
@@ -24,27 +17,26 @@ public class AnimationHandlerJetpack extends AnimationHandler {
 		animChannels.put("Disabled idle", new ChannelDisabledIdle("Disabled idle", 1.0F, 3, Channel.LOOP));
 	}
 	
+	public boolean notinited = true;
+	
 	public AnimationHandlerJetpack(IMCAnimatedEntity entity)
 	{
 		super(entity);
 	}
 	
-	public void activateAnimation(String name, float startingFrame, boolean tellServer)
+	public void activateAnimation(String name, float startingFrame)
 	{
 		//OTLoger.logInfo("Activated: " + name);
 		if (name.equals("Enable") && this.animCurrentFrame.containsKey("Disabled idle"))
 		{
 			this.stopAnimation("Disabled idle");
+			//OTLoger.logInfo("Stopping animation Disabled idle");
 		} else if (name.equals("Disable") && this.animCurrentFrame.containsKey("Enabled idle"))
 		{
 			this.stopAnimation("Enabled idle");
+			//OTLoger.logInfo("Stopping animation Enabled idle");
 		}
 		super.activateAnimation(animChannels, name, startingFrame);
-		
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && tellServer)
-		{
-			PacketHandler.sendToServer(new AnimationTellServerPacket(name, true));
-		}
 		
 	}
 	
@@ -53,13 +45,10 @@ public class AnimationHandlerJetpack extends AnimationHandler {
 		return animCurrentFrame;
 	}
 	
-	public void stopAnimation(String name, boolean tellServer)
+	public void stopAnimation(String name)
 	{
+		//OTLoger.logInfo("Stopped: " + name);
 		super.stopAnimation(animChannels, name);
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && tellServer)
-		{
-			PacketHandler.sendToServer(new AnimationTellServerPacket(name, false));
-		}
 	}
 	
 	@Override
@@ -76,63 +65,29 @@ public class AnimationHandlerJetpack extends AnimationHandler {
 	@Override
 	public boolean updateAnim(IMCAnimatedEntity entity, HashMap<String, Float> prevFrameAnim)
 	{
-		SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) entity;
-		ItemStack item = cap.getStack();
-		Boolean activated = false;
-		if (item.hasTagCompound())
-		{
-			activated = item.getTagCompound().getBoolean("Enabled");
-		} else
-		{
-			if (!isAnimationActive("Disabled idle"))
-			{
-				PacketHandler.sendToServer(new SyncPressedKeysPacket(false));
-				clearAnimations();
-				activateAnimation("Disabled idle", 0);
-			}
-		}
+		
 		for (int i = 0; i < animCurrentChannels.size(); i++)
 		{
 			Channel anim = animCurrentChannels.get(i);
 			Float frame = animCurrentFrame.get(anim.name);
+			//if (anim.name.equals("Enable")) OTLoger.logInfo("anim " + anim.name + " time is " + frame);
+			
 			if (anim.name.equals("Enable") && frame >= 8.5)
 			{
 				this.stopAnimation("Enable");
-				this.activateAnimation("Enabled idle", 0, true);
+				this.activateAnimation("Enabled idle", 0);
+				//OTLoger.logInfo("Enable ended, setting idle anim");
 			}
 			if (anim.name.equals("Disable") && frame >= 8.5)
 			{
 				this.stopAnimation("Disable");
-				this.activateAnimation("Disabled idle", 0, true);
+				this.activateAnimation("Disabled idle", 0);
+				//OTLoger.logInfo("Disable ended, setting idle anim");
 			}
 		}
-		
-		//		if (activated && !isAnimationActive("Enabled idle") && !isAnimationActive("Enable") && !isAnimationActive("Disable"))
-		//		{
-		//			clearAnimations();
-		//			activateAnimation("Enabled idle", 0);
-		//			cap.markDirty();
-		//		} else if (!activated && !isAnimationActive("Disabled idle") && !isAnimationActive("Disable") && !isAnimationActive("Enable"))
-		//		{
-		//			clearAnimations();
-		//			activateAnimation("Disabled idle", 0);
-		//			cap.markDirty();
-		//		}
 		
 		return false;
 		
 	}
 	
-	@Override
-	public void activateAnimation(String name, float startingFrame)
-	{
-		this.activateAnimation(name, startingFrame, true);
-	}
-	
-	@Override
-	public void stopAnimation(String name)
-	{
-		//OTLoger.logInfo("Stopped: " + name);
-		this.stopAnimation(name, true);
-	}
 }

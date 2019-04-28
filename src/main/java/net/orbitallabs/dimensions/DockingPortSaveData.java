@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
@@ -13,8 +14,9 @@ import net.minecraft.world.storage.MapStorage;
 public class DockingPortSaveData extends WorldSavedData {
 	public static String saveDataID = "GliderDockPorts";
 	
-	public List<int[]> DockingPorts = new ArrayList();
-	public List<int[]> GraviySources = new ArrayList();
+	public List<BlockPos> DockingPorts = new ArrayList();
+	public List<BlockPos> GraviySources = new ArrayList();
+	public List<BlockPos> frozenSands = new ArrayList<>();
 	
 	public DockingPortSaveData()
 	{
@@ -31,30 +33,46 @@ public class DockingPortSaveData extends WorldSavedData {
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		NBTTagList nbtlist = nbt.getTagList("DOCKPORTS", 11);
-		List<int[]> dockports = new ArrayList();
+		List<BlockPos> dockports = new ArrayList();
 		dockports.clear();
 		if (nbtlist.tagCount() != 0)
 		{
 			
 			for (int i = 0; i < nbtlist.tagCount(); i++)
 			{
-				dockports.add(nbtlist.getIntArrayAt(i));
+				int[] list = nbtlist.getIntArrayAt(i);
+				dockports.add(new BlockPos(list[0], list[1], list[2]));
 			}
 		}
 		this.DockingPorts = dockports;
 		
 		nbtlist = nbt.getTagList("GRAVITYSOURCES", 11);
-		List<int[]> gravityS = new ArrayList();
+		List<BlockPos> gravityS = new ArrayList();
 		gravityS.clear();
 		if (nbtlist.tagCount() != 0)
 		{
 			
 			for (int i = 0; i < nbtlist.tagCount(); i++)
 			{
-				gravityS.add(nbtlist.getIntArrayAt(i));
+				int[] list = nbtlist.getIntArrayAt(i);
+				gravityS.add(new BlockPos(list[0], list[1], list[2]));
 			}
 		}
 		this.GraviySources = gravityS;
+		
+		nbtlist = nbt.getTagList("FROZENSANDS", 11);
+		List<BlockPos> frozenS = new ArrayList();
+		frozenS.clear();
+		if (nbtlist.tagCount() != 0)
+		{
+			
+			for (int i = 0; i < nbtlist.tagCount(); i++)
+			{
+				int[] list = nbtlist.getIntArrayAt(i);
+				frozenS.add(new BlockPos(list[0], list[1], list[2]));
+			}
+		}
+		this.frozenSands = frozenS;
 		
 		if (nbt.getBoolean("UPDATED_GVALUE"))
 		{
@@ -69,16 +87,27 @@ public class DockingPortSaveData extends WorldSavedData {
 		NBTTagList nbtlist = new NBTTagList();
 		for (int i = 0; i < DockingPorts.size(); i++)
 		{
-			nbtlist.appendTag(new NBTTagIntArray(DockingPorts.get(i)));
+			BlockPos pos = DockingPorts.get(i);
+			nbtlist.appendTag(new NBTTagIntArray(new int[] { pos.getX(), pos.getY(), pos.getZ() }));
 		}
 		nbt.setTag("DOCKPORTS", nbtlist);
 		
 		nbtlist = new NBTTagList();
 		for (int i = 0; i < GraviySources.size(); i++)
 		{
-			nbtlist.appendTag(new NBTTagIntArray(GraviySources.get(i)));
+			BlockPos pos = GraviySources.get(i);
+			nbtlist.appendTag(new NBTTagIntArray(new int[] { pos.getX(), pos.getY(), pos.getZ() }));
 		}
 		nbt.setTag("GRAVITYSOURCES", nbtlist);
+		
+		nbtlist = new NBTTagList();
+		for (int i = 0; i < frozenSands.size(); i++)
+		{
+			BlockPos pos = frozenSands.get(i);
+			nbtlist.appendTag(new NBTTagIntArray(new int[] { pos.getX(), pos.getY(), pos.getZ() }));
+		}
+		nbt.setTag("FROZENSANDS", nbtlist);
+		
 		nbt.setBoolean("UPDATED_GVALUE", WorldProviderOrbitModif.updatedList);
 		nbt.setDouble("Artificial_GRAVITY", WorldProviderOrbitModif.artificialG);
 		return nbt;

@@ -56,32 +56,33 @@ public class SyncRocketTierPacket implements IMessage {
 		@Override
 		public IMessage onMessage(SyncRocketTierPacket pkt, MessageContext ctx)
 		{
-			
-			List<Entity> Entlist = Minecraft.getMinecraft().player.world.getLoadedEntityList();
-			
-			for (int i = 0; i < Entlist.size(); i++)
+			if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.world != null)
 			{
-				Entity ent = Entlist.get(i);
-				if (ent.getEntityId() == pkt.entid)
+				List<Entity> Entlist = Minecraft.getMinecraft().player.world.getLoadedEntityList();
+				
+				for (int i = 0; i < Entlist.size(); i++)
 				{
-					if (ent instanceof EntityRocketFakeTiered)
+					Entity ent = Entlist.get(i);
+					if (ent.getEntityId() == pkt.entid)
 					{
-						OTLoger.logInfo("Find writen entity from id");
-						pkt.ent = (EntityRocketFakeTiered) ent;
+						if (ent instanceof EntityRocketFakeTiered)
+						{
+							OTLoger.logInfo("Find writen entity from id");
+							pkt.ent = (EntityRocketFakeTiered) ent;
+						}
 					}
 				}
+				
+				if (pkt.ent != null)
+				{
+					pkt.ent.setTier(pkt.tier);
+					pkt.ent.setPosition(pkt.x, pkt.y, pkt.z);
+				} else
+				{
+					OTLoger.logWarn("An error on handling dismount packet. report this to dev!");
+					OTLoger.logWarn("info: Entity is null");
+				}
 			}
-			
-			if (pkt.ent != null)
-			{
-				pkt.ent.setTier(pkt.tier);
-				pkt.ent.setPosition(pkt.x, pkt.y, pkt.z);
-			} else
-			{
-				OTLoger.logWarn("An error on handling dismount packet. report this to dev!");
-				OTLoger.logWarn("info: Entity is null");
-			}
-			
 			return null;
 		}
 		

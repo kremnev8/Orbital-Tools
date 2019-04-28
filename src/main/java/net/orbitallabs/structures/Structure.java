@@ -3,8 +3,11 @@ package net.orbitallabs.structures;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.utils.FacingUtils;
 import net.orbitallabs.utils.OreDictItemStack;
 
 public abstract class Structure {
@@ -20,7 +23,7 @@ public abstract class Structure {
 	public static String THALLID = "thall";
 	public static String BIGHHALL = "bighall";
 	public static String GREENHOUSE = "greenhouse";
-	public static String PIERCE = "pierce";
+	public static String PIRS = "pirs";
 	
 	public BlockPos placementPos;
 	public EnumFacing placementDir;
@@ -29,6 +32,9 @@ public abstract class Structure {
 	
 	/**
 	 * client constructor(call on client)
+	 * 
+	 * @param hidden
+	 *            Will this structure be hidden in builder GUI
 	 */
 	public Structure(boolean hidden)
 	{
@@ -58,7 +64,7 @@ public abstract class Structure {
 	 * full alternative constructor(call on server)
 	 * 
 	 * @param pos
-	 *            - placement position;\
+	 *            - placement position
 	 * @param rot
 	 *            - placement rotation
 	 * @param dir
@@ -84,7 +90,7 @@ public abstract class Structure {
 	 * configure class(call on server)
 	 * 
 	 * @param x,y,z
-	 *            - placement position;
+	 *            - placement position
 	 * @param rot
 	 *            - placement rotation
 	 * @param dir
@@ -180,9 +186,9 @@ public abstract class Structure {
 		} else if (uln.equals(GREENHOUSE))
 		{
 			return new StructureGreenHouse();
-		} else if (uln.equals(PIERCE))
+		} else if (uln.equals(PIRS))
 		{
-			return new StructurePierce();
+			return new StructurePirs();
 		} else
 		{
 			return null;
@@ -195,31 +201,93 @@ public abstract class Structure {
 	}
 	
 	/**
-	 * place a structure
+	 * Code to build the structure itself
+	 * 
+	 * @param world
+	 * @param dir
+	 *            direction of placement
+	 * @param pos
 	 */
 	
 	public abstract void Build(World world, EnumFacing dir, BlockPos pos);
 	
 	/**
-	 * deconstruct structure
+	 * Code to deconstruct previously build structure
+	 * 
+	 * @param world
+	 * @param dir
+	 *            direction of placement
+	 * @param pos
 	 */
 	public abstract void deconstruct(World world, EnumFacing dir, BlockPos pos);
+	
+	/**
+	 * 
+	 * @param dir
+	 *            direction of placement
+	 * @return list of BoundingBoxes relative to placement position
+	 */
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		return new ArrayList<>();
+	}
 	
 	/**
 	 * check possible to place structure
 	 * 
 	 * @param meta
-	 *            0 - everything, 1 - everything excluding pierce, 2 - only add
+	 *            0 - everything, 1 - everything excluding pirs, 2 - only add
 	 *            structures, 3 - only window(only rot == 0), 4 - solar panels,
-	 *            5 - greenhouse, 6 - pierce
+	 *            5 - greenhouse, 6 - pirs
 	 * 
 	 */
 	public abstract boolean Check(World world, EnumFacing dir, BlockPos pos, int meta);
 	
 	/**
+	 * 
+	 * @param world
+	 * @param dir
+	 *            direction of placement
+	 * @param pos
+	 * @return Is there enough space to build this structure
+	 */
+	
+	public AxisAlignedBB createBoundingBox(EnumFacing dir, BlockPos pos, int[] size)
+	{
+		
+		if (size.length > 0 && dir != EnumFacing.DOWN && dir != EnumFacing.UP)
+		{
+			BlockPos start = new BlockPos(pos);
+			start = start.add(0, size[4], 0);
+			start = FacingUtils.IncreaseByDir(dir, start, size[3]);
+			start = FacingUtils.IncreaseByDir(dir.rotateYCCW(), start, size[5]);
+			
+			BlockPos end = new BlockPos(start);
+			end = end.add(0, size[1] - 1, 0);
+			end = FacingUtils.IncreaseByDir(dir, end, size[0] - 1);
+			end = FacingUtils.IncreaseByDir(dir.rotateY(), end, size[2] - 1);
+			
+			AxisAlignedBB box = new AxisAlignedBB(start, end);
+			
+			return box;
+		}
+		return null;
+	}
+	
+	/**
 	 * Clear way after placing structure
 	 */
 	public abstract void ClearWay(World world, EnumFacing dir, BlockPos pos);
+	
+	public boolean haveReplaceableItems()
+	{
+		return false;
+	}
+	
+	public String getGuiCheckboxText()
+	{
+		return "";
+	}
 	
 	public abstract boolean isHidden();
 	
@@ -230,13 +298,12 @@ public abstract class Structure {
 	public abstract Structure copy();
 	
 	/**
-	 * 
-	 * @return required items to build it
+	 * @return The items needed to build this structure
 	 */
-	public abstract List<OreDictItemStack> getRequiredItems();
+	public abstract NonNullList<OreDictItemStack> getRequiredItems();
 	
 	/**
-	 * some data was allready included. but not all.
+	 * @return Various information about this structure including recipe
 	 */
 	public StructureData getStructureData()
 	{
@@ -246,6 +313,24 @@ public abstract class Structure {
 		data.addRequiredItems(getRequiredItems());
 		data.specialFunc = "none";
 		return data;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String ret = "";
+		ret = ret.concat(this.getUnlocalizedName() + " - ");
+		if (placementPos != null)
+		{
+			ret = ret.concat(("pos: {x=" + placementPos.getX() + ", y=" + placementPos.getY() + ", z=" + placementPos.getZ() + "}; "));
+		}
+		if (placementDir != null)
+		{
+			ret = ret.concat("dir: " + placementDir.getName() + "; ");
+		}
+		ret = ret.concat("rot: " + placementRotation);
+		
+		return ret;
 	}
 	
 }

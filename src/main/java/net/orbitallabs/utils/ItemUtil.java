@@ -12,7 +12,7 @@ public class ItemUtil {
 		for (int i = 0; i < found.size(); i++)
 		{
 			ItemStack curr = found.get(i);
-			if (is != null && curr != null && curr.getItem() == is.getItem() && (!is.getHasSubtypes() || curr.getItemDamage() == is.getItemDamage())
+			if (!is.isEmpty() && !curr.isEmpty() && curr.getItem() == is.getItem() && (!is.getHasSubtypes() || curr.getItemDamage() == is.getItemDamage())
 					&& curr.getCount() >= is.getCount())
 			{
 				return true;
@@ -26,7 +26,7 @@ public class ItemUtil {
 		for (int i = 0; i < inv.getSizeInventory(); i++)
 		{
 			ItemStack curr = inv.getStackInSlot(i);
-			if (is != null && curr != null && curr.getItem() == is.getItem() && (!is.getHasSubtypes() || curr.getItemDamage() == is.getItemDamage())
+			if (!is.isEmpty() && !curr.isEmpty() && curr.getItem() == is.getItem() && (!is.getHasSubtypes() || curr.getItemDamage() == is.getItemDamage())
 					&& curr.getCount() >= is.getCount())
 			{
 				return true;
@@ -45,16 +45,16 @@ public class ItemUtil {
 	 */
 	public static boolean AreItemStackEqual(ItemStack is1, ItemStack is2, boolean ignoreStackSize)
 	{
-		if (is1 == null && is2 == null || (is1 != null && is1.isEmpty() && is2 != null && is2.isEmpty()))
+		if (is1.isEmpty() && is2.isEmpty())
 		{
 			return true;
 		}
-		if (is1 != null && is1.isEmpty() || is2 != null && is2.isEmpty())
+		if (is1.isEmpty() || is2.isEmpty())
 		{
 			return false;
 		}
 		
-		if (is1 != null && is2 != null
+		if (!is1.isEmpty() && !is2.isEmpty()
 				&& (ArrContain1SameInt(OreDictionary.getOreIDs(is1), OreDictionary.getOreIDs(is2))
 						|| (is1.getItem() == is2.getItem()) && (!is1.getItem().getHasSubtypes() || is2.getItemDamage() == is1.getItemDamage()))
 				&& (is1.getCount() >= is2.getCount() || ignoreStackSize))

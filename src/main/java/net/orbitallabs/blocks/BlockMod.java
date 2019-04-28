@@ -6,6 +6,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -18,6 +20,7 @@ public class BlockMod extends Block implements IDescrObject {
 	
 	private String name;
 	protected boolean show = false;
+	public boolean hasSubtypes = false;
 	
 	public static BlockMod BuildpPoint;
 	
@@ -64,7 +67,18 @@ public class BlockMod extends Block implements IDescrObject {
 			GameRegistry.register(ItemBM);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			{
-				ModelLoader.setCustomModelResourceLocation(ItemBM, 0, new ModelResourceLocation(OrbitalModInfo.MOD_ID + ":" + uln, "inventory"));
+				if (HasSubtypes())
+				{
+					NonNullList<ItemStack> list = NonNullList.create();
+					this.getSubBlocks(ItemBM, this.getCreativeTabToDisplayOn(), list);
+					for (int i = 0; i < list.size(); i++)
+					{
+						ModelLoader.setCustomModelResourceLocation(ItemBM, list.get(i).getMetadata(), new ModelResourceLocation(OrbitalModInfo.MOD_ID + ":" + uln, "inventory"));
+					}
+				} else
+				{
+					ModelLoader.setCustomModelResourceLocation(ItemBM, 0, new ModelResourceLocation(OrbitalModInfo.MOD_ID + ":" + uln, "inventory"));
+				}
 			}
 		}
 	}
@@ -72,7 +86,7 @@ public class BlockMod extends Block implements IDescrObject {
 	@Override
 	public String getUnlocalizedName()
 	{
-		return OrbitalModInfo.MOD_ID + "." + name + ".name";
+		return OrbitalModInfo.MOD_ID + ".block." + name + ".name";
 	}
 	
 	@Override
@@ -101,5 +115,11 @@ public class BlockMod extends Block implements IDescrObject {
 	public String getName()
 	{
 		return name;
+	}
+	
+	public boolean HasSubtypes()
+	{
+		return hasSubtypes;
+		
 	}
 }

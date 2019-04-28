@@ -54,7 +54,7 @@ public class BlockDockingPoint extends BlockContainerMod {
 			if (world.provider instanceof WorldProviderOrbitModif)
 			{
 				DockingPortSaveData savef = DockingPortSaveData.forWorld(world);
-				savef.DockingPorts.add(new int[] { pos.getX(), pos.getY(), pos.getZ() });//TODO: rewite to use BlockPos
+				savef.DockingPorts.add(pos);
 				savef.markDirty();
 			}
 		}
@@ -71,7 +71,7 @@ public class BlockDockingPoint extends BlockContainerMod {
 				DockingPortSaveData savef = DockingPortSaveData.forWorld(world);
 				for (int i = 0; i < savef.DockingPorts.size(); i++)
 				{
-					if (savef.DockingPorts.get(i)[0] == pos.getX() && savef.DockingPorts.get(i)[1] == pos.getY() && savef.DockingPorts.get(i)[2] == pos.getZ())
+					if (savef.DockingPorts.get(i).equals(pos))
 					{
 						savef.DockingPorts.remove(i);
 						savef.markDirty();

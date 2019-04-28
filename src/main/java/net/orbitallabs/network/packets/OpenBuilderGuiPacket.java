@@ -1,28 +1,27 @@
 
 package net.orbitallabs.network.packets;
 
-import java.util.ArrayList;
-import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.orbitallabs.gui.GuiBuilderSide;
+import net.orbitallabs.gui.GuiBuilder;
 import net.orbitallabs.utils.OTLoger;
 
 public class OpenBuilderGuiPacket implements IMessage {
-	private List<ItemStack> items = new ArrayList();
+	private NonNullList<ItemStack> items = NonNullList.create();
 	
 	public OpenBuilderGuiPacket()
 	{
 	}
 	
-	public OpenBuilderGuiPacket(List<ItemStack> items)
+	public OpenBuilderGuiPacket(NonNullList<ItemStack> items)
 	{
 		this.items = items;
 	}
@@ -77,7 +76,7 @@ public class OpenBuilderGuiPacket implements IMessage {
 		NBTTagCompound tag = ByteBufUtils.readTag(buf);
 		
 		final NBTTagList list = tag.getTagList("Items", 10);
-		items = new ArrayList();
+		items = NonNullList.create();
 		
 		for (int var3 = 0; var3 < list.tagCount(); ++var3)
 		{
@@ -117,8 +116,8 @@ public class OpenBuilderGuiPacket implements IMessage {
 			
 			if (pkt.items != null)
 			{
-				GuiBuilderSide.foundItems = pkt.items;
-				GuiBuilderSide.dataRecived = true;
+				GuiBuilder.foundItems = pkt.items;
+				GuiBuilder.dataRecived = true;
 				
 			} else
 			{

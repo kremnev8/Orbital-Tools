@@ -20,6 +20,15 @@ public class OrbitalHookLoader extends HookLoader {
 		OTLoger.logInfo("Starting injecting hooks");
 		registerHookContainer("net.orbitallabs.hooks.Hooks"); //FreefallHook
 		
+		//	OTLoger.logInfo("Trying to log BlockPos varid");
+		//	try
+		//	{
+		//		VariableIdHelper.printLocalVariables(SpinManager.class.getName(), "refresh", Type.getObjectType(Type.getInternalName(BlockPos.class)));
+		//	} catch (IOException e)
+		//	{
+		//		e.printStackTrace();
+		//}
+		
 		//OTLoger.logInfo("Replacing GC class FreefallHandler.");
 		//registerHookContainer("net.orbitallabs.hooks.FreefallHook");
 	}

@@ -8,9 +8,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.orbitallabs.items.AnimationCapabilityProvider;
+import net.orbitallabs.items.AnimationCapabilityProvider.IAnimationCapability;
 import net.orbitallabs.items.ItemSpaceJetpack;
-import net.orbitallabs.items.SpaceJetpackCapability;
-import net.orbitallabs.items.SpaceJetpackItemStackCap;
 import net.orbitallabs.renderer.MCAClientLibrary.MCAModelRenderer;
 import net.orbitallabs.renderer.MCACommonLibrary.animation.AnimationHandler;
 import net.orbitallabs.renderer.MCACommonLibrary.math.Matrix4f;
@@ -228,7 +228,7 @@ public class ModelJetpack extends ModelBiped {
 				GL11.glTranslatef(0.0F, 0.0F, -0.12F);
 				// GL11.glTranslatef(0, 0, 180 * 0.0625F);
 				ItemStack item = pl.inventory.armorItemInSlot(2);
-				SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) item.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+				IAnimationCapability cap = item.getCapability(AnimationCapabilityProvider.AnimCap, EnumFacing.UP);
 				
 				if (cap != null)
 				{

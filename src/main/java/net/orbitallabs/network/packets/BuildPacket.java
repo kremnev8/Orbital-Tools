@@ -1,7 +1,5 @@
 package net.orbitallabs.network.packets;
 
-import java.util.ArrayList;
-import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -9,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -17,6 +16,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.orbitallabs.dimensions.WorldProviderOrbitModif;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.structures.BuildHandler;
 import net.orbitallabs.structures.DeconstructHandler;
@@ -117,11 +117,21 @@ public class BuildPacket implements IMessage {
 				else
 				{
 					boolean build = BuildHandler.HandleBuild(world, pkt.dir, pkt.Fname, new BlockPos(pkt.x, pkt.y, pkt.z), pkt.rot, player);
-					if (!build) ChatUtils.SendChatMessageOnClient(player, new LocalizedChatComponent(new LocalizedString("builder.failed", TextFormatting.RED)));
-					else ChatUtils.SendChatMessageOnClient(player,
-							new LocalizedChatComponent(new LocalizedString("builder.successfully", TextFormatting.GREEN)).appendSibling(new TextComponentString(" "))
-									.appendSibling(new LocalizedChatComponent(new StructureLocalizedString(Structure.FindStructure(pkt.Fname), TextFormatting.GREEN))
-											.appendSibling(new TextComponentString("!"))));
+					if (!build)
+					{
+						ChatUtils.SendChatMessageOnClient(player, new LocalizedChatComponent(new LocalizedString("builder.failed", TextFormatting.RED)));
+					} else
+					{
+						ChatUtils.SendChatMessageOnClient(player,
+								new LocalizedChatComponent(new LocalizedString("builder.successfully", TextFormatting.GREEN)).appendSibling(new TextComponentString(" "))
+										.appendSibling(new LocalizedChatComponent(new StructureLocalizedString(Structure.FindStructure(pkt.Fname), TextFormatting.GREEN))
+												.appendSibling(new TextComponentString("!"))));
+						
+						if (world.provider instanceof WorldProviderOrbitModif)
+						{
+							((WorldProviderOrbitModif) world.provider).getSpinManager().refresh(new BlockPos(0, 64, 0), false);
+						}
+					}
 					
 					if (!build)
 					{
@@ -132,8 +142,8 @@ public class BuildPacket implements IMessage {
 							{
 								((StructureRotatable) str).setRotation(pkt.rot);
 							}
-							List<OreDictItemStack> I = str.getRequiredItems();
-							List<ItemStack> afterI = new ArrayList();
+							NonNullList<OreDictItemStack> I = str.getRequiredItems();
+							NonNullList<ItemStack> afterI = NonNullList.create();
 							afterI.addAll(DeconstructHandler.modificateRetItems(I));
 							
 							for (int k = 0; k < afterI.size(); k++)

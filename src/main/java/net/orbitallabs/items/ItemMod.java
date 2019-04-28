@@ -11,6 +11,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.orbitallabs.utils.Config;
 import net.orbitallabs.utils.IDescrObject;
@@ -119,6 +120,7 @@ public class ItemMod extends Item implements IDescrObject {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
@@ -128,7 +130,7 @@ public class ItemMod extends Item implements IDescrObject {
 	@Override
 	public String getUnlocalizedName()
 	{
-		return OrbitalModInfo.MOD_ID + "." + name + ".name";
+		return OrbitalModInfo.MOD_ID + ".item." + name + ".name";
 	}
 	
 	@Override
@@ -137,9 +139,9 @@ public class ItemMod extends Item implements IDescrObject {
 		Item item = stack.getItem();
 		if (item instanceof ItemMod)
 		{
-			return OrbitalModInfo.MOD_ID + "." + ((ItemMod) item).name + ".name";
+			return OrbitalModInfo.MOD_ID + ".item." + ((ItemMod) item).name + ".name";
 		}
-		return OrbitalModInfo.MOD_ID + "." + name + ".name";
+		return OrbitalModInfo.MOD_ID + ".item." + name + ".name";
 	}
 	
 	@Override

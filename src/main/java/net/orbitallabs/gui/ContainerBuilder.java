@@ -1,7 +1,5 @@
 package net.orbitallabs.gui;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -24,7 +22,7 @@ public class ContainerBuilder extends Container {
 	
 	public InventoryPlayer inventory;
 	
-	private List<ItemStack> found = new ArrayList();
+	private NonNullList<ItemStack> found = NonNullList.create();
 	
 	public ContainerBuilder(InventoryPlayer Pinv)
 	{
@@ -55,7 +53,7 @@ public class ContainerBuilder extends Container {
 									{
 										for (int j = 0; j < inv.getSizeInventory(); j++)
 										{
-											if (inv.getStackInSlot(j) != null)
+											if (!inv.getStackInSlot(j).isEmpty())
 											{
 												found.add(inv.getStackInSlot(j).copy());
 											}
@@ -68,7 +66,7 @@ public class ContainerBuilder extends Container {
 						{
 							for (int j = 0; j < inventory.getSizeInventory(); j++)
 							{
-								if (inventory.getStackInSlot(j) != null)
+								if (!inventory.getStackInSlot(j).isEmpty())
 								{
 									found.add(inventory.getStackInSlot(j).copy());
 								}
@@ -83,7 +81,7 @@ public class ContainerBuilder extends Container {
 								if (j != i)
 								{
 									ItemStack last = found.get(j);
-									if (last != null && curr != null)
+									if (!last.isEmpty() && !curr.isEmpty())
 									{
 										if (ItemUtil.AreItemStackEqual(curr, last, true))
 										{
@@ -122,7 +120,7 @@ public class ContainerBuilder extends Container {
 				{
 					for (int j = 0; j < inventory.getSizeInventory(); j++)
 					{
-						if (inventory.getStackInSlot(j) != null)
+						if (!inventory.getStackInSlot(j).isEmpty())
 						{
 							found.add(inventory.getStackInSlot(j).copy());
 						}
@@ -136,7 +134,7 @@ public class ContainerBuilder extends Container {
 							if (j != i)
 							{
 								ItemStack last = found.get(j);
-								if (last != null && curr != null)
+								if (!last.isEmpty() && !curr.isEmpty())
 								{
 									if (ItemUtil.AreItemStackEqual(curr, last, true))
 									{

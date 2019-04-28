@@ -35,8 +35,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.orbitallabs.blocks.BlockContainerMod;
 import net.orbitallabs.items.ItemSpaceJetpack;
-import net.orbitallabs.items.SpaceJetpackCapability;
-import net.orbitallabs.items.SpaceJetpackItemStackCap;
+import net.orbitallabs.items.SpaceJetpackProvider;
+import net.orbitallabs.items.SpaceJetpackStorage.ISpaceJetpackState;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.ArmorStandItemSyncPacket;
 
@@ -98,7 +98,7 @@ public class TileEntityArmorStand extends TileBaseElectricBlockWithInventory imp
 	{
 		super.update();
 		
-		if ((ticks % 100 == 0 || ticks <= 20) && !world.isRemote)
+		if ((ticks % 100 == 0 || (ticks > 15 && ticks <= 35)) && !world.isRemote)
 		{
 			PacketHandler.sendToDimension(new ArmorStandItemSyncPacket(items, pos.getX(), pos.getY(), pos.getZ()), world.provider.getDimension());
 			swapped = false;
@@ -286,18 +286,11 @@ public class TileEntityArmorStand extends TileBaseElectricBlockWithInventory imp
 				Item i = armor.getItem();
 				if (i instanceof ItemSpaceJetpack)
 				{
-					SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) armor.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+					ISpaceJetpackState cap = armor.getCapability(SpaceJetpackProvider.SpaceJetpackCapability, EnumFacing.UP);
 					
 					FluidTank tank = cap.getTank();
 					int amount = tank.fill(fluid, doFill);
-					if (!doFill)
-					{
-						return amount;
-					} else
-					{
-						armor.setTagCompound(cap.serializeNBT());
-						return amount;
-					}
+					return amount;
 				}
 			}
 		}

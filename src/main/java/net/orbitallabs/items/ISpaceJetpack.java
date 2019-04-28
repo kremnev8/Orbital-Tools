@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.orbitallabs.dimensions.WorldProviderOrbitModif;
+import net.orbitallabs.items.SpaceJetpackStorage.ISpaceJetpackState;
 
 public interface ISpaceJetpack {
 	
@@ -12,7 +13,7 @@ public interface ISpaceJetpack {
 	
 	public default boolean isDisabled(EntityPlayer player, ItemStack itemStack, boolean useage)
 	{
-		SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) itemStack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+		ISpaceJetpackState cap = itemStack.getCapability(SpaceJetpackProvider.SpaceJetpackCapability, EnumFacing.UP);
 		
 		if (player.world.provider instanceof WorldProviderOrbitModif)
 		{

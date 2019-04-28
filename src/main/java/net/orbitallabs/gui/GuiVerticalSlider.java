@@ -1,8 +1,8 @@
 
 package net.orbitallabs.gui;
 
-import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.orbitallabs.utils.OrbitalModInfo;
@@ -31,7 +31,7 @@ public class GuiVerticalSlider extends GuiButtonExt {
 	public String suffix = "";
 	
 	public boolean drawString = true;
-	public final ResourceLocation slidertex = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/Remover.png");
+	public final ResourceLocation slidertex = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/gui/remover.png");
 	
 	public GuiVerticalSlider(int id, int xPos, int yPos, int width, int height, String prefix, String suf, double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr)
 	{
@@ -142,7 +142,7 @@ public class GuiVerticalSlider extends GuiButtonExt {
 			updateSlider();
 		}
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		int k = this.getHoverState(this.hovered);
 		if (this.enabled)
 		{

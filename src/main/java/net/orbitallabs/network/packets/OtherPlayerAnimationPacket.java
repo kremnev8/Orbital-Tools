@@ -4,6 +4,8 @@ package net.orbitallabs.network.packets;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -11,6 +13,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.orbitallabs.items.AnimationCapabilityProvider;
+import net.orbitallabs.items.AnimationCapabilityProvider.IAnimationCapability;
+import net.orbitallabs.items.ItemMod;
+import net.orbitallabs.renderer.animations.AnimationHandlerJetpack;
+import net.orbitallabs.utils.OTLoger;
 
 public class OtherPlayerAnimationPacket implements IMessage {
 	private String name;
@@ -59,15 +66,21 @@ public class OtherPlayerAnimationPacket implements IMessage {
 				World world = player.world;
 				EntityPlayer otherPlayer = world.getPlayerEntityByName(pkt.Plname);
 				if (otherPlayer != null)
-				{//TODO: deprecated
-					//ExtendedPlayer Otherprop = ExtendedPlayer.get(otherPlayer);
-					//	if (pkt.act)
-					//	{
-					//		Otherprop.animH.activateAnimation(pkt.name, 0, false);
-					//	} else
-					//	{
-					//		Otherprop.animH.stopAnimation(pkt.name, false);
-					//	}
+				{
+					OTLoger.logInfo("Just got update on " + pkt.Plname + "'s animation status:");
+					OTLoger.logInfo((pkt.act ? "Activate" : "Stop") + " Animation " + pkt.name);
+					ItemStack stack = otherPlayer.inventory.armorInventory.get(2);
+					if (stack.getItem() == ItemMod.spaceJetpack)
+					{
+						IAnimationCapability cap = stack.getCapability(AnimationCapabilityProvider.AnimCap, EnumFacing.UP);
+						if (pkt.act)
+						{
+							((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation(pkt.name, 0);
+						} else
+						{
+							((AnimationHandlerJetpack) cap.getAnimationHandler()).stopAnimation(pkt.name);
+						}
+					}
 				}
 			}
 			

@@ -99,7 +99,7 @@ public class BlockContainerMod extends BlockContainer implements IDescrObject {
 	@Override
 	public String getUnlocalizedName()
 	{
-		return OrbitalModInfo.MOD_ID + "." + name + ".name";
+		return OrbitalModInfo.MOD_ID + ".tile." + name + ".name";
 	}
 	
 	@Override

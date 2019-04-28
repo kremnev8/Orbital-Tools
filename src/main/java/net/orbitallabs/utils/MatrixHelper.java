@@ -79,7 +79,7 @@ public class MatrixHelper {
 			//GLoger.logInfo(Px+" "+Py+" "+Pz);
 			if (world.getBlockState(pos.add(0, -3, 0)).getBlock() == BlockContainerMod.BlockInfo) return pos.add(0, -3, 0);
 		}
-		return null;
+		return pos;
 	}
 	
 	public static List<BlockPos> findTotalMatrix(World world, BlockPos Fpoint)
@@ -96,7 +96,7 @@ public class MatrixHelper {
 			for (int i = 0; i < lastMatrix.size(); i++)
 			{
 				addIfNotAdded(lastMatrix.get(i));
-				addIfNotAddedToScan(lastMatrix.remove(i));
+				addIfNotAddedToScan(lastMatrix.get(i));
 			}
 			
 			while (toScan.size() != 0)
@@ -105,7 +105,7 @@ public class MatrixHelper {
 				lastMatrix = findNextMatrixPoints(world, toScan.remove(0));
 				for (int i = 0; i < lastMatrix.size(); i++)
 				{
-					if (addIfNotAdded(lastMatrix.get(i))) addIfNotAddedToScan(lastMatrix.remove(i));
+					if (addIfNotAdded(lastMatrix.get(i))) addIfNotAddedToScan(lastMatrix.get(i));
 				}
 			}
 			

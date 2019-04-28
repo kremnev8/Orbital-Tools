@@ -13,6 +13,7 @@ public class Config {
 	
 	public static boolean makeSpaceStructureControlBlocksUnbreakable;
 	public static boolean disableUnstableContent;
+	public static boolean showCoordinatesAndlookDirection;
 	
 	public static boolean forceEnableSteelIngot;
 	
@@ -28,7 +29,7 @@ public class Config {
 		try
 		{
 			cfg.load();
-			cfg.setCategoryComment("dimensions", "Space stations dimension settings");
+			cfg.setCategoryComment(DIMENSIONS, "Space stations dimension settings");
 			cfg.setCategoryRequiresMcRestart(DIMENSIONS, true);
 			idDimensionMarsSpaceStation = cfg
 					.get(DIMENSIONS, "idDimensionMarsSpaceStation", 40, "WorldProvider ID for Mars Space Stations (advanced: do not change unless you have conflicts)").getInt(40);
@@ -48,6 +49,10 @@ public class Config {
 			forceEnableSteelIngot = cfg
 					.get(Configuration.CATEGORY_GENERAL, "forceEnableSteelIngot", true,
 							"if set to true Steel Ingot will be enabeled even when it is not needed(Recomended before adding new mods with Steel to set this to true)")
+					.getBoolean(true);
+			
+			showCoordinatesAndlookDirection = cfg
+					.get(Configuration.CATEGORY_GENERAL, "showCoordinatesAndlookDirection", true, "if set to true player position and look direction will be shown (Debug info)")
 					.getBoolean(true);
 			
 		} catch (Exception e)

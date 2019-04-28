@@ -252,11 +252,11 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 						(EntityPlayerMP) player);
 				GCPlayerStats stats = GCPlayerStats.get((EntityPlayerMP) player);
 				stats.setChatCooldown(0);
-				player.startRiding(null);
+				this.removePassengers();
 				if (dockport != null)
 				{
-					player.setPositionAndUpdate(player.posX, dockport.getPos().getY() + 1, player.posZ);
-				} else player.setPositionAndUpdate(player.posX, player.posY + 4, player.posZ);
+					player.setPositionAndUpdate(dockport.getPos().getX() + 0.5D, dockport.getPos().getY() + 2, dockport.getPos().getZ() + 0.5D);
+				} else player.setPositionAndUpdate(player.posX, 65, player.posZ);
 			}
 			
 			return true;
@@ -287,11 +287,11 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 						(EntityPlayerMP) player);
 				GCPlayerStats stats = GCPlayerStats.get((EntityPlayerMP) player);
 				stats.setChatCooldown(0);
-				this.dismountRidingEntity();
+				this.removePassengers();
 				if (dockport != null)
 				{
-					player.setPositionAndUpdate(player.posX, dockport.getPos().getY() + 1, player.posZ);
-				} else player.setPositionAndUpdate(player.posX, player.posY + 4, player.posZ);
+					player.setPositionAndUpdate(dockport.getPos().getX() + 0.5D, dockport.getPos().getY() + 2, dockport.getPos().getZ() + 0.5D);
+				} else player.setPositionAndUpdate(player.posX, 65, player.posZ);
 			}
 		}
 	}
@@ -358,7 +358,7 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 				double z1 = 3.2 * Math.sin(this.rotationYaw / 57.2957795D) * Math.sin(this.rotationPitch / 57.2957795D);
 				double y1 = 2.9 * Math.cos((this.rotationPitch - 180) * Math.PI / 180.0D);
 				
-				final double y2 = this.prevPosY + (this.posY - this.prevPosY) + y1 - 2;
+				final double y2 = this.prevPosY + (this.posY - this.prevPosY) + y1;
 				
 				final double x2 = this.posX + x1;
 				final double z2 = this.posZ + z1;
@@ -654,7 +654,7 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 			}
 		}
 		
-		if (this.timeSinceIgnition % MathHelper.floor(2 * (1 / multiplier)) == 0)
+		if (this.timeSinceIgnition > 0 && this.timeSinceIgnition % MathHelper.floor(2 * (1 / multiplier)) == 0)
 		{
 			this.removeFuel(1);
 			if (!this.hasValidFuel() && rocketSoundUpdater != null) ((SoundUpdateRocketFake) rocketSoundUpdater).stopRocketSound();
@@ -838,15 +838,15 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 			GCPlayerStats stats = GCPlayerStats.get((EntityPlayerMP) player);
 			NonNullList<ItemStack> rcStacks = NonNullList.withSize(2 + dockport.addSlots, ItemStack.EMPTY);
 			
-			if (dockport.getStackInSlot(dockport.getSizeInventory() - 3) != null)
+			if (!dockport.getStackInSlot(dockport.getSizeInventory() - 3).isEmpty())
 			{
-				rcStacks.set(rcStacks.size() - 2, dockport.getStackInSlot(dockport.getSizeInventory() - 3).copy());
-				dockport.setInventorySlotContents(dockport.getSizeInventory() - 3, null);
+				rcStacks.set(rcStacks.size() - 3, dockport.getStackInSlot(dockport.getSizeInventory() - 3).copy());
+				dockport.setInventorySlotContents(dockport.getSizeInventory() - 3, ItemStack.EMPTY);
 			}
-			if (dockport.getStackInSlot(dockport.getSizeInventory() - 2) != null)
+			if (!dockport.getStackInSlot(dockport.getSizeInventory() - 2).isEmpty())
 			{
 				rcStacks.set(rcStacks.size() - 2, dockport.getStackInSlot(dockport.getSizeInventory() - 2).copy());
-				dockport.setInventorySlotContents(dockport.getSizeInventory() - 2, null);
+				dockport.setInventorySlotContents(dockport.getSizeInventory() - 2, ItemStack.EMPTY);
 			}
 			
 			if (dockport.addSlots != 0)
@@ -854,14 +854,14 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 				for (int i = 0; i < dockport.addSlots; i++)
 				{
 					ItemStack stack = dockport.getStackInSlot(i);
-					if (stack != null)
+					if (!stack.isEmpty())
 					{
 						stack = stack.copy();
 						if (i < rcStacks.size())
 						{
 							rcStacks.set(i, stack);
 						}
-						dockport.setInventorySlotContents(i, null);
+						dockport.setInventorySlotContents(i, ItemStack.EMPTY);
 					}
 					
 				}

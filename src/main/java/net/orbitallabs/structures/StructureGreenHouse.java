@@ -9,8 +9,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.OreDictItemStack;
 
@@ -1315,7 +1318,7 @@ public class StructureGreenHouse extends Structure {
 		BuildHandler.setBlock(world, x - 9, y - 5, z - 1, block1, 4, 2);
 		BuildHandler.setBlock(world, x - 9, y + 0, z - 10, block1, 4, 2);
 		
-		BuildHandler.buildBuildPoint(world, x - 9, y, z - 9, 5);
+		BuildHandler.buildBuildPoint(world, x - 9, y, z - 9, EnumBlockPointStates.GREENHOUSE);
 		
 		BuildHandler.setBlock(world, x - 9, y + 0, z - 8, block1, 4, 2);
 		BuildHandler.setBlock(world, x - 9, y + 0, z - 7, block1, 4, 2);
@@ -1325,7 +1328,7 @@ public class StructureGreenHouse extends Structure {
 		BuildHandler.setBlock(world, x - 9, y + 0, z - 3, block1, 4, 2);
 		BuildHandler.setBlock(world, x - 9, y + 0, z - 2, block1, 4, 2);
 		BuildHandler.setBlock(world, x - 9, y + 0, z - 1, block1, 4, 2);
-		BuildHandler.buildBuildPoint(world, x - 9, y, z, 5);
+		BuildHandler.buildBuildPoint(world, x - 9, y, z, EnumBlockPointStates.GREENHOUSE);
 		BuildHandler.setBlock(world, x - 9, y + 0, z + 1, block1, 4, 2);
 		BuildHandler.setBlock(world, x - 8, y - 5, z - 9, block1, 4, 2);
 		BuildHandler.setBlock(world, x - 8, y - 5, z - 8, block1, 4, 2);
@@ -1512,7 +1515,7 @@ public class StructureGreenHouse extends Structure {
 		BuildHandler.setBlock(world, x + 0, y - 5, z - 2, block1, 4, 2);
 		BuildHandler.setBlock(world, x + 0, y - 5, z - 1, block1, 4, 2);
 		BuildHandler.setBlock(world, x + 0, y + 0, z - 10, block1, 4, 2);
-		BuildHandler.buildBuildPoint(world, x, y, z - 9, 5);
+		BuildHandler.buildBuildPoint(world, x, y, z - 9, EnumBlockPointStates.GREENHOUSE);
 		BuildHandler.setBlock(world, x + 0, y + 0, z - 8, block1, 4, 2);
 		BuildHandler.setBlock(world, x + 0, y + 0, z - 7, block1, 4, 2);
 		BuildHandler.setBlock(world, x + 0, y + 0, z - 6, block1, 4, 2);
@@ -1521,7 +1524,7 @@ public class StructureGreenHouse extends Structure {
 		BuildHandler.setBlock(world, x + 0, y + 0, z - 3, block1, 4, 2);
 		BuildHandler.setBlock(world, x + 0, y + 0, z - 2, block1, 4, 2);
 		BuildHandler.setBlock(world, x + 0, y + 0, z - 1, block1, 4, 2);
-		BuildHandler.buildBuildPoint(world, x, y, z, 5);
+		BuildHandler.buildBuildPoint(world, x, y, z, EnumBlockPointStates.GREENHOUSE);
 		BuildHandler.setBlock(world, x + 0, y + 0, z + 1, block1, 4, 2);
 		BuildHandler.setBlock(world, x + 1, y + 0, z - 9, block1, 4, 2);
 		BuildHandler.setBlock(world, x + 1, y + 0, z - 8, block1, 4, 2);
@@ -1562,9 +1565,18 @@ public class StructureGreenHouse extends Structure {
 	}
 	
 	@Override
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		ArrayList<AxisAlignedBB> list = new ArrayList<>();
+		//	list.add(createBoundingBox(dir, pos, new int[] { 5, 6, 5, 2, -2, 2 }));
+		return list;
+	}
+	
+	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos spos, int meta)
 	{
-		if (meta != 2 && meta != 5 && meta != -1 && meta != 0)
+		if (meta != EnumBlockPointStates.ADDSTRUCTURES.getMeta() && meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.GREENHOUSE.getMeta()
+				&& meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -1608,9 +1620,9 @@ public class StructureGreenHouse extends Structure {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 64, 7), "plateTin"));
 		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 32, ItemMod.scaffold_meta)));
 		items.add(new OreDictItemStack(new ItemStack(Blocks.GLASS, 64, 0)));

@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.orbitallabs.tiles.TileEntityInfo;
+import net.orbitallabs.utils.Config;
 
 public class BlockInfo extends BlockContainerMod {
 	
@@ -22,7 +23,7 @@ public class BlockInfo extends BlockContainerMod {
 	public BlockInfo(String uln)
 	{
 		super(uln, invis);
-		this.setBlockUnbreakable();
+		if (Config.makeSpaceStructureControlBlocksUnbreakable) this.setBlockUnbreakable();
 		this.setCreativeTab(CreativeTabs.REDSTONE);
 	}
 	

@@ -1,38 +1,42 @@
 ﻿
-orbitaltools.item.Builder.name=Строитель
-orbitaltools.item.ironScaffold.name=Железные леса
-orbitaltools.item.dockingComponent.name=Компонент стыковочного шлюза
-orbitaltools.item.brokenTin.name=Поврежеденная оловянная пластина
-orbitaltools.item.brokenSteel.name=Поврежеденная стальная пластина
-orbitaltools.item.brokenAluminum.name=Поврежеденная алюминиевая пластина
-orbitaltools.item.debugTool.name=Дебаг тул
-orbitaltools.item.Jetpack.name=Космический джетпак
-orbitaltools.item.schematicJetpack.name=Схема для верстака NASA
-orbitaltools.item.smallEngine.name=Маленький двигатель
-orbitaltools.item.Omni-Dir_Engine_Set.name=Всенаправлнный набор двигателей
-orbitaltools.item.emptyIdea.name=Замысел
-orbitaltools.item.filledIdea.name=Наброски
-orbitaltools.item.AGMotorMap.name=Гравитационное кольцо
-orbitaltools.item.steelIngot.name=Стальной слиток
-orbitaltools.item.AltMotor.name=Мотор
-orbitaltools.item.AltCoil.name=Катушка
+orbitaltools.item.builder.name=Строитель
+orbitaltools.item.ironscaffold.name=Железные леса
+orbitaltools.item.dockingcomponent.name=Компонент стыковочного шлюза
+orbitaltools.item.brokentin.name=Поврежеденная оловянная пластина
+orbitaltools.item.brokensteel.name=Поврежеденная стальная пластина
+orbitaltools.item.brokenaluminum.name=Поврежеденная алюминиевая пластина
+orbitaltools.item.debugtool.name=Дебаг тул
+orbitaltools.item.jetpack.name=Космический джетпак
+orbitaltools.item.schematicjetpack.name=Схема для верстака NASA
+orbitaltools.item.smallengine.name=Маленький двигатель
+orbitaltools.item.omnidirengineset.name=Всенаправлнный набор двигателей
+orbitaltools.item.emptyidea.name=Замысел
+orbitaltools.item.filledidea.name=Наброски
+orbitaltools.item.agmotormap.name=Гравитационное кольцо
+orbitaltools.item.steelingot.name=Стальной слиток
+orbitaltools.item.altmotor.name=Мотор
+orbitaltools.item.altcoil.name=Катушка
 
-orbitaltools.block.buildPoint=Точка строительства
-orbitaltools.tile.dockingPoint=Стыковочный шлюз
-orbitaltools.tile.infoBlock=Info Block
-orbitaltools.tile.removeInfoBlock=Бортовой журнал
-orbitaltools.tile.artificialGsource=Источник искусственной гравитаций
-orbitaltools.tile.armorStand=Стойка для брони
+orbitaltools.block.buildpoint.name=Точка строительства
+orbitaltools.tile.dockingpoint.name=Стыковочный шлюз
+orbitaltools.tile.infoblock.name=Info Block
+orbitaltools.tile.removeinfoblock.name=Бортовой журнал
+orbitaltools.tile.artificialgsource.name=Источник искусственной гравитаций
+orbitaltools.tile.armorstand.name=Стойка для брони
 
-orbitaltools.descr_shift.Builder.name=Строитель позволяет строить разные модули на космических станциях
-orbitaltools.descr_shift.brokenTin.name=Она не выглядит пригодной для использования...
-orbitaltools.descr_shift.brokenSteel.name=Она не выглядит пригодной для использования...
-orbitaltools.descr_shift.brokenAluminum.name=Она не выглядит пригодной для использования...
-orbitaltools.descr_shift.Jetpack.name=Космический джетпак - это продвинутое устройство с помощью которого можно свободно перемешаться в условиях микрогравитации
+orbitaltools.descr_shift.builder.name=Строитель позволяет строить разные модули на космических станциях
+orbitaltools.descr_shift.brokentin.name=Она не выглядит пригодной для использования...
+orbitaltools.descr_shift.brokensteel.name=Она не выглядит пригодной для использования...
+orbitaltools.descr_shift.brokenaluminum.name=Она не выглядит пригодной для использования...
+orbitaltools.descr_shift.jetpack.name=Космический джетпак - это продвинутое устройство с помощью которого можно свободно перемешаться в условиях микрогравитации
 
-orbitaltools.descr_shift.dockingPoint.name=Стыковочный шлюз предназначен для пристыковки кораблей на космическую станцию. обычно его используют вместе одноименным модулем
-orbitaltools.descr_shift.artificialGsource.name=Данное устройство позволяет создать на космической станций искусственную гравитацию
-orbitaltools.descr_shift.armorStand.name=Данная стойка может заряжать броню а так заправлять некоторые устройства
+orbitaltools.descr_shift.dockingpoint.name=Стыковочный шлюз предназначен для пристыковки кораблей на космическую станцию. Часть cтыковочного модуля
+orbitaltools.descr_shift.artificialgsource.name=Данное устройство может создать искусственную гравитацию на космической станций
+orbitaltools.descr_shift.armorstand.name=Данная стойка может заряжать броню а так заправлять некоторые устройства
+
+satellite.orbitaltools.mars=Космическая станция Марса
+checklist.orbitaltools.createSpaceStationBuilder.key=Создать инструмент "Строитель"
+checklist.orbitaltools.grabAlotofMaterials.key=Взять много строительных материалов, например Оловянные пластины, Строительные леса и полупроводниковые пластины
 
 schematic.jetpack.name=Джетпак
 gui.rocket.warning.nopad.name=У меня нету взлетной площадки! Если я нажму запуск снова, пути назад не будет.
@@ -47,15 +51,16 @@ builder.window.name=Окно
 builder.cupola.name=Купол
 builder.dockport.name=Стыковочный модуль
 builder.greenhouse.name=Теплица
-builder.pierce.name="Пирс"
+builder.pirs.name="Пирс"
 builder.name=Строитель
 builder.successfully=Сервер успешно построил
 builder.failed=Строительство провалилось!
 builder.failed.noitems=Строительство провалилось! Недостаточно ресурсов для строительства.
-builder.failed.itemsreturn=Большинство предметов былы вернуты, но некоторые оказались повреждены...
+builder.failed.itemsreturn=Предметы вернулись, однако некоторые из них могут быть повреждены!
 builder.solarpanel.name=Солнечная панель
 builder.thall.name=Т-коридор
 builder.bighall.name=Большой зал
+builder.properties.name=Свойства
 
 builder.build_button.name=Построить
 
@@ -86,7 +91,10 @@ builder.side_info.funcs.cupola.name=Вид на землю
 builder.side_info.funcs.dockport.name=+1 место для стыковки
 builder.side_info.funcs.greenhouse.name=Выращивание растений
 builder.side_info.funcs.solar.name=Генератор
-builder.side_info.funcs.pierce.name=Выход в космос
+builder.side_info.funcs.pirs.name=Выход в космос
+builder.side_info.funcs.bighall.name=Много места
+
+builder.side_info.checkbox.window.name=Использовать замену типа стекла
 
 builder.deconstruct.failed=Разборка провалилась!
 builder.deconstruct.partfailed=Разборка частично провалилась!
@@ -98,13 +106,14 @@ remover.deconstruct_button.name=Разобрать
 remover.no_selected.name=Не выбрано ни одной структуры!
 remover.no_linked_tile.name=Не найден связанный TileEntityInfo блок!
 
-remover.haschilds_tip.name=Эта структура имеет дочерние объекты. чтобы ее удалить, вам надо сначала удалить все её дочерние объекты
+remover.haschilds_tip.name=Эта структура имеет дочерние объекты. Чтобы ее удалить, вам надо сначала удалить все её дочерние объекты
 
 modificator.name=Настройщик
 modificator.direction.name=напр.
 modificator.rotation.name=повр.
 modificator.children.name=Дочерние
 modificator.additional.name=Дополнительные
+modificator.save.name=Сохранить
 modificator.notready.name=Данный инструмент в данный момент находиться в активной разработке и получить доступ к нему нельзя!
 
 ForgeDirs.DOWN.name=Внизу(Down)

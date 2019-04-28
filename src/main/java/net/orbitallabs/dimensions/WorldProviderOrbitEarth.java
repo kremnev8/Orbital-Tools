@@ -86,4 +86,24 @@ public class WorldProviderOrbitEarth extends WorldProviderOrbitModif {
 	{
 		return tier > 0;
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void setSpinDeltaPerTick(float angle)
+	{
+		SkyProviderOrbit skyProvider = ((SkyProviderOrbit) this.getSkyRenderer());
+		if (skyProvider != null) skyProvider.spinDeltaPerTick = angle;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public float getSkyRotation()
+	{
+		SkyProviderOrbit skyProvider = ((SkyProviderOrbit) this.getSkyRenderer());
+		if (skyProvider != null)
+		{
+			return skyProvider.spinAngle;
+		}
+		return 0;
+	}
 }

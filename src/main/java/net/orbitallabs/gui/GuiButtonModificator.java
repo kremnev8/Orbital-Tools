@@ -3,14 +3,13 @@ package net.orbitallabs.gui;
 import java.util.ArrayList;
 import java.util.List;
 import org.lwjgl.opengl.GL11;
-import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementDropdown;
-import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementDropdown.IDropboxCallback;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementTextBox;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementTextBox.ITextBoxCallback;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.orbitallabs.gui.GuiButtonBuilder.GuiIconsUtil;
+import net.orbitallabs.gui.GuiElementDropdown.IDropboxCallback;
 import net.orbitallabs.structures.Structure;
 import net.orbitallabs.structures.StructureRotatable;
 import net.orbitallabs.utils.OTLoger;
@@ -27,28 +27,9 @@ import net.orbitallabs.utils.OrbitalModInfo;
 
 @SideOnly(Side.CLIENT)
 public class GuiButtonModificator extends GuiButton implements IDropboxCallback, ITextBoxCallback {
-	protected static final ResourceLocation buttonTextures = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/Modificator.png");
+	protected static final ResourceLocation buttonTextures = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/gui/modificator.png");
 	
 	protected static final ResourceLocation Icons = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/Icons.png");
-	/** Button width in pixels */
-	public int width = 134;
-	/** Button height in pixels */
-	public int height = 44;
-	/** The x position of this control. */
-	public int xPosition;
-	/** The y position of this control. */
-	public int yPosition;
-	/** The string displayed on this control. */
-	public String displayString;
-	public int id;
-	/** True if this control is enabled, false to disable. */
-	public boolean enabled;
-	/** Hides the button completely if false. */
-	public boolean visible;
-	protected boolean field_146123_n;
-	private static final String __OBFID = "CL_00000668";
-	public int packedFGColour;
-	public boolean Enabled;
 	
 	public Structure ButStr;
 	private Structure OrgStr;
@@ -71,13 +52,7 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 	
 	public GuiButtonModificator(int id, int xpos, int ypos, Structure str, int y, boolean disableDel)
 	{
-		super(id, xpos, ypos, 134, 44, "");
-		super.visible = false;
-		this.enabled = true;
-		this.visible = true;
-		this.id = id;
-		this.xPosition = xpos;
-		this.yPosition = ypos;
+		super(id, xpos, ypos, 129, 40, "");
 		ZeroPos = y;
 		this.disableDel = disableDel;
 		if (str != null)
@@ -89,7 +64,7 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 		initButtons(ButStr);
 	}
 	
-	private void initButtons(Structure str)
+	public void initButtons(Structure str)
 	{
 		int xpos = xPosition;
 		int ypos = yPosition;
@@ -97,15 +72,45 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 		
 		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
 		
-		elementList.add(new GuiElementTextBox(0, this, xpos + 31, ypos + 28, 20, 10, "", true, 3, true));
-		elementList.add(new GuiElementTextBox(1, this, xpos + 61, ypos + 28, 20, 10, "", true, 3, true));
-		elementList.add(new GuiElementTextBox(2, this, xpos + 91, ypos + 28, 20, 10, "", true, 3, true));
+		elementList.add(new GuiElementTextBox(0, this, xpos + 30, ypos + 26, 20, 10, "", true, 3, true) {
+			@Override
+			public boolean isValid(String string)
+			{
+				if (string.equals("-"))
+				{
+					string = "-0";
+				}
+				return super.isValid(string);
+			}
+		});
+		elementList.add(new GuiElementTextBox(1, this, xpos + 60, ypos + 26, 20, 10, "", true, 3, true) {
+			@Override
+			public boolean isValid(String string)
+			{
+				if (string.equals("-"))
+				{
+					string = "-0";
+				}
+				return super.isValid(string);
+			}
+		});
+		elementList.add(new GuiElementTextBox(2, this, xpos + 90, ypos + 26, 20, 10, "", true, 3, true) {
+			@Override
+			public boolean isValid(String string)
+			{
+				if (string.equals("-"))
+				{
+					string = "-0";
+				}
+				return super.isValid(string);
+			}
+		});
 		
 		String[] list = new String[] { EnumFacing.WEST.toString(), EnumFacing.EAST.toString(), EnumFacing.SOUTH.toString(), EnumFacing.NORTH.toString(), EnumFacing.UP.toString(),
 				EnumFacing.DOWN.toString() };
-		elementList.add(new GuiElementDropdown(3, this, xpos + 24 + fontrenderer.getStringWidth(I18n.format("modificator.direction.name")), ypos + 12, list));
+		elementList.add(new GuiElementDropdown(3, this, xpos + 22 + fontrenderer.getStringWidth(I18n.format("modificator.direction.name")), ypos + 10, list));
 		String[] list2 = new String[] { "0", "1", "2", "3" };
-		elementList.add(new GuiElementDropdown(4, this, xpos + 80 + fontrenderer.getStringWidth(I18n.format("modificator.rotation.name")), ypos + 12, list2));
+		elementList.add(new GuiElementDropdown(4, this, xpos + 78 + fontrenderer.getStringWidth(I18n.format("modificator.rotation.name")), ypos + 10, list2));
 		
 		if (str instanceof StructureRotatable)
 		{
@@ -169,11 +174,6 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 		}
 	}
 	
-	public void setEnabled(boolean e)
-	{
-		this.Enabled = e;
-	}
-	
 	public void setRotation(int rot)
 	{
 		this.ButStr.placementRotation = rot;
@@ -208,7 +208,7 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 	 */
 	public void drawButton(Minecraft mine, int x, int y)
 	{
-		int move_mod = 11;
+		int move_mod = 10;
 		
 		NyPos = this.yPosition - (move_mod * GuiModificator.move);
 		if (visSelf)
@@ -220,42 +220,45 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 		}
 		if (this.visible)
 		{
+			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			FontRenderer fontrenderer = mine.fontRendererObj;
 			mine.getTextureManager().bindTexture(buttonTextures);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.field_146123_n = x >= this.xPosition && y >= NyPos && x < this.xPosition + this.width && y < NyPos + this.height;
-			int k = this.getHoverState(this.field_146123_n);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			this.hovered = x >= this.xPosition && y >= NyPos && x < this.xPosition + this.width && y < NyPos + this.height;
+			int k = this.getHoverState(this.hovered);
 			GL11.glEnable(GL11.GL_BLEND);
 			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			this.drawTexturedModalRect(this.xPosition, NyPos, 2, 166, this.width, this.height);
+			this.drawTexturedModalRect(this.xPosition, NyPos, 0, 181, this.width, this.height);
 			
-			boolean onPlusSign = x >= this.xPosition + 113 && y >= NyPos + 6 && x < this.xPosition + 113 + 16 && y < NyPos + 6 + 16;
+			boolean covered = y > ZeroPos + 157;
+			
+			boolean onPlusSign = x >= this.xPosition + 110 && y >= NyPos + 3 && x < this.xPosition + 110 + 16 && y < NyPos + 3 + 16 && !covered;
 			if (onPlusSign)
 			{
-				this.drawTexturedModalRect(this.xPosition + 113, NyPos + 6, 202, 2, 16, 16);//+sign
+				this.drawTexturedModalRect(this.xPosition + 110, NyPos + 3, 202, 2, 16, 16);//+sign
 			} else
 			{
-				this.drawTexturedModalRect(this.xPosition + 113, NyPos + 6, 184, 2, 16, 16);//+sign
+				this.drawTexturedModalRect(this.xPosition + 110, NyPos + 3, 184, 2, 16, 16);//+sign
 			}
 			
-			boolean onRstSign = x >= this.xPosition + 5 && y >= NyPos + 23 && x < this.xPosition + 5 + 20 && y < NyPos + 23 + 17;
+			boolean onRstSign = x >= this.xPosition + 2 && y >= NyPos + 20 && x < this.xPosition + 2 + 20 && y < NyPos + 20 + 17 && !covered;
 			if (onRstSign)
 			{
-				this.drawTexturedModalRect(this.xPosition + 5, NyPos + 23, 205, 20, 20, 17);//rst sign
+				this.drawTexturedModalRect(this.xPosition + 2, NyPos + 20, 205, 20, 20, 17);//rst sign
 			} else
 			{
-				this.drawTexturedModalRect(this.xPosition + 5, NyPos + 23, 184, 20, 20, 17);//rst sign
+				this.drawTexturedModalRect(this.xPosition + 2, NyPos + 20, 184, 20, 20, 17);//rst sign
 			}
 			if (!disableDel)
 			{
-				boolean onDelSign = x >= this.xPosition + 116 && y >= NyPos + 26 && x < this.xPosition + 116 + 13 && y < NyPos + 26 + 13;
+				boolean onDelSign = x >= this.xPosition + 113 && y >= NyPos + 23 && x < this.xPosition + 116 + 10 && y < NyPos + 23 + 13 && !covered;
 				if (onDelSign)
 				{
-					this.drawTexturedModalRect(this.xPosition + 116, NyPos + 26, 200, 41, 13, 13);//rst sign
+					this.drawTexturedModalRect(this.xPosition + 113, NyPos + 23, 200, 41, 13, 13);//rst sign
 				} else
 				{
-					this.drawTexturedModalRect(this.xPosition + 116, NyPos + 26, 185, 41, 13, 13);//rst sign
+					this.drawTexturedModalRect(this.xPosition + 113, NyPos + 23, 185, 41, 13, 13);//rst sign
 				}
 			}
 			
@@ -264,7 +267,7 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 				renderIcons();
 			} catch (Throwable error)
 			{
-				OTLoger.logWarn("An error ocured in GuiButtonBuilder:", error);
+				OTLoger.logWarn("An error ocured in GuiButtonModificator:" + error.getMessage());
 			}
 			this.mouseDragged(mine, x, y);
 			int l = 4210752;
@@ -279,15 +282,15 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 			//	   break;
 			// }
 			//  }
-			fontrenderer.drawString(ButStr.getName(), this.xPosition + 24, NyPos + 4, l, false);
+			fontrenderer.drawString(ButStr.getName(), this.xPosition + 22, NyPos + 2, l, false);
 			
-			fontrenderer.drawString(I18n.format("modificator.direction.name"), this.xPosition + 24, NyPos + 14, l, false);
+			fontrenderer.drawString(I18n.format("modificator.direction.name"), this.xPosition + 22, NyPos + 12, l, false);
 			
-			fontrenderer.drawString(I18n.format("modificator.rotation.name"), this.xPosition + 80, NyPos + 14, l, false);
+			fontrenderer.drawString(I18n.format("modificator.rotation.name"), this.xPosition + 78, NyPos + 12, l, false);
 			
-			fontrenderer.drawString("x:", this.xPosition + 24, NyPos + 29, l, false);
-			fontrenderer.drawString("y:", this.xPosition + 54, NyPos + 29, l, false);
-			fontrenderer.drawString("z:", this.xPosition + 84, NyPos + 29, l, false);
+			fontrenderer.drawString("x:", this.xPosition + 22, NyPos + 27, l, false);
+			fontrenderer.drawString("y:", this.xPosition + 52, NyPos + 27, l, false);
+			fontrenderer.drawString("z:", this.xPosition + 82, NyPos + 27, l, false);
 			
 			for (k = 0; k < this.elementList.size(); ++k)
 			{
@@ -299,6 +302,7 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 					((GuiButton) this.elementList.get(k)).yPosition = old;
 				}
 			}
+			GL11.glDisable(GL11.GL_SCISSOR_TEST);
 			
 		}
 	}
@@ -311,139 +315,139 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 		EnumFacing dir = ButStr.placementDir;
 		if (strName.equals(Structure.HOLLID))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "hall", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "hall", 0);
 		} else if (strName.equals(Structure.CORNERID))
 		{
 			if (dir == EnumFacing.WEST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 1);
-				} else DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
+				} else DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 			} else if (dir == EnumFacing.EAST)
 			{
 				if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				}
 			} else if (dir == EnumFacing.NORTH)
 			{
 				if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				}
 			} else if (dir == EnumFacing.SOUTH)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 1);
-				} else DrawGuiIcon(this.xPosition + 5, NyPos + 5, "corner", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
+				} else DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
 			}
 		} else if (strName.equals(Structure.CROSSROADID))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "crossroad", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "crossroad", 0);
 		} else if (strName.equals(Structure.HALLAIRLOCKID))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "airlock", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "airlock", 0);
 		} else if (strName.equals(Structure.WINDOWID))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "window", rot);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "window", rot);
 		} else if (strName.equals(Structure.CUPOLAID))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "cupola", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "cupola", 0);
 		} else if (strName.equals(Structure.DOCKPORTID))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "dockport", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "dockport", 0);
 		} else if (strName.equals(Structure.SOLARPANELID))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "solarpanel", rot);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "solarpanel", rot);
 		} else if (strName.equals(Structure.THALLID))
 		{
 			if (dir == EnumFacing.WEST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 2);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
 				}
 			} else if (dir == EnumFacing.EAST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 2);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
 				}
 			} else if (dir == EnumFacing.NORTH)
 			{
 				if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 2);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				}
 			} else if (dir == EnumFacing.SOUTH)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 2);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 5, NyPos + 5, "thall", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
 				}
 			}
 		} else if (strName.equals(Structure.BIGHHALL))
 		{
 			if (rot == 1)
 			{
-				DrawGuiIcon(this.xPosition + 5, NyPos + 5, "bighall_normal", 2);
+				DrawGuiIcon(this.xPosition + 2, NyPos + 2, "bighall_normal", 2);
 			} else if (rot == 0)
 			{
-				DrawGuiIcon(this.xPosition + 5, NyPos + 5, "bighall_normal", 3);
+				DrawGuiIcon(this.xPosition + 2, NyPos + 2, "bighall_normal", 3);
 			}
 		} else if (strName.equals(Structure.GREENHOUSE))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "greenhouse", 0);
-		} else if (strName.equals(Structure.PIERCE))
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "greenhouse", 0);
+		} else if (strName.equals(Structure.PIRS))
 		{
-			DrawGuiIcon(this.xPosition + 5, NyPos + 5, "pierce", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "pirs", 0);
 		}
 		
 	}
@@ -470,7 +474,7 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 	 */
 	public boolean mousePressed(Minecraft mine, int x, int y)
 	{
-		int move_mod = 11;
+		int move_mod = 10;
 		int shift = (move_mod * GuiModificator.move);
 		;
 		for (int l = 0; l < this.elementList.size(); ++l)
@@ -519,14 +523,16 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 			}
 			
 		}
-		boolean onRstSign = x >= this.xPosition + 5 && y >= NyPos + 23 && x < this.xPosition + 5 + 20 && y < NyPos + 23 + 17;
+		boolean covered = y > ZeroPos + 157;
+		
+		boolean onRstSign = x >= this.xPosition + 2 && y >= NyPos + 20 && x < this.xPosition + 2 + 20 && y < NyPos + 20 + 17 && !covered;
 		if (onRstSign)
 		{
 			this.ButStr = OrgStr.copy();
 			initButtons(ButStr);
 		}
-		boolean onDelSign = x >= this.xPosition + 116 && y >= NyPos + 26 && x < this.xPosition + 116 + 13 && y < NyPos + 26 + 13 && !disableDel;
-		boolean onPlusSign = x >= this.xPosition + 113 && y >= NyPos + 6 && x < this.xPosition + 113 + 16 && y < NyPos + 6 + 16;
+		boolean onDelSign = x >= this.xPosition + 113 && y >= NyPos + 23 && x < this.xPosition + 113 + 13 && y < NyPos + 23 + 13 && !disableDel && !covered;
+		boolean onPlusSign = x >= this.xPosition + 110 && y >= NyPos + 3 && x < this.xPosition + 110 + 16 && y < NyPos + 3 + 16 && !covered;
 		
 		this.isDelSign = onDelSign;
 		return this.enabled && this.visible && (onPlusSign || onDelSign);
@@ -552,17 +558,20 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 	{
 		GuiIconsUtil.initMap();
 		
-		int[] Iconpos = GuiIconsUtil.Icons.get(name + "_" + rot);
-		int[] Iconsize = new int[] { 16, 16 };
-		if (name.equals("redcross"))
+		if (GuiIconsUtil.Icons.containsKey(name + "_" + rot))
 		{
-			Iconsize = new int[] { 18, 18 };
-		} else if (name.equals("redstar"))
-		{
-			Iconsize = new int[] { 9, 9 };
+			
+			int[] Iconpos = GuiIconsUtil.Icons.get(name + "_" + rot);
+			int[] Iconsize = new int[] { 16, 16 };
+			if (name.equals("redcross"))
+			{
+				Iconsize = new int[] { 18, 18 };
+			} else if (name.equals("redstar"))
+			{
+				Iconsize = new int[] { 9, 9 };
+			}
+			this.drawTexturedModalRect(x, y, Iconpos[0], Iconpos[1], Iconsize[0], Iconsize[1]);
 		}
-		this.drawTexturedModalRect(x, y, Iconpos[0], Iconpos[1], Iconsize[0], Iconsize[1]);
-		
 	}
 	
 	@Override

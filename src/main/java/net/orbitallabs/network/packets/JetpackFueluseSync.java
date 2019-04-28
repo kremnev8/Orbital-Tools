@@ -8,8 +8,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.orbitallabs.items.ItemMod;
-import net.orbitallabs.items.SpaceJetpackCapability;
-import net.orbitallabs.items.SpaceJetpackItemStackCap;
+import net.orbitallabs.items.SpaceJetpackProvider;
+import net.orbitallabs.items.SpaceJetpackStorage.ISpaceJetpackState;
 
 public class JetpackFueluseSync implements IMessage {
 	
@@ -46,19 +46,18 @@ public class JetpackFueluseSync implements IMessage {
 				
 				if (player != null && player.world != null)
 				{
-					if (player.inventory.armorItemInSlot(2) != null && player.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
+					if (player.inventory.armorInventory.get(2) != null && player.inventory.armorInventory.get(2).getItem() == ItemMod.spaceJetpack)
 					{
-						ItemStack is = player.inventory.armorItemInSlot(2);
-						SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) is.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+						ItemStack is = player.inventory.armorInventory.get(2);
+						ISpaceJetpackState cap = is.getCapability(SpaceJetpackProvider.SpaceJetpackCapability, EnumFacing.UP);
 						
-						cap.usedFuel += pkt.used;
+						cap.setUsedFuel(cap.getUsedFuel() + pkt.used);
 						//player.sendMessage(new TextComponentString("fuel used: " + cap.usedFuel));
-						if (cap.usedFuel >= 10)
+						if (cap.getUsedFuel() >= 10)
 						{
-							int use = cap.getTank().drain((int) cap.usedFuel, true).amount;
-							cap.usedFuel -= use;
+							int use = cap.getTank().drain((int) cap.getUsedFuel(), true).amount;
+							cap.setUsedFuel(cap.getUsedFuel() - use);
 						}
-						cap.markDirty();
 					}
 				}
 			}

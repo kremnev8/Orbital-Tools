@@ -1,6 +1,8 @@
 package net.orbitallabs;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.Callable;
 import ic2.api.item.IC2Items;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
@@ -14,19 +16,28 @@ import micdoodle8.mods.galacticraft.api.world.SpaceStationType;
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.GCBlocks;
 import micdoodle8.mods.galacticraft.core.GCItems;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.dimension.GCDimensions;
 import micdoodle8.mods.galacticraft.core.dimension.TeleportTypeSpaceStation;
 import micdoodle8.mods.galacticraft.core.items.ItemBasic;
 import micdoodle8.mods.galacticraft.core.recipe.NasaWorkbenchRecipe;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -38,13 +49,19 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.orbitallabs.blocks.BlockContainerMod;
 import net.orbitallabs.blocks.BlockMod;
+import net.orbitallabs.dimensions.WorldProviderOrbitEarth;
 import net.orbitallabs.dimensions.WorldProviderOrbitModif;
 import net.orbitallabs.entity.EntityMod;
 import net.orbitallabs.events.Events;
 import net.orbitallabs.events.ItemsToolTips;
 import net.orbitallabs.gui.GuiHandler;
+import net.orbitallabs.hooks.Hooks;
+import net.orbitallabs.items.AnimationCapabilityProvider;
+import net.orbitallabs.items.AnimationCapabilityProvider.IAnimationCapability;
 import net.orbitallabs.items.ItemMod;
-import net.orbitallabs.items.SpaceJetpackCapability;
+import net.orbitallabs.items.ItemSchematic;
+import net.orbitallabs.items.SpaceJetpackStorage;
+import net.orbitallabs.items.SpaceJetpackStorage.ISpaceJetpackState;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.tiles.TileEntityArmorStand;
 import net.orbitallabs.tiles.TileEntityDockingPort;
@@ -66,19 +83,32 @@ public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		//OTLoger.logInfo("pre init : ingotSteel -" + Boolean.toString(OreDictionary.doesOreNameExist("ingotSteel")));
 		PacketHandler.register();
 		Config.init("orbitaltools");
 		BlockMod.init();
 		BlockContainerMod.init();
-		CapabilityManager.INSTANCE.register(SpaceJetpackCapability.ISpaceJetpackState.class, new SpaceJetpackCapability(), new SpaceJetpackCapability.Factory());
+		CapabilityManager.INSTANCE.register(ISpaceJetpackState.class, new SpaceJetpackStorage(), new SpaceJetpackStorage.Factory());
+		CapabilityManager.INSTANCE.register(IAnimationCapability.class, new Capability.IStorage<IAnimationCapability>() {
+			public NBTBase writeNBT(Capability<IAnimationCapability> capability, IAnimationCapability instance, EnumFacing side)
+			{
+				return null;
+			}
+			
+			public void readNBT(Capability<IAnimationCapability> capability, IAnimationCapability instance, EnumFacing side, NBTBase nbt)
+			{
+			}
+		}, new Callable<IAnimationCapability>() {
+			public IAnimationCapability call() throws Exception
+			{
+				return AnimationCapabilityProvider.missing;
+			}
+		});
 		ItemMod.init();
 		EntityMod.init(Side.SERVER);
 	}
 	
 	public void init(FMLInitializationEvent event)
 	{
-		//OTLoger.logInfo("init : ingotSteel -" + Boolean.toString(OreDictionary.doesOreNameExist("ingotSteel")));
 		NetworkRegistry.INSTANCE.registerGuiHandler(OrbitalTools.instance, new GuiHandler());
 		
 		SchematicRegistry.registerSchematicRecipe(new SchematicJetpack());
@@ -105,10 +135,10 @@ public class CommonProxy {
 		GameRegistry.addRecipe(new ItemStack(ItemMod.schematicjetpack, 1),
 				new Object[] { "314", "121", "413", '1', Items.PAPER, '2', ItemMod.filledIdea, '3', new ItemStack(Items.DYE, 1, 0), '4', new ItemStack(Items.DYE, 1, 14) });
 		
-		if (Loader.isModLoaded("IC2"))
+		if (Loader.isModLoaded("ic2"))
 		{
 			GameRegistry.addRecipe(new ItemStack(ItemMod.rotatingRing, 1), new Object[] { "121", "232", "121", '1', new ItemStack(GCItems.basicItem, 1, 8), '2',
-					new ItemStack(GCItems.basicItem, 1, 9), '3', IC2Items.getItem("elemotor") });
+					new ItemStack(GCItems.basicItem, 1, 9), '3', IC2Items.getItem("crafting", "electric_motor") });
 		} else
 		{
 			GameRegistry.addRecipe(new ItemStack(ItemMod.rotatingRing, 1),
@@ -118,6 +148,9 @@ public class CommonProxy {
 			
 			GameRegistry.addRecipe(new ItemStack(ItemMod.motor, 1),
 					new Object[] { "010", "323", "010", '1', new ItemStack(GCItems.basicItem, 1, 7), '2', GCItems.flagPole, '3', ItemMod.coil });
+			
+			GameRegistry.addRecipe(new ItemStack(ItemMod.ironScaffold, 16, 2),
+					new Object[] { "110", "220", "110", '1', new ItemStack(GCItems.basicItem, 1, 8), '2', GCItems.flagPole });
 		}
 		
 		GameRegistry.addRecipe(new ItemStack(BlockContainerMod.BlockArticialGsource, 1), new Object[] { "121", "343", "212", '1', new ItemStack(GCItems.basicItem, 1, 9), '2',
@@ -160,7 +193,6 @@ public class CommonProxy {
 		
 		SchematicsUtil.addJetpackRecipe(new NasaWorkbenchRecipe(new ItemStack(ItemMod.spaceJetpack), input));
 		
-		//	NetworkRegistry.INSTANCE.registerGuiHandler(this.instance, new GuiHandler());
 		GameRegistry.registerTileEntity(TileEntityInfo.class, "Info");
 		GameRegistry.registerTileEntity(TileEntityRemoveInfo.class, "RemoveInfo");
 		GameRegistry.registerTileEntity(TileEntityDockingPort.class, "DockingPort");
@@ -172,8 +204,31 @@ public class CommonProxy {
 		satelliteMarsSpaceStation.setDimensionInfo(Config.idDimensionMarsSpaceStation, Config.idDimensionMarsSpaceStationStatic, WorldProviderOrbitModif.class).setTierRequired(2);
 		satelliteMarsSpaceStation.setBodyIcon(new ResourceLocation(Constants.ASSET_PREFIX, "textures/gui/celestialbodies/space_station.png"));
 		satelliteMarsSpaceStation.setAtmosphere(new AtmosphereInfo(false, false, false, 0.0F, 0.03F, 0.02F));
-		satelliteMarsSpaceStation.addChecklistKeys("equipOxygenSuit", "createGrapple", OrbitalModInfo.MOD_ID + ".createSpaceStationBuilder",
+		satelliteMarsSpaceStation.addChecklistKeys("equip_oxygen_suit", "create_grapple", OrbitalModInfo.MOD_ID + ".createSpaceStationBuilder",
 				OrbitalModInfo.MOD_ID + ".grabAlotofMaterials");
+		
+		GalacticraftCore.satelliteSpaceStation
+				.setDimensionInfo(ConfigManagerCore.idDimensionOverworldOrbit, ConfigManagerCore.idDimensionOverworldOrbitStatic, WorldProviderOrbitEarth.class).setTierRequired(1);
+		GalacticraftCore.satelliteSpaceStation.getChecklistKeys().clear();
+		GalacticraftCore.satelliteSpaceStation.addChecklistKeys("equip_oxygen_suit", "create_grapple", OrbitalModInfo.MOD_ID + ".createSpaceStationBuilder",
+				OrbitalModInfo.MOD_ID + ".grabAlotofMaterials");
+		
+		Hooks.AllowOwerworldSatelliteReg = true;
+		GalaxyRegistry.registerSatellite(GalacticraftCore.satelliteSpaceStation);
+		
+		GCDimensions.ORBIT = GalacticraftRegistry.registerDimension("Space Station", "_orbit", ConfigManagerCore.idDimensionOverworldOrbit, WorldProviderOrbitEarth.class, false);
+		if (GCDimensions.ORBIT == null)
+		{
+			OTLoger.logWarn("Failed to register space station dimension type with ID " + ConfigManagerCore.idDimensionOverworldOrbit);
+		}
+		GCDimensions.ORBIT_KEEPLOADED = GalacticraftRegistry.registerDimension("Space Station", "_orbit", ConfigManagerCore.idDimensionOverworldOrbitStatic,
+				WorldProviderOrbitEarth.class, true);
+		if (GCDimensions.ORBIT_KEEPLOADED == null)
+		{
+			OTLoger.logWarn("Failed to register space station dimension type with ID " + ConfigManagerCore.idDimensionOverworldOrbitStatic);
+		}
+		
+		Hooks.AllowOwerworldSatelliteReg = false;
 		
 		GalaxyRegistry.registerSatellite(satelliteMarsSpaceStation);
 		MARS_ORBIT = GalacticraftRegistry.registerDimension("Mars Space Station", "_orbitmars", Config.idDimensionMarsSpaceStation, WorldProviderOrbitModif.class, false);
@@ -189,7 +244,17 @@ public class CommonProxy {
 		}
 		
 		GalacticraftRegistry.registerTeleportType(WorldProviderOrbitModif.class, new TeleportTypeSpaceStation());
+		GalacticraftRegistry.registerTeleportType(WorldProviderOrbitEarth.class, new TeleportTypeSpaceStation());
 		
+		GalacticraftRegistry.registerRocketGui(WorldProviderOrbitModif.class, new ResourceLocation(Constants.ASSET_PREFIX, "textures/gui/overworld_rocket_gui.png"));
+		GalacticraftRegistry.registerRocketGui(WorldProviderOrbitEarth.class, new ResourceLocation(Constants.ASSET_PREFIX, "textures/gui/overworld_rocket_gui.png"));
+		
+		MinecraftForge.EVENT_BUS.register(new Events());
+		MinecraftForge.EVENT_BUS.register(new ItemsToolTips());
+	}
+	
+	public void postInit(FMLPostInitializationEvent event)
+	{
 		final HashMap<Object, Integer> inputMap = new HashMap<Object, Integer>();
 		inputMap.put(new ItemStack(GCItems.basicItem, 1, 7), 64);
 		inputMap.put(new ItemStack(Items.GLOWSTONE_DUST), 8);
@@ -203,20 +268,29 @@ public class CommonProxy {
 		{
 			inputMap.put("waferAdvanced", 5);
 		}
+		
+		ItemSchematic.registerSchematicItems(Side.SERVER);
+		
 		GalacticraftRegistry
 				.registerSpaceStation(new SpaceStationType(Config.idDimensionMarsSpaceStation, MarsModule.planetMars.getDimensionID(), new SpaceStationRecipe(inputMap)));
+		GalacticraftRegistry.replaceSpaceStationRecipe(ConfigManagerCore.idDimensionOverworldOrbit, inputMap);
 		
-		//Hooks.ignoreThis = true;
-		//	GalacticraftRegistry.registerSpaceStation(new SpaceStationType(ConfigManagerCore.idDimensionOverworldOrbit, ConfigManagerCore.idDimensionOverworld, new SpaceStationRecipe(inputMap)));
-		//Hooks.ignoreThis = false;
-		//	GalacticraftRegistry.registerSpaceStation(new SpaceStationType(40, MarsModule.planetMars.getDimensionID(), new SpaceStationRecipe(inputMap)));
-		MinecraftForge.EVENT_BUS.register(new Events());
-		MinecraftForge.EVENT_BUS.register(new ItemsToolTips());
-	}
-	
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		//OTLoger.logInfo("post init : ingotSteel -" + Boolean.toString(OreDictionary.doesOreNameExist("ingotSteel")));
+		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		
+		for (int i = 0; i < recipes.size(); i++)
+		{
+			IRecipe recipe = recipes.get(i);
+			if (recipe.getRecipeOutput().getItem() == Item.getItemFromBlock(GCBlocks.basicBlock)
+					&& (recipe.getRecipeOutput().getItemDamage() == 3 || recipe.getRecipeOutput().getItemDamage() == 4))
+			{
+				recipes.remove(i--);
+			}
+		}
+		
+		RecipeUtil.addRecipe(new ItemStack(GCBlocks.basicBlock, 4, 3), new Object[] { "   ", " XY", "   ", 'X', new ItemStack(ItemMod.ironScaffold, 1, 2), 'Y', "compressedTin" });
+		
+		RecipeUtil.addRecipe(new ItemStack(GCBlocks.basicBlock, 4, 4), new Object[] { "   ", " X ", " Y ", 'X', new ItemStack(ItemMod.ironScaffold, 1, 2), 'Y', "compressedTin" });
+		
 	}
 	
 	public void spawnParticle(String particleID, Vector3 position, Vector3 motion, Object[] otherInfo)

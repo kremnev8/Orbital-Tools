@@ -10,8 +10,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.blocks.BlockContainerMod;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.OreDictItemStack;
@@ -128,9 +131,17 @@ public class StructureDockingPort extends Structure {
 	}
 	
 	@Override
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		ArrayList<AxisAlignedBB> list = new ArrayList<>();
+		//	list.add(createBoundingBox(dir, pos, new int[] { 5, 6, 5, 2, -2, 2 }));
+		return list;
+	}
+	
+	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos pos, int meta)
 	{
-		if (meta != 2 && meta != 0 && meta != -1)
+		if (meta != EnumBlockPointStates.ADDSTRUCTURES.getMeta() && meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -190,9 +201,9 @@ public class StructureDockingPort extends Structure {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 24, 7), "plateTin"));
 		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 12, ItemMod.scaffold_meta)));
 		items.add(new OreDictItemStack(new ItemStack(ItemMod.dockingPortComp, 4)));

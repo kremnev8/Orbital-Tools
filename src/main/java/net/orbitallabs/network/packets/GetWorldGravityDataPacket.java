@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -50,10 +49,9 @@ public class GetWorldGravityDataPacket implements IMessage {
 							List<Double> sources = new ArrayList();
 							for (int i = 0; i < savef.GraviySources.size(); i++)
 							{
-								if (player.world.getTileEntity(new BlockPos(savef.GraviySources.get(i)[0], savef.GraviySources.get(i)[1], savef.GraviySources.get(i)[2])) != null)
+								if (player.world.getTileEntity(savef.GraviySources.get(i)) != null)
 								{
-									TileEntity te = player.world
-											.getTileEntity(new BlockPos(savef.GraviySources.get(i)[0], savef.GraviySources.get(i)[1], savef.GraviySources.get(i)[2]));
+									TileEntity te = player.world.getTileEntity(savef.GraviySources.get(i));
 									if (te instanceof TileEntityGravitySource)
 									{
 										sources.add(((TileEntityGravitySource) te).gravityAddition);

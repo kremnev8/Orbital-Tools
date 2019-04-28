@@ -15,11 +15,11 @@ import micdoodle8.mods.galacticraft.core.network.IPacketReceiver;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityAdvanced;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
 import micdoodle8.mods.miccore.Annotations.NetworkedField;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -148,7 +148,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public ItemStack getStackInSlot(int par1)
 	{
-		if (par1 > 0 && par1 < this.getSizeInventory())
+		if (par1 >= 0 && par1 < this.getSizeInventory())
 		{
 			return this.chestContents.get(par1);
 		}
@@ -158,9 +158,9 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public ItemStack decrStackSize(int par1, int par2)
 	{
-		if (par1 > 0 && par1 < this.getSizeInventory())
+		if (par1 >= 0 && par1 < this.getSizeInventory())
 		{
-			if (this.chestContents.get(par1) != null)
+			if (!this.chestContents.get(par1).isEmpty())
 			{
 				ItemStack itemstack;
 				
@@ -208,11 +208,11 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
-		if (par1 > 0 && par1 < this.getSizeInventory())
+		if (par1 >= 0 && par1 < this.getSizeInventory())
 		{
 			this.chestContents.set(par1, par2ItemStack);
 			
-			if (par2ItemStack != null && par2ItemStack.getCount() > this.getInventoryStackLimit())
+			if (!par2ItemStack.isEmpty() && par2ItemStack.getCount() > this.getInventoryStackLimit())
 			{
 				par2ItemStack.setCount(this.getInventoryStackLimit());
 			}
@@ -224,7 +224,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public String getName()
 	{
-		return GCCoreUtil.translate("container.dockingport.name");
+		return I18n.format("orbitaltools.tile.dockingpoint.name");
 	}
 	
 	@Override
@@ -285,7 +285,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 		
 		for (int i = 0; i < this.chestContents.size(); ++i)
 		{
-			if (this.chestContents.get(i) != null)
+			if (!this.chestContents.get(i).isEmpty())
 			{
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
@@ -344,7 +344,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 						rocket = (EntityRocketFakeTiered) ent;
 						if (rocket != null) PacketHandler.sendToAllAround(new SendUUIDPacket(rocket.getUniqueID()),
 								new TargetPoint(this.world.provider.getDimension(), pos.getX(), pos.getX(), pos.getX(), 10));
-						if (this.getStackInSlot(this.getSizeInventory() - 2) != null)
+						if (!this.getStackInSlot(this.getSizeInventory() - 2).isEmpty())
 						{
 							boolean preFueled = false;
 							int type = this.getStackInSlot(this.getSizeInventory() - 2).getItemDamage();
@@ -386,7 +386,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 			this.fuelTank.drain(this.fuelTank.getCapacity(), true);
 			rocket = null;
 		}
-		if (this.getStackInSlot(this.getSizeInventory() - 2) != null)
+		if (!this.getStackInSlot(this.getSizeInventory() - 2).isEmpty())
 		{
 			int type = this.getStackInSlot(this.getSizeInventory() - 2).getItemDamage();
 			// Checking type
@@ -397,7 +397,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 		}
 		
 		//checking for replaced item (dirty code, it creates useless int in NBT) 
-		if (this.getStackInSlot(this.getSizeInventory() - 2) != null && rocket != null)
+		if (!this.getStackInSlot(this.getSizeInventory() - 2).isEmpty() && rocket != null)
 		{
 			boolean writeID = false;
 			if (this.getStackInSlot(this.getSizeInventory() - 2).hasTagCompound())
@@ -439,7 +439,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 		}
 		
 		// Checking and saving fuel data in rocket item NBT
-		if (this.getStackInSlot(this.getSizeInventory() - 2) != null && rocket != null && !anotherItem && !preFueled)
+		if (!this.getStackInSlot(this.getSizeInventory() - 2).isEmpty() && rocket != null && !anotherItem && !preFueled)
 		{
 			int tier = EntityRocketFakeTiered.getTierFromItem(this.getStackInSlot(this.getSizeInventory() - 2));
 			ItemStack is = this.getStackInSlot(this.getSizeInventory() - 2);
@@ -480,7 +480,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 				}
 			}
 		}
-		if (this.getStackInSlot(this.getSizeInventory() - 2) != ItemStack.EMPTY)
+		if (!this.getStackInSlot(this.getSizeInventory() - 2).isEmpty())
 		{
 			if (this.getStackInSlot(this.getSizeInventory() - 2).getItemDamage() > 4)
 			{
@@ -497,7 +497,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 								ChatUtils.modifyColor(new TextComponentString("This rocket isn't supported by docking port. Use landing pad instead!"), TextFormatting.RED));
 					}
 				}
-				this.setInventorySlotContents(this.getSizeInventory() - 2, null);
+				this.setInventorySlotContents(this.getSizeInventory() - 2, ItemStack.EMPTY);
 				
 			}
 		}
@@ -673,11 +673,13 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 		}
 		if (!this.world.isRemote && rocket != null)
 		{
+			//	if (!chestContents.get(chestContents.size() - 1).isEmpty())
 			// drain
-			FluidUtil.loadFromContainer(fuelTank, GCFluids.fluidFuel, chestContents, this.chestContents.size() - 1, fuelTank.getCapacity() - fuelTank.getFluidAmount());
+			FluidUtil.loadFromContainer(fuelTank, GCFluids.fluidFuel, chestContents, this.chestContents.size() - 4, fuelTank.getCapacity() - fuelTank.getFluidAmount());
 			
+			//	if (!chestContents.get(chestContents.size() - 4).isEmpty())
 			// fuel
-			FluidUtil.tryFillContainer(fuelTank, new FluidStack(GCFluids.fluidFuel, 1000), chestContents, this.chestContents.size() - 4, GCItems.fuelCanister);
+			FluidUtil.tryFillContainer(fuelTank, new FluidStack(GCFluids.fluidFuel, 1000), chestContents, this.chestContents.size() - 1, GCItems.fuelCanister);
 			/*ItemStack stack = getStackInSlot(this.chestContents.size() - 4);
 			
 			if (stack != null)
@@ -947,7 +949,7 @@ public class TileEntityDockingPort extends TileEntityAdvanced implements IInvent
 	@Override
 	public ItemStack removeStackFromSlot(int index)
 	{
-		if (index > 0 && index < this.getSizeInventory())
+		if (index >= 0 && index < this.getSizeInventory())
 		{
 			ItemStack stack = chestContents.get(index).copy();
 			chestContents.set(index, ItemStack.EMPTY);

@@ -88,8 +88,8 @@ public class ContainerRemover extends Container {
 							BlockPos Ipos = MatrixHelper.findMatrixPoint(world, str.placementDir, str.placementPos);
 							if (Ipos != null)
 							{
-								FacingUtils.IncreaseByDir(str.placementDir, Ipos, 9);
-								TileEntityInfo Ite = (TileEntityInfo) world.getTileEntity(Ipos);
+								BlockPos Ipos2 = FacingUtils.IncreaseByDir(str.placementDir, Ipos, 9);
+								TileEntityInfo Ite = (TileEntityInfo) world.getTileEntity(Ipos2);
 								if (Ite != null && Ite.Object.connections != null && Ite.Object.connections.size() > 0)
 								{
 									te.infoBlocks.get(0).ChildObjects.get(i).connections = Ite.Object.connections;

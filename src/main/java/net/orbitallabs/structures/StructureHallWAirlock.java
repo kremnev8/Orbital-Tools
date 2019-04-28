@@ -12,8 +12,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.OreDictItemStack;
 
@@ -696,9 +699,17 @@ public class StructureHallWAirlock extends Structure {
 	}
 	
 	@Override
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		ArrayList<AxisAlignedBB> list = new ArrayList<>();
+		list.add(createBoundingBox(dir, pos, new int[] { 5, 5, 5, 2, -2, 2 }));
+		return list;
+	}
+	
+	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos pos, int meta)
 	{
-		if (meta != 0 && meta != 1 && meta != -1)
+		if (meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -730,19 +741,22 @@ public class StructureHallWAirlock extends Structure {
 		return "hallairlock";
 	}
 	
+	//"0solar_module_0", "1solar_module_1", "2raw_silicon", "3ingot_copper", "4ingot_tin", "5ingot_aluminum", "6compressed_copper", "7compressed_tin", 
+	//"8compressed_aluminum", "9compressed_steel", "1compressed_bronze", "11compressed_iron", "12wafer_solar", "13wafer_basic", "4wafer_advanced", "5dehydrated_apple", 
+	//"6dehydrated_carrot", "7dehydrated_melon", "8dehydrated_potato", "9frequency_module", "20ambient_thermal_controller" 
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
-		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 48, 7), "plateTin"));
-		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 24, ItemMod.scaffold_meta)));
+		NonNullList<OreDictItemStack> items = NonNullList.create();
+		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 32, 7), "plateTin"));
+		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 32, ItemMod.scaffold_meta)));
 		items.add(new OreDictItemStack(new ItemStack(Items.GLOWSTONE_DUST, 12)));
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 3, 13)));
 		
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 36, 8)));
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 24, 9), "plateSteel"));
 		items.add(new OreDictItemStack(new ItemStack(GCItems.oxygenConcentrator, 6, 0)));
-		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 4, 0)));
+		items.add(new OreDictItemStack(new ItemStack(GCItems.itemBasicMoon, 4, 1)));
 		
 		return items;
 	}

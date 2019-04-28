@@ -1,8 +1,7 @@
 package net.orbitallabs.structures;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.orbitallabs.utils.OreDictItemStack;
 
 public class StructureData {
@@ -12,10 +11,10 @@ public class StructureData {
 	public int mainConnect;
 	public int addConnect;
 	public String specialFunc;
-	public List<OreDictItemStack> requiredItems;
-	public List<ItemStack> requiredItemsExamp = new ArrayList();
+	public NonNullList<OreDictItemStack> requiredItems = NonNullList.create();;
+	public NonNullList<ItemStack> requiredItemsExamp = NonNullList.create();
 	
-	public StructureData(String name,String uln,int mainC,int addC,String func)
+	public StructureData(String name, String uln, int mainC, int addC, String func)
 	{
 		this.name = name;
 		this.uln = uln;
@@ -23,7 +22,8 @@ public class StructureData {
 		this.addConnect = addC;
 		this.specialFunc = func;
 	}
-	public StructureData(String uln,int mainC,int addC)
+	
+	public StructureData(String uln, int mainC, int addC)
 	{
 		this.name = uln;
 		this.uln = uln;
@@ -31,7 +31,7 @@ public class StructureData {
 		this.addConnect = addC;
 	}
 	
-	public StructureData addRequiredItems(List<OreDictItemStack> stacks)
+	public StructureData addRequiredItems(NonNullList<OreDictItemStack> stacks)
 	{
 		requiredItems = stacks;
 		for (int i = 0; i < requiredItems.size(); i++)

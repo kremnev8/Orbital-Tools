@@ -14,13 +14,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
 import net.orbitallabs.entity.EntityRocketFakeTiered;
 import net.orbitallabs.entity.EntityRocketFakeTiered.EnumLaunchPhase;
+import net.orbitallabs.items.AnimationCapabilityProvider;
+import net.orbitallabs.items.AnimationCapabilityProvider.IAnimationCapability;
 import net.orbitallabs.items.ItemMod;
-import net.orbitallabs.items.SpaceJetpackCapability;
-import net.orbitallabs.items.SpaceJetpackItemStackCap;
+import net.orbitallabs.items.SpaceJetpackProvider;
+import net.orbitallabs.items.SpaceJetpackStorage.ISpaceJetpackState;
 import net.orbitallabs.network.PacketHandler;
+import net.orbitallabs.network.packets.AnimationTellServerPacket;
 import net.orbitallabs.network.packets.DismountPacket;
 import net.orbitallabs.network.packets.OpenRocketFuelGuiPacket;
 import net.orbitallabs.renderer.animations.AnimationHandlerJetpack;
+import net.orbitallabs.utils.OTLoger;
 import net.orbitallabs.utils.OrbitalModInfo;
 
 public class KeyHandlerClient extends KeyHandler {
@@ -91,24 +95,26 @@ public class KeyHandlerClient extends KeyHandler {
 			{
 				ItemStack stack = playerBase.inventory.armorItemInSlot(2);
 				
-				SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) stack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
+				ISpaceJetpackState cap = stack.getCapability(SpaceJetpackProvider.SpaceJetpackCapability, EnumFacing.UP);
+				IAnimationCapability anim = stack.getCapability(AnimationCapabilityProvider.AnimCap, EnumFacing.UP);
 				if (cap != null)
 				{
-					if (cap.getAnimationHandler().isAnimationActive("Enabled idle"))
+					if (anim.getAnimationHandler().isAnimationActive("Enabled idle") || anim.getAnimationHandler().isAnimationActive("Disabled idle"))
 					{
-						cap.setState(false);
-						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Disable", 0, true);
-						//cap.markDirty();
-					} else if (cap.getAnimationHandler().isAnimationActive("Disabled idle"))
-					{
-						cap.setState(true);
-						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Enable", 0, true);
-						//cap.markDirty();
-					} else if (cap.getAnimationHandler().animCurrentChannels.size() == 0)
-					{
-						cap.setState(true);
-						((AnimationHandlerJetpack) cap.getAnimationHandler()).activateAnimation("Enable", 0, true);
-						//	cap.markDirty();
+						if (cap.isEnabled())
+						{
+							cap.setEnabled(false);
+							((AnimationHandlerJetpack) anim.getAnimationHandler()).activateAnimation("Disable", 0);
+							PacketHandler.sendToServer(new AnimationTellServerPacket("Disable", true));
+							OTLoger.logInfo("Trying to disable jetpack");
+						} else
+						{
+							cap.setEnabled(true);
+							((AnimationHandlerJetpack) anim.getAnimationHandler()).activateAnimation("Enable", 0);
+							PacketHandler.sendToServer(new AnimationTellServerPacket("Enable", true));
+							OTLoger.logInfo("Trying to enable jetpack");
+							//cap.markDirty();
+						}
 					}
 				}
 			}

@@ -38,14 +38,14 @@ import net.orbitallabs.items.ItemSpaceJetpack;
 
 public class FreefallAdvHandler extends FreefallHandler {
 	private double pPrevMotionX;
-	public double pPrevMotionY;
+	//public double pPrevMotionY;
 	private double pPrevMotionZ;
 	private float jetpackBoost;
 	private double pPrevdY;
-	public boolean sneakLast;
-	public boolean onWall;
+	//public boolean sneakLast;
+	//public boolean onWall;
 	
-	public int pjumpticks = 0;
+	//public int pjumpticks = 0;
 	private GCPlayerStatsClient stats;
 	private int flyToggleTimer;
 	
@@ -133,7 +133,7 @@ public class FreefallAdvHandler extends FreefallHandler {
 		if (p.world.provider instanceof WorldProviderOrbitModif)
 		{
 			WorldProviderOrbitModif orbit = (WorldProviderOrbitModif) p.world.provider;
-			if (orbit.artificialG > WorldProviderOrbitModif.MIN_GRAVITY_VAL)
+			if (orbit.artificialG >= WorldProviderOrbitModif.MIN_GRAVITY_VAL)
 			{
 				return false;
 			}
@@ -379,7 +379,7 @@ public class FreefallAdvHandler extends FreefallHandler {
 		
 		if (!jetpackUsed && p.movementInput.jump)
 		{
-			p.motionY += ConfigManagerCore.hardMode ? 0.002D : 0.0032D;
+			p.motionY += ConfigManagerCore.hardMode ? 0.0002D : 0.00032D;
 		}
 		
 		float speedLimit = ConfigManagerCore.hardMode ? 0.9F : 0.7F;
@@ -426,9 +426,6 @@ public class FreefallAdvHandler extends FreefallHandler {
 		pPrevMotionZ = p.motionZ;
 		p.move(MoverType.SELF, p.motionX + posOffsetX, p.motionY + posOffsetY, p.motionZ + posOffsetZ);
 		
-		super.onWall = onWall;
-		super.sneakLast = sneakLast;
-		super.pPrevMotionY = pPrevMotionY;
 	}
 	
 	/*              double dyaw = p.rotationYaw - p.prevRotationYaw;
@@ -576,6 +573,12 @@ public class FreefallAdvHandler extends FreefallHandler {
 					gravmod = WorldProviderOrbitModif.MIN_GRAVITY_VAL;
 				}
 			}
+			
+			if (p.onGround && p.capabilities.isCreativeMode)
+			{
+				p.capabilities.isFlying = false;
+			}
+			
 			boolean flag = p.movementInput.jump;
 			p.movementInput.updatePlayerMoveState();
 			if (p.movementInput.jump)
@@ -733,11 +736,16 @@ public class FreefallAdvHandler extends FreefallHandler {
 	public void jump(EntityPlayer player, float gravmod)
 	{
 		
-		player.motionY = 0.42F / gravmod;
+		player.motionY = 0.42D / gravmod;
 		
 		if (player.isPotionActive(MobEffects.JUMP_BOOST))
 		{
 			player.motionY += (double) ((float) (player.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+		}
+		
+		if ((float) WorldProviderOrbitModif.artificialG < 0.1F && player.motionY > 0.5D)
+		{
+			player.motionY = 0.5D;
 		}
 		
 		if (player.isSprinting())

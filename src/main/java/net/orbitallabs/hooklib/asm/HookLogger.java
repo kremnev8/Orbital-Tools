@@ -2,7 +2,6 @@ package net.orbitallabs.hooklib.asm;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.orbitallabs.utils.OTLoger;
 
 public interface HookLogger {
 
@@ -18,20 +17,17 @@ public interface HookLogger {
 
         @Override
         public void debug(String message) {
-        //    System.out.println("[DEBUG] " + message);
-        	OTLoger.logInfo("[DEBUG][HOOKLOADER]"+message); 
+            System.out.println("[DEBUG] " + message);
         }
 
         @Override
         public void warning(String message) {
-          //  System.out.println("[WARNING] " + message);
-        	OTLoger.logInfo("[WARNING][HOOKLOADER]"+message); 
+            System.out.println("[WARNING] " + message);
         }
 
         @Override
         public void severe(String message) {
-          //  System.out.println("[SEVERE] " + message);
-        	OTLoger.logInfo("[FATAL][HOOKLOADER]"+message); 
+            System.out.println("[SEVERE] " + message);
         }
 
         @Override

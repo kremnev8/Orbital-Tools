@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.orbitallabs.tiles.TileEntityArmorStand;
+import net.orbitallabs.utils.OTLoger;
 
 public class ArmorStandItemSyncPacket implements IMessage {
 	private NonNullList<ItemStack> items;
@@ -87,14 +88,21 @@ public class ArmorStandItemSyncPacket implements IMessage {
 		@Override
 		public IMessage onMessage(ArmorStandItemSyncPacket pkt, MessageContext ctx)
 		{
-			TileEntityArmorStand tile = (TileEntityArmorStand) Minecraft.getMinecraft().world.getTileEntity(new BlockPos(pkt.x, pkt.y, pkt.z));
-			
-			if (tile == null)
+			if (Minecraft.getMinecraft().world != null)
 			{
-				//	OTLoger.logInfo("NULL tile entity reference in Armor stand item sync update packet! Please report to dev!");
+				
+				TileEntityArmorStand tile = (TileEntityArmorStand) Minecraft.getMinecraft().world.getTileEntity(new BlockPos(pkt.x, pkt.y, pkt.z));
+				
+				if (tile == null)
+				{
+					//	OTLoger.logInfo("NULL tile entity reference in Armor stand item sync update packet! Please report to dev!");
+				} else
+				{
+					tile.items = pkt.items;
+				}
 			} else
 			{
-				tile.items = pkt.items;
+				OTLoger.logInfo("NULL world reference in Armor stand item sync update packet! Please report to dev!");
 			}
 			
 			return null;

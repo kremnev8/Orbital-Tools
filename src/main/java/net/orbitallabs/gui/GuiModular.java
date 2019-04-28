@@ -168,11 +168,11 @@ public class GuiModular extends GuiContainer {
 		}
 		if (module.guiRight() > this.guiLeft + this.xSize)
 		{
-			xSize = module.guiRight() - this.guiLeft;
+			//xSize = module.guiRight() - this.guiLeft;
 		}
 		if (module.guiBottom() > this.guiTop + this.ySize)
 		{
-			ySize = module.guiBottom() - this.guiTop;
+			//ySize = module.guiBottom() - this.guiTop;
 		}
 	}
 	
@@ -190,6 +190,18 @@ public class GuiModular extends GuiContainer {
 		} catch (IOException e)
 		{
 		}
+	}
+	
+	@Override
+	protected void mouseReleased(int mouseX, int mouseY, int state)
+	{
+		//GuiModule module = getModuleForPoint(mouseX, mouseY);
+		for (int i = 0; i < modules.size(); i++)
+		{
+			GuiModule module = modules.get(i);
+			module.mouseReleased(mouseX, mouseY, state);
+		}
+		super.mouseReleased(mouseX, mouseY, state);
 	}
 	
 	@Override

@@ -1,7 +1,5 @@
 package net.orbitallabs.structures;
 
-import java.util.ArrayList;
-import java.util.List;
 import micdoodle8.mods.galacticraft.core.GCBlocks;
 import micdoodle8.mods.galacticraft.core.blocks.BlockSolar;
 import micdoodle8.mods.galacticraft.core.tile.TileEntitySolar;
@@ -9,8 +7,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.utils.OreDictItemStack;
 
 public class StructureSolarPanel extends StructureRotatable {
@@ -42,7 +42,7 @@ public class StructureSolarPanel extends StructureRotatable {
 		return false;
 	}
 	
-	int ret = 4;
+	public EnumBlockPointStates set;
 	
 	@Override
 	public void deconstruct(World world, EnumFacing dir, BlockPos spos)
@@ -56,7 +56,7 @@ public class StructureSolarPanel extends StructureRotatable {
 		{
 			BuildHandler.setBlock(world, x - 1, y, z, GCBlocks.basicBlock, 4, 2);
 		} else BuildHandler.setBlock(world, x, y, z + 1, GCBlocks.basicBlock, 4, 2);
-		BuildHandler.buildBuildPoint(world, x, y, z, ret);
+		BuildHandler.buildBuildPoint(world, x, y, z, set);
 	}
 	
 	@Override
@@ -92,7 +92,8 @@ public class StructureSolarPanel extends StructureRotatable {
 	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos spos, int meta)
 	{
-		if (meta != 2 && meta != 4 && meta != 5 && meta != 0 && meta != -1)
+		if (meta != EnumBlockPointStates.SOLARPANELS.getMeta() && meta != EnumBlockPointStates.GREENHOUSE.getMeta() && meta != EnumBlockPointStates.ADDSTRUCTURES.getMeta()
+				&& meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -128,9 +129,9 @@ public class StructureSolarPanel extends StructureRotatable {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		if (this.placementRotation == 0)
 		{
 			items.add(new OreDictItemStack(new ItemStack(GCBlocks.solarPanel, 1, 0)));

@@ -153,7 +153,7 @@ public class TileEntityInfo extends TileEntity {
 					
 					for (int j = 0; j < ChildObjects.get(i).connections.size(); j++)
 					{
-						tag.setInteger("CHCN" + j + "_DIR", ChildObjects.get(j).connections.get(j).placementDir.getIndex());
+						tag.setInteger("CHCN" + j + "_DIR", ChildObjects.get(i).connections.get(j).placementDir.getIndex());
 						tag.setInteger("CHCN" + j + "_ROT", ChildObjects.get(i).connections.get(j).placementRotation);
 						tag.setIntArray("CHCN" + j + "_POS", getInt(ChildObjects.get(i).connections.get(j).placementPos));
 						tag.setString("CHCN" + j + "_OBJ", ChildObjects.get(i).connections.get(j).getUnlocalizedName());

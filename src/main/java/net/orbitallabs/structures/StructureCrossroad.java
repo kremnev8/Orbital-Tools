@@ -11,8 +11,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.blocks.BlockContainerMod;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.tiles.TileEntityInfo;
@@ -1169,7 +1172,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + -4, y + -2, z + -3, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -4, y + -2, z + -2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -4, y + -2, z + -1, block3, 4, 2);
-			BuildHandler.buildBuildPoint(world, x - 4, y - 2, z, 2);
+			BuildHandler.buildBuildPoint(world, x - 4, y - 2, z, EnumBlockPointStates.ADDSTRUCTURES);
 			// world.setTileEntity(p_147455_1_, p_147455_2_, p_147455_3_,
 			// p_147455_4_);
 			BuildHandler.setBlock(world, x + -4, y + -2, z + 1, block3, 4, 2);
@@ -1187,7 +1190,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + -4, y + 3, z + -3, block2, 2, 2);
 			BuildHandler.setBlock(world, x + -4, y + 3, z + -2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -4, y + 3, z + -1, block3, 4, 2);
-			BuildHandler.buildBuildPoint(world, x - 4, y + 3, z, 4);
+			BuildHandler.buildBuildPoint(world, x - 4, y + 3, z, EnumBlockPointStates.SOLARPANELS);
 			BuildHandler.setBlock(world, x + -4, y + 3, z + 1, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -4, y + 3, z + 2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -4, y + 3, z + 3, block2, 3, 2);
@@ -1401,7 +1404,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 0, y + -2, z + -7, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + -6, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + -5, block3, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y - 2, z - 4, 2);
+			BuildHandler.buildBuildPoint(world, x, y - 2, z - 4, EnumBlockPointStates.ADDSTRUCTURES);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + -3, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + -2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + -1, block3, 4, 2);
@@ -1417,7 +1420,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 0, y + 3, z + -7, block2, 2, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + -6, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + -5, block3, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y + 3, z - 4, 4);
+			BuildHandler.buildBuildPoint(world, x, y + 3, z - 4, EnumBlockPointStates.SOLARPANELS);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + -3, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + -2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + -1, block2, 3, 2);
@@ -1638,7 +1641,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 4, y + -2, z + -2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 4, y + -2, z + -1, block3, 4, 2);
 			// Block block6 = id:505;
-			BuildHandler.buildBuildPoint(world, x + 4, y - 2, z, 2);
+			BuildHandler.buildBuildPoint(world, x + 4, y - 2, z, EnumBlockPointStates.ADDSTRUCTURES);
 			BuildHandler.setBlock(world, x + 4, y + -2, z + 1, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 4, y + -2, z + 2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 4, y + -2, z + 3, block3, 4, 2);
@@ -1654,7 +1657,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 4, y + 3, z + -3, block2, 2, 2);
 			BuildHandler.setBlock(world, x + 4, y + 3, z + -2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 4, y + 3, z + -1, block3, 4, 2);
-			BuildHandler.buildBuildPoint(world, x + 4, y + 3, z, 4);
+			BuildHandler.buildBuildPoint(world, x + 4, y + 3, z, EnumBlockPointStates.SOLARPANELS);
 			BuildHandler.setBlock(world, x + 4, y + 3, z + 1, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 4, y + 3, z + 2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 4, y + 3, z + 3, block2, 3, 2);
@@ -1875,7 +1878,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 0, y + -2, z + 2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + 3, block3, 4, 2);
 			// Block block6 = id:505;
-			BuildHandler.buildBuildPoint(world, x, y - 2, z + 4, 2);
+			BuildHandler.buildBuildPoint(world, x, y - 2, z + 4, EnumBlockPointStates.ADDSTRUCTURES);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + 5, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + 6, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -2, z + 7, block3, 4, 2);
@@ -1891,7 +1894,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 0, y + 3, z + 1, block2, 2, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + 2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + 3, block3, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y + 3, z + 4, 4);
+			BuildHandler.buildBuildPoint(world, x, y + 3, z + 4, EnumBlockPointStates.SOLARPANELS);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + 5, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + 6, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + 7, block2, 3, 2);
@@ -2011,7 +2014,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x - 6, y + 1, z + 0, block2, 4, 2);
 			BuildHandler.setBlock(world, x - 6, y + 1, z + 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x - 6, y + 2, z - 1, block2, 4, 2);
-			BuildHandler.buildBuildPoint(world, x - 6, y + 2, z, 1);
+			BuildHandler.buildBuildPoint(world, x - 6, y + 2, z, EnumBlockPointStates.EVERYTHING);
 			BuildHandler.setBlock(world, x - 6, y + 2, z + 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x - 6, y + 3, z - 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x - 6, y + 3, z + 0, block2, 4, 2);
@@ -2109,7 +2112,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x - 2, y + 2, z - 5, block2, 4, 2);
 			BuildHandler.setBlock(world, x - 2, y + 2, z - 4, block2, 4, 2);
 			BuildHandler.setBlock(world, x - 2, y + 2, z - 3, block2, 4, 2);
-			BuildHandler.buildInfoPoint(world, dir, getUnlocalizedName(), x + 0, y - 1, z + 0, 0, x, y, z);
+			BuildHandler.buildInfoPoint(world, dir, getUnlocalizedName(), x + 0, y - 1, z + 0, 0, x, y - 1, z);
 			
 			BuildHandler.buildRemoveInfoPoint(world, dir, getUnlocalizedName(), x - 2, y + 2, z + 2, 0, x + 0, y - 1, z + 0);
 			
@@ -2215,8 +2218,8 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 0, y + 1, z - 5, block4, 0, 2);
 			BuildHandler.setBlock(world, x + 0, y + 1, z + 5, block4, 0, 2);
 			BuildHandler.setBlock(world, x + 0, y + 1, z + 6, block2, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y + 2, z - 6, 1);
-			BuildHandler.buildBuildPoint(world, x, y + 2, z + 6, 1);
+			BuildHandler.buildBuildPoint(world, x, y + 2, z - 6, EnumBlockPointStates.EVERYTHING);
+			BuildHandler.buildBuildPoint(world, x, y + 2, z + 6, EnumBlockPointStates.EVERYTHING);
 			BuildHandler.setBlock(world, x + 0, y + 3, z - 6, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z - 5, block4, 8, 2);
 			BuildHandler.setBlock(world, x + 0, y + 3, z + 5, block4, 8, 2);
@@ -2234,7 +2237,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 0, y + 5, z - 3, block1, 2, 2);
 			BuildHandler.setBlock(world, x + 0, y + 5, z - 2, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 5, z - 1, block2, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y + 5, z, 4);
+			BuildHandler.buildBuildPoint(world, x, y + 5, z, EnumBlockPointStates.SOLARPANELS);
 			BuildHandler.setBlock(world, x + 0, y + 5, z + 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 5, z + 2, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 5, z + 3, block1, 3, 2);
@@ -2403,7 +2406,7 @@ public class StructureCrossroad extends Structure {
 			BuildHandler.setBlock(world, x + 6, y + 1, z + 0, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 6, y + 1, z + 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 6, y + 2, z - 1, block2, 4, 2);
-			BuildHandler.buildBuildPoint(world, x + 6, y + 2, z, 1);
+			BuildHandler.buildBuildPoint(world, x + 6, y + 2, z, EnumBlockPointStates.EVERYTHING);
 			BuildHandler.setBlock(world, x + 6, y + 2, z + 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 6, y + 3, z - 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 6, y + 3, z + 0, block2, 4, 2);
@@ -2417,9 +2420,17 @@ public class StructureCrossroad extends Structure {
 	}
 	
 	@Override
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		ArrayList<AxisAlignedBB> list = new ArrayList<>();
+		list.add(createBoundingBox(dir, pos, new int[] { 5, 6, 5, 2, -2, 2 }));
+		return list;
+	}
+	
+	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos pos, int meta)
 	{
-		if (meta != 0 && meta != 1 && meta != -1)
+		if (meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -2452,11 +2463,11 @@ public class StructureCrossroad extends Structure {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 64, 7), "plateTin"));
-		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 24, 7), "plateTin"));
+		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 12, 7), "plateTin"));
 		items.add(new OreDictItemStack(new ItemStack(Items.GLOWSTONE_DUST, 8)));
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 5, 13)));
 		items.add(new OreDictItemStack(new ItemStack(MarsItems.marsItemBasic, 8, 2)));

@@ -1,5 +1,6 @@
 package net.orbitallabs.hooklib.disk;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import net.orbitallabs.hooklib.asm.HookClassTransformer;
 import java.io.File;
@@ -21,14 +22,14 @@ public class DiskHookLib {
     void process() throws IOException {
         HookClassTransformer transformer = new HookClassTransformer();
         for (File file : getFiles(".class", hooksDir)) {
-            transformer.registerHookContainer(new FileInputStream(file));
-            
+            transformer.registerHookContainer(FileUtils.readFileToByteArray(file));
+            // теперь file надо скопировать в transformedDir, сохранив путь
         }
         for (File file : getFiles(".class", untransformedDir)) {
             byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
-            String className = ""; 
+            String className = ""; //нужно из пути получить название класса через точки вроде ru.lol.DatClass
             byte[] newBytes = transformer.transform(className, bytes);
-            
+            // надо закинуть файл, состоящий из newBytes в transformedDir, сохранив путь
         }
     }
 

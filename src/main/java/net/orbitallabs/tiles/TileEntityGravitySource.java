@@ -15,15 +15,11 @@ public class TileEntityGravitySource extends TileBaseElectricBlock {
 	public double gravityAddition = 0F;
 	@NetworkedField(targetSide = Side.CLIENT)
 	public double SettedGA = 1.0F;
-	@NetworkedField(targetSide = Side.SERVER)
-	public double ClientVal = 0F;
-	public boolean gA_changed = false;
 	
 	public TileEntityGravitySource()
 	{
 		storage.setCapacity(4000F);
 		storage.setMaxExtract(500F);
-		ClientVal = SettedGA;
 	}
 	
 	@Override
@@ -49,11 +45,6 @@ public class TileEntityGravitySource extends TileBaseElectricBlock {
 	@Override
 	public void slowDischarge()
 	{
-		if (ClientVal != SettedGA && gA_changed)
-		{
-			SettedGA = ClientVal;
-			gA_changed = false;
-		}
 		if (this.hasEnoughEnergyToRun && !RedstoneUtil.isBlockReceivingRedstone(this.world, this.pos))
 		{
 			gravityAddition = SettedGA;
@@ -100,7 +91,6 @@ public class TileEntityGravitySource extends TileBaseElectricBlock {
 	{
 		super.readFromNBT(nbt);
 		SettedGA = nbt.getDouble("GValue");
-		ClientVal = SettedGA;
 	}
 	
 	@Override

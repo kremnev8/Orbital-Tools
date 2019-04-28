@@ -1,7 +1,5 @@
 package net.orbitallabs.structures;
 
-import java.util.ArrayList;
-import java.util.List;
 import micdoodle8.mods.galacticraft.core.GCBlocks;
 import micdoodle8.mods.galacticraft.core.GCItems;
 import net.minecraft.block.Block;
@@ -9,8 +7,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.OreDictItemStack;
 
@@ -592,7 +592,8 @@ public class StructureWindow extends StructureRotatable {
 	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos spos, int meta)
 	{
-		if (meta != 0 && meta != 1 && meta != 2 && meta != 3 && meta != -1)
+		if (meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN && meta != EnumBlockPointStates.ADDSTRUCTURES.getMeta()
+				&& meta != EnumBlockPointStates.WINDOWS0.getMeta())
 		{
 			return false;
 		}
@@ -624,7 +625,7 @@ public class StructureWindow extends StructureRotatable {
 			BuildHandler.setBlock(world, x + 0, y - 2, z + 0, block1, 6, 2);
 			BuildHandler.setBlock(world, x + 0, y - 1, z + 0, block2, 4, 2);
 			
-			BuildHandler.buildBuildPoint(world, x, y, z, 3);
+			BuildHandler.buildBuildPoint(world, x, y, z, EnumBlockPointStates.WINDOWS0);
 			
 			BuildHandler.setBlock(world, x + 0, y + 1, z + 0, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 2, z + 0, block1, 2, 2);
@@ -655,7 +656,7 @@ public class StructureWindow extends StructureRotatable {
 			BuildHandler.setBlock(world, x - 1, y + 2, z + 0, block1, 3, 2);
 			BuildHandler.setBlock(world, x + 0, y - 2, z + 0, block1, 7, 2);
 			BuildHandler.setBlock(world, x + 0, y - 1, z + 0, block2, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y, z, 3);
+			BuildHandler.buildBuildPoint(world, x, y, z, EnumBlockPointStates.WINDOWS0);
 			BuildHandler.setBlock(world, x + 0, y + 1, z + 0, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 2, z + 0, block1, 3, 2);
 			BuildHandler.setBlock(world, x + 1, y - 2, z + 0, block1, 7, 2);
@@ -685,7 +686,7 @@ public class StructureWindow extends StructureRotatable {
 			BuildHandler.setBlock(world, x + 0, y - 1, z + 2, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z - 2, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z - 1, block2, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y, z, 3);
+			BuildHandler.buildBuildPoint(world, x, y, z, EnumBlockPointStates.WINDOWS0);
 			BuildHandler.setBlock(world, x + 0, y + 0, z + 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z + 2, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 1, z - 2, block2, 4, 2);
@@ -715,7 +716,7 @@ public class StructureWindow extends StructureRotatable {
 			BuildHandler.setBlock(world, x + 0, y - 1, z + 2, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z - 2, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z - 1, block2, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y, z, 3);
+			BuildHandler.buildBuildPoint(world, x, y, z, EnumBlockPointStates.WINDOWS0);
 			BuildHandler.setBlock(world, x + 0, y + 0, z + 1, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 0, z + 2, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 1, z - 2, block2, 4, 2);
@@ -730,6 +731,18 @@ public class StructureWindow extends StructureRotatable {
 			BuildHandler.setBlock(world, x + 0, y + 2, z + 2, block1, 1, 2);
 		}
 		
+	}
+	
+	@Override
+	public boolean haveReplaceableItems()
+	{
+		return true;
+	}
+	
+	@Override
+	public String getGuiCheckboxText()
+	{
+		return I18n.format("builder.side_info.checkbox.window.name");
 	}
 	
 	@Override
@@ -758,10 +771,10 @@ public class StructureWindow extends StructureRotatable {
 	@Override
 	public boolean isPossible(EnumFacing dir, int rot, int meta)
 	{
-		if (meta == 3 && rot == 1)
+		if (meta == EnumBlockPointStates.WINDOWS0.getMeta() && rot == 1)
 		{
 			return false;
-		} else if (meta != 3 && meta != 0 && rot == 0)
+		} else if (meta != EnumBlockPointStates.WINDOWS0.getMeta() && meta != EnumBlockPointStates.EVERYTHING.getMeta() && rot == 0)
 		{
 			return false;
 		}
@@ -772,18 +785,18 @@ public class StructureWindow extends StructureRotatable {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		if (this.placementRotation == 0)
 		{
-			items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 6, 7), "plateTin"));
+			items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 4, 7), "plateTin"));
 			items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 4, ItemMod.scaffold_meta)));
 			items.add(new OreDictItemStack(new ItemStack(Blocks.GLASS, 9, 0)));
 		} else
 		{
-			items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 12, 7), "plateTin"));
-			items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 6, ItemMod.scaffold_meta)));
+			items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 3, 7), "plateTin"));
+			items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 3, ItemMod.scaffold_meta)));
 			items.add(new OreDictItemStack(new ItemStack(Blocks.GLASS, 9, 0)));
 		}
 		return items;

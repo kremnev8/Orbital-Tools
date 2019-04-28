@@ -46,15 +46,15 @@ public class BlockArtificialGravitySource extends BlockContainerMod {
 			if (world.provider instanceof WorldProviderOrbitModif)
 			{
 				DockingPortSaveData savef = DockingPortSaveData.forWorld(world);
-				savef.GraviySources.add(new int[] { pos.getX(), pos.getY(), pos.getZ() });//TODO: rewite to use BlockPos
+				savef.GraviySources.add(pos);
 				savef.markDirty();
 				
 				List<Double> gforces = new ArrayList();
 				for (int i = 0; i < savef.GraviySources.size(); i++)
 				{
-					if (world.getTileEntity(new BlockPos(savef.GraviySources.get(i)[0], savef.GraviySources.get(i)[1], savef.GraviySources.get(i)[2])) != null)
+					if (world.getTileEntity(savef.GraviySources.get(i)) != null)
 					{
-						TileEntity te = world.getTileEntity(new BlockPos(savef.GraviySources.get(i)[0], savef.GraviySources.get(i)[1], savef.GraviySources.get(i)[2]));
+						TileEntity te = world.getTileEntity(savef.GraviySources.get(i));
 						if (te instanceof TileEntityGravitySource)
 						{
 							gforces.add(((TileEntityGravitySource) te).gravityAddition);
@@ -84,7 +84,7 @@ public class BlockArtificialGravitySource extends BlockContainerMod {
 				DockingPortSaveData savef = DockingPortSaveData.forWorld(world);
 				for (int i = 0; i < savef.GraviySources.size(); i++)
 				{
-					if (savef.GraviySources.get(i)[0] == pos.getX() && savef.GraviySources.get(i)[1] == pos.getY() && savef.GraviySources.get(i)[2] == pos.getZ())
+					if (savef.GraviySources.get(i).equals(pos))
 					{
 						savef.GraviySources.remove(i);
 						savef.markDirty();
@@ -92,9 +92,9 @@ public class BlockArtificialGravitySource extends BlockContainerMod {
 						List<Double> gforces = new ArrayList();
 						for (int i2 = 0; i2 < savef.GraviySources.size(); i2++)
 						{
-							if (world.getTileEntity(new BlockPos(savef.GraviySources.get(i2)[0], savef.GraviySources.get(i2)[1], savef.GraviySources.get(i2)[2])) != null)
+							if (world.getTileEntity(savef.GraviySources.get(i2)) != null)
 							{
-								TileEntity te = world.getTileEntity(new BlockPos(savef.GraviySources.get(i2)[0], savef.GraviySources.get(i2)[1], savef.GraviySources.get(i2)[2]));
+								TileEntity te = world.getTileEntity(savef.GraviySources.get(i2));
 								if (te instanceof TileEntityGravitySource)
 								{
 									gforces.add(((TileEntityGravitySource) te).gravityAddition);

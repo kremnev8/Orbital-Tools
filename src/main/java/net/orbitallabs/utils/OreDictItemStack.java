@@ -2,12 +2,13 @@ package net.orbitallabs.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreDictItemStack {
 	
-	public ItemStack example;
+	public ItemStack example = ItemStack.EMPTY;
 	public List<Integer> oreID;
 	
 	private List<Integer> TableToList(int[] tab)
@@ -46,18 +47,18 @@ public class OreDictItemStack {
 		this(getOre(oreName), oreName);
 	}
 	
-	public OreDictItemStack(ItemStack stack)
+	public OreDictItemStack(@Nonnull ItemStack stack)
 	{
-		if (stack != null)
+		if (!stack.isEmpty())
 		{
 			this.example = stack;
 			oreID = TableToList(OreDictionary.getOreIDs(stack));
 		}
 	}
 	
-	public OreDictItemStack(ItemStack stack, String oreDict)
+	public OreDictItemStack(@Nonnull ItemStack stack, String oreDict)
 	{
-		if (stack != null)
+		if (!stack.isEmpty())
 		{
 			this.example = stack;
 			oreID = TableToList(OreDictionary.getOreIDs(stack));
@@ -69,9 +70,9 @@ public class OreDictItemStack {
 		
 	}
 	
-	public OreDictItemStack(ItemStack stack, String[] oreDict)
+	public OreDictItemStack(@Nonnull ItemStack stack, String[] oreDict)
 	{
-		if (stack != null)
+		if (!stack.isEmpty())
 		{
 			this.example = stack;
 			oreID = TableToList(OreDictionary.getOreIDs(stack));
@@ -135,30 +136,35 @@ public class OreDictItemStack {
 		return false;
 	}
 	
-	public boolean isItemEqual(OreDictItemStack other)
+	public boolean isEmpty()
+	{
+		return example.isEmpty();
+	}
+	
+	public boolean isItemEqual(@Nonnull OreDictItemStack other)
 	{
 		
-		return other != null && (oreID.size() > 0 && ArrContain1SameInt(oreID, other.oreID) || (other.example != null && example.getItem() == other.example.getItem()
-				&& (!example.getHasSubtypes() || other.example.getItemDamage() == example.getItemDamage())));
+		return (oreID.size() > 0 && ArrContain1SameInt(oreID, other.oreID)
+				|| (example.getItem() == other.example.getItem() && (!example.getHasSubtypes() || other.example.getItemDamage() == example.getItemDamage())));
 	}
 	
 	public boolean isStackEqual(OreDictItemStack other, boolean ignoreStackSize)
 	{
 		
-		return isItemEqual(other) && other.example != null && (example.getCount() <= other.example.getCount() || ignoreStackSize);
+		return isItemEqual(other) && !other.example.isEmpty() && (example.getCount() <= other.example.getCount() || ignoreStackSize);
 	}
 	
 	public boolean isStackValid()
 	{
 		
-		return example != null || (oreID != null && oreID.size() > 0);
+		return (oreID != null && oreID.size() > 0);
 	}
 	
 	public ItemStack toItemStack()
 	{
 		
-		ItemStack ret = example != null ? example : null;
-		if (ret != null)
+		ItemStack ret = example;
+		if (!ret.isEmpty())
 		{
 			return ret;
 		} else

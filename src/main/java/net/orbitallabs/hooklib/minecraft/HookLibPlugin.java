@@ -2,16 +2,14 @@ package net.orbitallabs.hooklib.minecraft;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import net.minecraftforge.fml.relauncher.CoreModManager;
+import net.minecraftforge.fml.relauncher.FMLRelaunchLog;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import net.orbitallabs.utils.OrbitalModInfo;
 
 public class HookLibPlugin implements IFMLLoadingPlugin {
 	
 	private static boolean obf;
-	private static boolean cheched;
+	private static boolean checked;
 	
 	// 1.6.x only
 	public String[] getLibraryRequestClass()
@@ -50,20 +48,19 @@ public class HookLibPlugin implements IFMLLoadingPlugin {
 	
 	public static boolean getObfuscated()
 	{
-		if (!cheched)
+		if (!checked)
 		{
 			try
 			{
 				Field deobfField = CoreModManager.class.getDeclaredField("deobfuscatedEnvironment");
 				deobfField.setAccessible(true);
 				obf = !deobfField.getBoolean(null);
-				Logger log = LogManager.getLogger(OrbitalModInfo.MOD_ID);
-				log.info("[HOOKLIB] " + " Obfuscated: " + obf);
+				FMLRelaunchLog.info("[HOOKLIB] " + " Obfuscated: " + obf);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
-			cheched = true;
+			checked = true;
 		}
 		return obf;
 	}

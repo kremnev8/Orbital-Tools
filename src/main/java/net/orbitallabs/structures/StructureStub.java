@@ -1,14 +1,14 @@
 
 package net.orbitallabs.structures;
 
-import java.util.ArrayList;
-import java.util.List;
 import micdoodle8.mods.galacticraft.core.GCBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.utils.OreDictItemStack;
 
 public class StructureStub extends Structure {
@@ -244,7 +244,7 @@ public class StructureStub extends Structure {
 			BuildHandler.setBlock(world, x - 1, y - 1, z + 1, Bblock, 4, 2);
 			BuildHandler.setBlock(world, x - 1, y + 0, z - 1, Bblock, 4, 2);
 			
-			BuildHandler.buildBuildPoint(world, x - 1, y, z, meta);
+			BuildHandler.buildBuildPoint(world, x - 1, y, z, EnumBlockPointStates.EVERYTHING);
 			BuildHandler.setBlock(world, x - 1, y + 0, z + 1, Bblock, 4, 2);
 			BuildHandler.setBlock(world, x - 1, y + 1, z - 1, Bblock, 4, 2);
 			BuildHandler.setBlock(world, x - 1, y + 1, z + 0, Bblock, 4, 2);
@@ -311,7 +311,7 @@ public class StructureStub extends Structure {
 			BuildHandler.setBlock(world, x + 1, y + -1, z + 0, block6, 4, 2);
 			BuildHandler.setBlock(world, x + 1, y + -1, z + 1, block6, 4, 2);
 			BuildHandler.setBlock(world, x + 1, y + 0, z + -1, block6, 4, 2);
-			BuildHandler.buildBuildPoint(world, x + 1, y, z, meta);
+			BuildHandler.buildBuildPoint(world, x + 1, y, z, EnumBlockPointStates.EVERYTHING);
 			BuildHandler.setBlock(world, x + 1, y + 0, z + 1, block6, 4, 2);
 			BuildHandler.setBlock(world, x + 1, y + 1, z + -1, block6, 4, 2);
 			BuildHandler.setBlock(world, x + 1, y + 1, z + 0, block6, 4, 2);
@@ -343,7 +343,7 @@ public class StructureStub extends Structure {
 			BuildHandler.setBlock(world, x + 0, y + -2, z + 1, block2, 7, 2);
 			BuildHandler.setBlock(world, x + 0, y + -1, z + 0, block4, 0, 2);
 			BuildHandler.setBlock(world, x + 0, y + -1, z + 1, block3, 4, 2);
-			BuildHandler.buildBuildPoint(world, x, y, z + 1, meta);
+			BuildHandler.buildBuildPoint(world, x, y, z + 1, EnumBlockPointStates.EVERYTHING);
 			BuildHandler.setBlock(world, x + 0, y + 1, z + 0, block4, 8, 2);
 			BuildHandler.setBlock(world, x + 0, y + 1, z + 1, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 2, z + 0, block3, 4, 2);
@@ -385,7 +385,7 @@ public class StructureStub extends Structure {
 			BuildHandler.setBlock(world, x + 0, y + -2, z + 0, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -1, z + -1, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + -1, z + 0, block3, 0, 2);
-			BuildHandler.buildBuildPoint(world, x, y, z - 1, meta);
+			BuildHandler.buildBuildPoint(world, x, y, z - 1, EnumBlockPointStates.EVERYTHING);
 			BuildHandler.setBlock(world, x + 0, y + 1, z + -1, block2, 4, 2);
 			BuildHandler.setBlock(world, x + 0, y + 1, z + 0, block3, 8, 2);
 			BuildHandler.setBlock(world, x + 0, y + 2, z + -1, block1, 2, 2);
@@ -439,9 +439,9 @@ public class StructureStub extends Structure {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
+		NonNullList<OreDictItemStack> items = NonNullList.create();
 		return items;
 	}
 	

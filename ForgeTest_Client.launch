@@ -7,8 +7,8 @@
 <listEntry value="4"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="GradleStart"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--username super.minecraft9@yandex.ru&#13;&#10;--password NootAlly159753"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--username=Super.minecraft9@yandex.ru --password=Noot159Ally753"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ModdingTest"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DFORGE_FORCE_FRAME_RECALC=true&#13;&#10;-Dfml.coreMods.load=net.orbitallabs.hooks.OrbitalHookLoader"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="D:\ProgramsData\forge\ForgeTest\run"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DFORGE_FORCE_FRAME_RECALC=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:ModdingTest/run}"/>
 </launchConfiguration>

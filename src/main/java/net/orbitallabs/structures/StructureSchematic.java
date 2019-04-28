@@ -1,7 +1,7 @@
 package net.orbitallabs.structures;
 
-import java.util.List;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.orbitallabs.utils.OreDictItemStack;
@@ -16,32 +16,27 @@ public abstract class StructureSchematic extends Structure {
 	public StructureSchematic(int x, int y, int z, int rot, EnumFacing dir)
 	{
 		super(x, y, z, rot, dir);
-		// TODO јвтоматически созданна€ заглушка конструктора
 	}
 	
 	public StructureSchematic(int[] pos, int rot, EnumFacing dir)
 	{
 		super(pos, rot, dir);
-		// TODO јвтоматически созданна€ заглушка конструктора
 	}
 	
 	public StructureSchematic(BlockPos pos, int rot, EnumFacing dir)
 	{
 		super(pos, rot, dir);
-		// TODO јвтоматически созданна€ заглушка конструктора
 	}
 	
 	@Override
 	public void Build(World world, EnumFacing dir, BlockPos pos)
 	{
-		// TODO јвтоматически созданна€ заглушка метода
 		
 	}
 	
 	@Override
 	public void deconstruct(World world, EnumFacing dir, BlockPos pos)
 	{
-		// TODO јвтоматически созданна€ заглушка метода
 		
 	}
 	
@@ -73,9 +68,8 @@ public abstract class StructureSchematic extends Structure {
 	public abstract Structure copy();
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		// TODO јвтоматически созданна€ заглушка метода
 		return null;
 	}
 	

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -29,7 +30,7 @@ public class GuiRemover extends GuiContainer {
 	
 	public static Map strucutures = new HashMap<Integer, Structure>();
 	
-	private ResourceLocation texture = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/Remover.png");
+	private ResourceLocation texture = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/gui/remover.png");
 	private int Xsize = 157;
 	private int Ysize = 125;
 	
@@ -98,16 +99,16 @@ public class GuiRemover extends GuiContainer {
 		{
 			objCount = addObjects.size();
 		}
-		this.buttonList.add(new GuiVerticalSlider(0, x + 141, y + 15, 10, 82, "R", "R", 0, objCount - 2, 0, true, false));
+		this.buttonList.add(new GuiVerticalSlider(0, x + 134, y + 15, 10, 88, "R", "R", 0, objCount - 3, 0, true, false));
 		
-		this.buttonList.add(new GuiButton(1, x + 70, y + 101, 80, 20, I18n.format("remover.deconstruct_button.name")));
+		this.buttonList.add(new SmallGuiButton(1, x + 65, y + 106, 80, I18n.format("remover.deconstruct_button.name")));
 		if (ChildObjects != null)
 		{
 			if (ChildObjects.size() == 0)
 			{
 				if (object != null)
 				{
-					this.buttonList.add(new GuiButtonRemover(2, x + 9, y + 17, object.getUnlocalizedName(), object, y));
+					this.buttonList.add(new GuiButtonRemover(2, x + 8, y + 16, object.getUnlocalizedName(), object, y));
 					objCount++;
 				}
 			} else
@@ -127,7 +128,7 @@ public class GuiRemover extends GuiContainer {
 				{
 					if (object != null)
 					{
-						this.buttonList.add(new GuiButtonRemover(2, x + 9, y + 17, object.getUnlocalizedName(), object, y));
+						this.buttonList.add(new GuiButtonRemover(2, x + 8, y + 16, object.getUnlocalizedName(), object, y));
 						objCount++;
 					}
 				}
@@ -141,17 +142,52 @@ public class GuiRemover extends GuiContainer {
 					this.buttonList.add(new GuiButtonRemover(2, x, y, "", object, 0));
 					((GuiButtonRemover) this.buttonList.get(2)).visSelf = false;
 					((GuiButtonRemover) this.buttonList.get(2)).visible = false;
-					offs = 28;
+					offs = 22;
 				}
 				for (int i = 0; i < addObjects.size(); i++)
 				{
-					this.buttonList.add(new GuiButtonRemover(3 + i, x + 9, y + 45 + (28 * i) - offs, addObjects.get(i).getUnlocalizedName(), addObjects.get(i), y));
+					this.buttonList.add(new GuiButtonRemover(3 + i, x + 8, y + 38 + (22 * i) - offs, addObjects.get(i).getUnlocalizedName(), addObjects.get(i), y));
 					
 				}
 				hasChilds = false;
 			}
 		}
 		
+	}
+	
+	@Override
+	public void handleMouseInput() throws IOException
+	{
+		super.handleMouseInput();
+		int i = Mouse.getEventDWheel();
+		
+		if (i != 0 && !((objCount < 3 && !hasChilds) || (objCount < 4 && hasChilds)))
+		{
+			// int j = (int) ((GuiVerticalSlider) buttonList.get(0)).maxValue;
+			
+			if (i > 0)
+			{
+				i = 1;
+			}
+			
+			if (i < 0)
+			{
+				i = -1;
+			}
+			
+			((GuiVerticalSlider) buttonList.get(0)).sliderValue -= (double) i / (objCount - 2);
+			if (((GuiVerticalSlider) buttonList.get(0)).sliderValue > 1F)
+			{
+				((GuiVerticalSlider) buttonList.get(0)).sliderValue = 1;
+			}
+			if (((GuiVerticalSlider) buttonList.get(0)).sliderValue < 0)
+			{
+				((GuiVerticalSlider) buttonList.get(0)).sliderValue = 0;
+			}
+			//   this.currentScroll = (float)((double)this.currentScroll - (double)i / (double)j);
+			//   this.currentScroll = MathHelper.clamp(this.currentScroll, 0.0F, 1.0F);
+			//   ((GuiContainerCreative.ContainerCreative)this.inventorySlots).scrollTo(this.currentScroll);
+		}
 	}
 	
 	@Override
@@ -165,12 +201,12 @@ public class GuiRemover extends GuiContainer {
 		}
 		if (button.id != 0 && button instanceof GuiButtonRemover)
 		{
-			if (((GuiButtonRemover) button).Enabled)
+			if (((GuiButtonRemover) button).pressed)
 			{
-				((GuiButtonRemover) button).setEnabled(false);
+				((GuiButtonRemover) button).setPressed(false);
 			} else
 			{
-				((GuiButtonRemover) button).setEnabled(true);
+				((GuiButtonRemover) button).setPressed(true);
 			}
 		}
 		if (button.id == 1)
@@ -180,7 +216,7 @@ public class GuiRemover extends GuiContainer {
 			{
 				GuiButtonRemover but = (GuiButtonRemover) buttonList.get(i);
 				
-				if (but.Enabled)
+				if (but.pressed)
 				{
 					if (i == 2)
 					{
@@ -257,7 +293,7 @@ public class GuiRemover extends GuiContainer {
 				{
 					for (int i = 2; i < buttonList.size(); i++)
 					{
-						if (((GuiButtonRemover) buttonList.get(i)).Enabled)
+						if (((GuiButtonRemover) buttonList.get(i)).pressed)
 						{
 							if (i - 2 < Iselected.length)
 							{
@@ -290,12 +326,6 @@ public class GuiRemover extends GuiContainer {
 		int y = (height - Ysize) / 2;
 		drawTexturedModalRect(x, y, 0, 0, Xsize, Ysize);
 		
-		if (hasChilds)
-		{
-			drawTexturedModalRect(x + 7, y + 42, 7, 18, 131, 2);
-			drawTexturedModalRect(x + 7, y + 70, 7, 18, 131, 2);
-		}
-		
 	}
 	
 	@Override
@@ -325,7 +355,7 @@ public class GuiRemover extends GuiContainer {
 			finalW.add(lastLine);
 			for (int i = 0; i < finalW.size(); i++)
 			{
-				fontRendererObj.drawString(finalW.get(i), (int) (125 / 4.5D) - fontRendererObj.getStringWidth(finalW.get(i)) / 2 + 35, 50 + (i * 9), 14737632, true);
+				fontRendererObj.drawString(finalW.get(i), (int) (125 / 4.5D) - fontRendererObj.getStringWidth(finalW.get(i)) / 2 + 32, 50 + (i * 9), 14737632, true);
 			}
 			
 		}

@@ -3,7 +3,6 @@ package net.orbitallabs.events;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import micdoodle8.mods.galacticraft.api.entity.IRocketType;
@@ -18,10 +17,12 @@ import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
 import net.minecraft.block.BlockAir;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,10 +32,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -48,15 +50,17 @@ import net.orbitallabs.ClientProxy;
 import net.orbitallabs.dimensions.DockingPortSaveData;
 import net.orbitallabs.dimensions.WorldProviderOrbitModif;
 import net.orbitallabs.entity.EntityRocketFakeTiered;
+import net.orbitallabs.items.AnimationCapabilityProvider;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.items.ItemSpaceJetpack;
-import net.orbitallabs.items.SpaceJetpackCapability;
-import net.orbitallabs.items.SpaceJetpackItemStackCap;
+import net.orbitallabs.items.SpaceJetpackProvider;
+import net.orbitallabs.items.SpaceJetpackStorage.ISpaceJetpackState;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.LaunchRocketPacket;
 import net.orbitallabs.network.packets.SetThirdPersonPacket;
 import net.orbitallabs.network.packets.SyncPlayerFallPacket;
 import net.orbitallabs.tiles.TileEntityDockingPort;
+import net.orbitallabs.utils.Config;
 import net.orbitallabs.utils.OTLoger;
 import net.orbitallabs.utils.OrbitalModInfo;
 
@@ -97,49 +101,48 @@ public class Events {
 	@SubscribeEvent
 	public void onPlayerTeleportDim(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
-		if (event.player.world.provider instanceof WorldProviderOrbitModif)
+		
+		EntityPlayer player = event.player;
+		if (player != null && player.world != null)
 		{
-			EntityPlayer player = event.player;
-			if (player != null)
+			
+			if (player.world.provider instanceof WorldProviderOrbitModif)
 			{
-				GCPlayerStats playerStats = GCPlayerStats.get((EntityPlayerMP) player);
-				if (playerStats.getRocketStacks().size() <= 1)
-				{
-					return;
-				}
-				OTLoger.logInfo("Player just docked to Space Station");
-				OTLoger.logInfo("info:");
 				
-				PacketHandler.sendTo(new SetThirdPersonPacket(0), (EntityPlayerMP) player);
-				
-				if (player.world != null)
+				Chunk zChunk = player.world.getChunkFromChunkCoords(0, 0);
+				if (zChunk.isTerrainPopulated())
 				{
+					
+					GCPlayerStats playerStats = GCPlayerStats.get((EntityPlayerMP) player);
+					if (playerStats.getRocketStacks().size() <= 1)
+					{
+						return;
+					}
+					OTLoger.logInfo("Player just docked to Space Station");
+					OTLoger.logInfo("info:");
+					
+					PacketHandler.sendTo(new SetThirdPersonPacket(0), (EntityPlayerMP) player);
+					
 					DockingPortSaveData savef = DockingPortSaveData.forWorld(player.world);
 					World world = player.world;
 					
-					try
-					{
-						TimeUnit.SECONDS.sleep(5);
-					} catch (InterruptedException e)
-					{
-					}
 					boolean docked = false;
 					if (savef.DockingPorts.size() > 0)
 					{
 						OTLoger.logInfo("Dim have a docking port info");
 						for (int i = 0; i < savef.DockingPorts.size(); i++)
 						{
-							int[] pos = savef.DockingPorts.get(i);
+							BlockPos pos = savef.DockingPorts.get(i);
 							
-							if (world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2])) != null)
+							if (world.getTileEntity(pos) != null)
 							{
-								TileEntityDockingPort te = (TileEntityDockingPort) world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
+								TileEntityDockingPort te = (TileEntityDockingPort) world.getTileEntity(pos);
 								
-								if (te.getStackInSlot(te.getSizeInventory() - 2) == null && te.getStackInSlot(te.getSizeInventory() - 3) == null)
+								if (te.getStackInSlot(te.getSizeInventory() - 2).isEmpty() && te.getStackInSlot(te.getSizeInventory() - 3).isEmpty())
 								{
-									player.setPositionAndUpdate(pos[0] + 0.5D, pos[1] + 2, pos[2] + 0.5D);
+									player.setPositionAndUpdate(pos.getX() + 0.5D, pos.getY() + 2, pos.getZ() + 0.5D);
 									
-									if (playerStats.getRocketStacks() != null)
+									if (playerStats.getRocketStacks().size() > 0)
 									{
 										te.setSizeInventory(playerStats.getRocketStacks().size() + 2);
 										// te.chestContents =
@@ -156,7 +159,7 @@ public class Events {
 										te.setInventorySlotContents(te.getSizeInventory() - 2, RCis.get(RCis.size() - 1));
 										boolean preFueled = false;
 										ItemStack rocketI = RCis.get(RCis.size() - 1);
-										if (rocketI != null)
+										if (!rocketI.isEmpty())
 										{
 											int type = rocketI.getItemDamage();
 											// Checking type
@@ -258,12 +261,28 @@ public class Events {
 						
 						if (!docked) OTLoger.logInfo("Dim haven't a docking port info");
 					}
+					
+				} else
+				{
+					OTLoger.logInfo("0 0 Chunk is not populated yet. Waiting.");
 				}
 			}
 		}
 	}
 	
 	//CLIENT
+	
+	private static ResourceLocation key = new ResourceLocation(OrbitalModInfo.MOD_ID, "Animation");
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void attachCap(AttachCapabilitiesEvent<ItemStack> event)
+	{
+		if (event.getObject().getItem() == ItemMod.spaceJetpack && !event.getCapabilities().containsKey(key))
+		{
+			event.addCapability(key, new AnimationCapabilityProvider());
+		}
+	}
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -303,8 +322,7 @@ public class Events {
 				
 				if (mc.player.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
 				{
-					SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) mc.player.inventory.armorItemInSlot(2).getCapability(SpaceJetpackCapability.SpaceJetpackCapability,
-							EnumFacing.UP);
+					ISpaceJetpackState cap = mc.player.inventory.armorItemInSlot(2).getCapability(SpaceJetpackProvider.SpaceJetpackCapability, EnumFacing.UP);
 					if (!(ItemSpaceJetpack.KeysPressed.equals(keys)) && cap.isEnabled())
 					{
 						ItemSpaceJetpack.KeysPressed = keys;
@@ -375,7 +393,21 @@ public class Events {
 		{
 			return;
 		}
-		if (mc.player.inventory.armorItemInSlot(2) != null && mc.player.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
+		
+		if (!mc.gameSettings.showDebugInfo && Config.showCoordinatesAndlookDirection)
+		{
+			FontRenderer fontRendererObj = mc.fontRendererObj;
+			
+			Entity entity = mc.getRenderViewEntity();
+			EnumFacing enumfacing = entity.getHorizontalFacing();
+			String s = "Invalid";
+			
+			fontRendererObj.drawString("x: " + (double) Math.round(mc.player.posX * 100) / 100 + " y: " + (double) Math.round(mc.player.posY * 100) / 100 + " z: "
+					+ (double) Math.round(mc.player.posZ * 100) / 100, 3, 3, 14737632, false);
+			fontRendererObj.drawString("Look: " + enumfacing.getName(), 3, 13, 14737632, false);
+		}
+		
+		if (!mc.gameSettings.showDebugInfo && mc.player.inventory.armorItemInSlot(2) != null && mc.player.inventory.armorItemInSlot(2).getItem() == ItemMod.spaceJetpack)
 		{
 			Minecraft.getMinecraft().renderEngine.bindTexture(Fuel);
 			
@@ -385,8 +417,7 @@ public class Events {
 			drawTexturedModalRect(xPos, yPos, 0, 0, 19, 47);
 			
 			ItemStack jetpack = mc.player.inventory.armorItemInSlot(2);
-			SpaceJetpackItemStackCap cap = (SpaceJetpackItemStackCap) jetpack.getCapability(SpaceJetpackCapability.SpaceJetpackCapability, EnumFacing.UP);
-			
+			ISpaceJetpackState cap = jetpack.getCapability(SpaceJetpackProvider.SpaceJetpackCapability, EnumFacing.UP);
 			int fuelLevel;
 			
 			if (cap.getTank().getCapacity() <= 0)
@@ -394,7 +425,7 @@ public class Events {
 				fuelLevel = 0;
 			} else
 			{
-				fuelLevel = cap.RCSFuel.getFluidAmount() * 44 / cap.RCSFuel.getCapacity() / ConfigManagerCore.rocketFuelFactor;
+				fuelLevel = cap.getTank().getFluidAmount() * 44 / cap.getTank().getCapacity() / ConfigManagerCore.rocketFuelFactor;
 			}
 			drawTexturedModalRect(xPos + 1, yPos + 1 + 44 - fuelLevel, 19, 45 - fuelLevel, 44, fuelLevel);
 			
@@ -403,39 +434,10 @@ public class Events {
 		
 	}
 	
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onRenderPlayerPre(RenderPlayerEvent.Pre event)
-	{
-		GL11.glPushMatrix();
-		
-		EntityPlayer player = event.getEntityPlayer();
-		
-		if (player.getRidingEntity() instanceof EntityRocketFakeTiered && player == Minecraft.getMinecraft().player)
-		{
-			EntityRocketFakeTiered entity = (EntityRocketFakeTiered) player.getRidingEntity();
-			GL11.glTranslatef(0, -entity.getRotateOffset() - 1.6200000047683716F, 0);
-			float anglePitch = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * event.getPartialRenderTick();
-			float angleYaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * event.getPartialRenderTick();
-			GL11.glRotatef(-angleYaw, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(anglePitch, 0.0F, 0.0F, 1.0F);
-			GL11.glTranslatef(0, entity.getRotateOffset() + 1.6200000047683716F, 0);
-		}
-		
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onRenderPlayerPost(RenderPlayerEvent.Post event)
-	{
-		GL11.glPopMatrix();
-		
-	}
-	
 	@SubscribeEvent
 	public void onEntityFall(LivingFallEvent event)
 	{
-		if (event.getEntity().world.isRemote && event.getEntityLiving() instanceof EntityPlayer)
+		if (event.getEntity().world.isRemote && event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().world.provider instanceof WorldProviderOrbitModif)
 		{
 			PacketHandler
 					.sendToServer(new SyncPlayerFallPacket(event.getDistance() * ((IGalacticraftWorldProvider) event.getEntityLiving().world.provider).getFallDamageModifier()));

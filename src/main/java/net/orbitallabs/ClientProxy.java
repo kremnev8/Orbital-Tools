@@ -1,7 +1,6 @@
 package net.orbitallabs;
 
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.client.fx.EffectHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,8 +15,10 @@ import net.orbitallabs.entity.EntityMod;
 import net.orbitallabs.events.Events;
 import net.orbitallabs.events.KeyHandlerClient;
 import net.orbitallabs.gui.GuiBuilder;
+import net.orbitallabs.items.ItemSchematic;
 import net.orbitallabs.renderer.TileEntityArmorStandRenderer;
 import net.orbitallabs.renderer.TileEntityInfoRenderer;
+import net.orbitallabs.renderer.fx.EffectHandler;
 import net.orbitallabs.renderer.models.ModelJetpack;
 import net.orbitallabs.tiles.TileEntityArmorStand;
 import net.orbitallabs.tiles.TileEntityInfo;
@@ -67,6 +68,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void postInit(FMLPostInitializationEvent event)
 	{
+		ItemSchematic.registerSchematicItems(Side.CLIENT);
 		super.postInit(event);
 	}
 	

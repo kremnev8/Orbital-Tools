@@ -9,7 +9,7 @@ orbitaltools.item.debugtool.name=Debug Tool
 orbitaltools.item.jetpack.name=Space Jetpack
 orbitaltools.item.schematicjetpack.name=NASA Workbench Schematic
 orbitaltools.item.smallengine.name=Small Engine
-orbitaltools.item.omni-dir_engine_set.name=Omni-directional Engines set
+orbitaltools.item.omnidirengineset.name=Omni-directional Engines set
 orbitaltools.item.emptyidea.name=Empty Idea
 orbitaltools.item.filledidea.name=Filled Idea
 orbitaltools.item.agmotormap.name=Rotating Gravity Ring
@@ -17,22 +17,26 @@ orbitaltools.item.steelingot.name=Steel ingot
 orbitaltools.item.altmotor.name=Motor
 orbitaltools.item.altcoil.name=Coil
 
-orbitaltools.block.buildpoint=Build Point
-orbitaltools.tile.dockingpoint=Docking Port
-orbitaltools.tile.infoblock=Info Block
-orbitaltools.tile.removeinfoblock=Logbook
-orbitaltools.tile.artificialgsource=Artificial Gravity Source
-orbitaltools.tile.armorstand=Armor Stand
+orbitaltools.block.buildpoint.name=Build Point
+orbitaltools.tile.dockingpoint.name=Docking Port
+orbitaltools.tile.infoblock.name=Info Block
+orbitaltools.tile.removeinfoblock.name=Logbook
+orbitaltools.tile.artificialgsource.name=Artificial Gravity Source
+orbitaltools.tile.armorstand.name=Armor Stand
 
 orbitaltools.descr_shift.builder.name=Builder allows you to build space station modules
-orbitaltools.descr_shift.brokentin.name=it not seems applicable...
-orbitaltools.descr_shift.brokensteel.name=it not seems applicable...
-orbitaltools.descr_shift.brokenaluminum.name=it not seems applicable...
-orbitaltools.descr_shift.jetpack.name=Space jetpack is a complex device intended to fly free within microgravity environment
+orbitaltools.descr_shift.brokentin.name=It does not seem to be applicable...
+orbitaltools.descr_shift.brokensteel.name=It does not seem to be applicable...
+orbitaltools.descr_shift.brokenaluminum.name=It does not seem to be applicable...
+orbitaltools.descr_shift.jetpack.name=Space jetpack is a complex device intended to help you navigate within microgravity environment
 
-orbitaltools.descr_shift.dockingpoint.name=Docking port used to dock spaceships to space staion. usually it used with Docking port module
-orbitaltools.descr_shift.artificialgsource.name=this device allows to create artificial gravity on space staion
-orbitaltools.descr_shift.armorstand.name=This armor stand can charge armor and fuel some devices
+orbitaltools.descr_shift.dockingpoint.name=Docking port is used to dock spaceships to space staion. Part of the Docking port module
+orbitaltools.descr_shift.artificialgsource.name=This device can create artificial gravity around space staion
+orbitaltools.descr_shift.armorstand.name=This armorstand can charge armor and fuel some devices
+
+satellite.orbitaltools.mars=Mars Space Station
+checklist.orbitaltools.createSpaceStationBuilder.key=Create Builder Tool
+checklist.orbitaltools.grabAlotofMaterials.key=Take a lot of building materials such as Tin plates, Scaffolding and wafers
 
 schematic.jetpack.name=Jetpack
 gui.rocket.warning.nopad.name=I don't have a landing pad! If I press launch again, there's no going back!
@@ -47,16 +51,17 @@ builder.window.name=Window
 builder.cupola.name=Cupola
 builder.dockport.name=Dock Port
 builder.greenhouse.name=Greenhouse
-builder.pierce.name="Pierce"
+builder.pirs.name="Pirs"
 builder.name=Builder
 builder.successfully=Server successfully builded
 builder.failed=Building failed!
 builder.failed.noitems=Building failed! Not enough items to build structure.
-builder.failed.itemsreturn=Most items has been returned, but some get damaged...
+builder.failed.itemsreturn=Most items have been returned, but some got damaged...
 builder.solarpanel.name=Solar Panel
 builder.thall.name=T Hall
 builder.bighall.name=Bighall
 builder.build_button.name=Build
+builder.properties.name=Properties
 
 builder.window.rot0= in wall
 builder.window.rot1=-stub
@@ -85,7 +90,10 @@ builder.side_info.funcs.cupola.name=Earth view
 builder.side_info.funcs.dockport.name=+1 Docking slot
 builder.side_info.funcs.greenhouse.name=Plants Growing
 builder.side_info.funcs.solar.name=Generator
-builder.side_info.funcs.pierce.name=Exit into space
+builder.side_info.funcs.pirs.name=Exit into space
+builder.side_info.funcs.bighall.name=A lot of space
+
+builder.side_info.checkbox.window.name=Allow glass type replacement
 
 builder.deconstruct.failed=Deconstruction failed!
 builder.deconstruct.partfailed=Deconstruction partially failed!
@@ -104,6 +112,7 @@ modificator.direction.name=dir.
 modificator.rotation.name=rot.
 modificator.children.name=Children
 modificator.additional.name=Additional
+modificator.save.name=Save
 modificator.notready.name=This tool is not fully implemented!
 
 

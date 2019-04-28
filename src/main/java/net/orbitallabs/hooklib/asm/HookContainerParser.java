@@ -1,12 +1,9 @@
 package net.orbitallabs.hooklib.asm;
 
+import org.objectweb.asm.*;
 import net.orbitallabs.hooklib.asm.Hook.LocalVariable;
 import net.orbitallabs.hooklib.asm.Hook.ReturnValue;
-import net.orbitallabs.hooks.Hooks;
-import net.orbitallabs.utils.OTLoger;
-import org.objectweb.asm.*;
-
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -18,10 +15,15 @@ public class HookContainerParser {
     private String currentMethodDesc;
     private boolean currentMethodPublicStatic;
 
-    
+    /*
+    Ключ - название значения аннотации
+     */
     private HashMap<String, Object> annotationValues;
 
-   
+    /*
+    Ключ - номер параметра, значение - номер локальной переменной для перехвата
+    или -1 для перехвата значения наверху стека.
+     */
     private HashMap<Integer, Integer> parameterAnnotations = new HashMap<Integer, Integer>();
 
     private boolean inHookAnnotation;
@@ -35,12 +37,16 @@ public class HookContainerParser {
     }
 
     protected void parseHooks(String className) {
-        transformer.logger.debug("Parsing hooks contatiner " + className);
-        parseHooks(ReadClassHelper.getClassData(className));
+        transformer.logger.debug("Parsing hooks container " + className);
+        try {
+            transformer.classMetadataReader.acceptVisitor(className, new HookClassVisitor());
+        } catch (IOException e) {
+            transformer.logger.severe("Can not parse hooks container " + className, e);
+        }
     }
 
-    protected void parseHooks(InputStream input) {
-        ReadClassHelper.acceptVisitor(input, new HookClassVisitor());
+    protected void parseHooks(byte[] classData) {
+
     }
 
     private void invalidHook(String message) {
@@ -53,7 +59,6 @@ public class HookContainerParser {
         Type methodType = Type.getMethodType(currentMethodDesc);
         Type[] argumentTypes = methodType.getArgumentTypes();
 
-        
         if (!currentMethodPublicStatic) {
             invalidHook("Hook method must be public and static.");
             return;
@@ -83,8 +88,6 @@ public class HookContainerParser {
         builder.setHookMethod(currentMethodName);
         builder.addThisToHookMethodParameters();
 
-        OTLoger.logInfo("injecting hook in "+argumentTypes[0].getClassName());
-        
         boolean injectOnExit = Boolean.TRUE.equals(annotationValues.get("injectOnExit"));
 
         int currentParameterId = 1;
@@ -137,6 +140,9 @@ public class HookContainerParser {
             }
         }
 
+        // setReturnCondition и setReturnValue сетают тип хук-метода, поэтому сетнуть его вручную можно только теперь
+        builder.setHookMethodReturnType(methodType.getReturnType());
+
         if (returnCondition == ReturnCondition.ON_TRUE && methodType.getReturnType() != Type.BOOLEAN_TYPE) {
             invalidHook("Hook method must return boolean if returnCodition is ON_TRUE.");
             return;
@@ -152,7 +158,12 @@ public class HookContainerParser {
             builder.setPriority(HookPriority.valueOf((String) annotationValues.get("priority")));
         }
 
-        builder.setHookMethodReturnType(methodType.getReturnType());
+        if (annotationValues.containsKey("createMethod")) {
+            builder.setCreateMethod(Boolean.TRUE.equals(annotationValues.get("createMethod")));
+        }
+        if (annotationValues.containsKey("isMandatory")) {
+            builder.setMandatory(Boolean.TRUE.equals(annotationValues.get("isMandatory")));
+        }
 
         transformer.registerHook(builder.build());
     }

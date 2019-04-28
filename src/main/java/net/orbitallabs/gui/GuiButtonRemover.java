@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -19,28 +20,11 @@ import net.orbitallabs.utils.OrbitalModInfo;
 
 @SideOnly(Side.CLIENT)
 public class GuiButtonRemover extends GuiButton {
-	protected static final ResourceLocation buttonTextures = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/Remover.png");
+	protected static final ResourceLocation buttonTextures = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/gui/remover.png");
 	
 	protected static final ResourceLocation Icons = new ResourceLocation(OrbitalModInfo.MOD_ID, "textures/Icons.png");
-	/** Button width in pixels */
-	public int width = 127;
-	/** Button height in pixels */
-	public int height = 24;
-	/** The x position of this control. */
-	public int xPosition;
-	/** The y position of this control. */
-	public int yPosition;
-	/** The string displayed on this control. */
-	public String displayString;
-	public int id;
-	/** True if this control is enabled, false to disable. */
-	public boolean enabled;
-	/** Hides the button completely if false. */
-	public boolean visible;
-	protected boolean field_146123_n;
-	private static final String __OBFID = "CL_00000668";
-	public int packedFGColour;
-	public boolean Enabled;
+	
+	public boolean pressed;
 	
 	public int rot = 0;
 	public EnumFacing dir = EnumFacing.UP;
@@ -54,10 +38,7 @@ public class GuiButtonRemover extends GuiButton {
 	
 	public GuiButtonRemover(int id, int xpos, int ypos, String Dispstring, Structure str, int y)
 	{
-		super(id, xpos, ypos, 127, 24, Dispstring);
-		super.visible = false;
-		this.enabled = true;
-		this.visible = true;
+		super(id, xpos, ypos, 125, 22, Dispstring);
 		this.id = id;
 		this.xPosition = xpos;
 		this.yPosition = ypos;
@@ -72,9 +53,9 @@ public class GuiButtonRemover extends GuiButton {
 		}
 	}
 	
-	public void setEnabled(boolean e)
+	public void setPressed(boolean e)
 	{
-		this.Enabled = e;
+		this.pressed = e;
 	}
 	
 	public void setRotation(int rot)
@@ -91,14 +72,14 @@ public class GuiButtonRemover extends GuiButton {
 	 * Returns 0 if the button is disabled, 1 if the mouse is NOT hovering over
 	 * this button and 2 if it IS hovering over this button.
 	 */
-	public int getHoverState(boolean p_146114_1_)
+	public int getHoverState(boolean hover)
 	{
 		byte b0 = 1;
 		
 		if (!this.enabled)
 		{
 			b0 = 0;
-		} else if (p_146114_1_)
+		} else if (hover)
 		{
 			b0 = 2;
 		}
@@ -109,37 +90,37 @@ public class GuiButtonRemover extends GuiButton {
 	/**
 	 * Draws this button to the screen.
 	 */
-	public void drawButton(Minecraft p_146112_1_, int p_146112_2_, int p_146112_3_)
+	public void drawButton(Minecraft mc, int x, int y)
 	{
 		
-		NyPos = this.yPosition - (28 * GuiRemover.move);
+		NyPos = this.yPosition - (22 * GuiRemover.move);
 		if (visSelf)
 		{
-			if (NyPos < ZeroPos + 16 || NyPos > ZeroPos + 99)
+			if (NyPos < ZeroPos + 16 || NyPos > ZeroPos + 103)
 			{
 				this.visible = false;
 			} else this.visible = true;
 		}
 		if (this.visible)
 		{
-			FontRenderer fontrenderer = p_146112_1_.fontRendererObj;
-			p_146112_1_.getTextureManager().bindTexture(buttonTextures);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.field_146123_n = p_146112_2_ >= this.xPosition && p_146112_3_ >= NyPos && p_146112_2_ < this.xPosition + this.width && p_146112_3_ < NyPos + this.height;
+			FontRenderer fontrenderer = mc.fontRendererObj;
+			mc.getTextureManager().bindTexture(buttonTextures);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			this.hovered = x >= this.xPosition && y >= NyPos && x < this.xPosition + this.width && y < NyPos + this.height;
 			GL11.glEnable(GL11.GL_BLEND);
 			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			
-			if (getHoverState(this.field_146123_n) == 0)
+			if (getHoverState(this.hovered) == 0)
 			{
 				this.drawTexturedModalRect(this.xPosition, NyPos, 0, 127, this.width, this.height);//disable
-			} else if (getHoverState(this.field_146123_n) != 2 && Enabled)
+			} else if (getHoverState(this.hovered) != 2 && pressed)
 			{
 				this.drawTexturedModalRect(this.xPosition, NyPos, 0, 127, this.width, this.height);//disable
 				// this.drawTexturedModalRect(this.xPosition, NyPos, 0, 177, this.width , this.height);//enable
-			} else if (getHoverState(this.field_146123_n) == 2)
+			} else if (getHoverState(this.hovered) == 2)
 			{
-				this.drawTexturedModalRect(this.xPosition, NyPos, 0, 152, this.width, this.height);//hover
+				this.drawTexturedModalRect(this.xPosition, NyPos, 0, 149, this.width, this.height);//hover
 			} else this.drawTexturedModalRect(this.xPosition, NyPos, 0, 127, this.width, this.height);//disable
 			
 			try
@@ -147,29 +128,18 @@ public class GuiButtonRemover extends GuiButton {
 				renderIcons();
 			} catch (Throwable error)
 			{
-				OTLoger.logWarn("An error ocured in GuiButtonBuilder:", error);
+				OTLoger.logWarn("An error ocured in GuiButtonRemover:" + error.getMessage());
 			}
-			this.mouseDragged(p_146112_1_, p_146112_2_, p_146112_3_);
+			this.mouseDragged(mc, x, y);
 			int l = 4210752;
 			
-			if (packedFGColour != 0)
-			{
-				l = packedFGColour;
-			} else if (!this.enabled)
+			if (!this.enabled)
 			{
 				l = 10526880;
-			} else if (this.field_146123_n)
+			} else if (this.hovered)
 			{
 				l = 16777120;
 			}
-			// while (true)
-			//  {
-			//  GLoger.logInfo(Minecraft.getMinecraft().getLanguageManager().getLanguages().iterator().next());
-			//  if (Minecraft.getMinecraft().getLanguageManager().getLanguages().iterator().hasNext())
-			//  {
-			//	   break;
-			// }
-			//  }
 			
 			String NewDispStr = "";
 			Structure str = Structure.FindStructure(strName);
@@ -182,13 +152,12 @@ public class GuiButtonRemover extends GuiButton {
 				NewDispStr = str.getName();
 			}
 			
-			fontrenderer.drawString(NewDispStr, (this.xPosition + this.width / 2) - 40, NyPos + (this.height - 20) - 3 / 2, l, false);
+			fontrenderer.drawString(NewDispStr, (this.xPosition + this.width / 2) - 40, NyPos + (this.height - 20), l, false);
 			if (this.dir != EnumFacing.UP && this.dir != EnumFacing.DOWN)
 			{
 				NewDispStr = "ForgeDir: " + FacingUtils.GetLocolizedName(dir);
-				fontrenderer.drawString(NewDispStr, (this.xPosition + this.width / 2) - 40, NyPos + (this.height - 11) - 3 / 2, l, false);
+				fontrenderer.drawString(NewDispStr, (this.xPosition + this.width / 2) - 40, NyPos + (this.height - 11), l, false);
 			}
-			//  this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, l);
 		}
 	}
 	
@@ -197,197 +166,178 @@ public class GuiButtonRemover extends GuiButton {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(Icons);
 		if (strName.equals(Structure.HOLLID))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "hall", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "hall", 0);
 		} else if (strName.equals(Structure.CORNERID))
 		{
 			if (dir == EnumFacing.WEST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 1);
-				} else DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
+				} else DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 			} else if (dir == EnumFacing.EAST)
 			{
 				if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				}
 			} else if (dir == EnumFacing.NORTH)
 			{
 				if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				}
 			} else if (dir == EnumFacing.SOUTH)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 0);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 1);
-				} else DrawGuiIcon(this.xPosition + 3, NyPos + 3, "corner", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
+				} else DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
 			}
 		} else if (strName.equals(Structure.CROSSROADID))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "crossroad", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "crossroad", 0);
 		} else if (strName.equals(Structure.HALLAIRLOCKID))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "airlock", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "airlock", 0);
 		} else if (strName.equals(Structure.WINDOWID))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "window", rot);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "window", rot);
 		} else if (strName.equals(Structure.CUPOLAID))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "cupola", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "cupola", 0);
 		} else if (strName.equals(Structure.DOCKPORTID))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "dockport", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "dockport", 0);
 		} else if (strName.equals(Structure.SOLARPANELID))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "solarpanel", rot);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "solarpanel", rot);
 		} else if (strName.equals(Structure.THALLID))
 		{
 			if (dir == EnumFacing.WEST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 2);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
 				}
 			} else if (dir == EnumFacing.EAST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 2);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
 				}
 			} else if (dir == EnumFacing.NORTH)
 			{
 				if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 2);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				}
 			} else if (dir == EnumFacing.SOUTH)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 3);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 2);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 3, NyPos + 3, "thall", 1);
+					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
 				}
 			}
 		} else if (strName.equals(Structure.BIGHHALL))
 		{
 			if (rot == 1)
 			{
-				DrawGuiIcon(this.xPosition + 3, NyPos + 3, "bighall_normal", 2);
+				DrawGuiIcon(this.xPosition + 2, NyPos + 2, "bighall_normal", 2);
 			} else if (rot == 0)
 			{
-				DrawGuiIcon(this.xPosition + 3, NyPos + 3, "bighall_normal", 3);
+				DrawGuiIcon(this.xPosition + 2, NyPos + 2, "bighall_normal", 3);
 			}
 		} else if (strName.equals(Structure.GREENHOUSE))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "greenhouse", 0);
-		} else if (strName.equals(Structure.PIERCE))
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "greenhouse", 0);
+		} else if (strName.equals(Structure.PIRS))
 		{
-			DrawGuiIcon(this.xPosition + 3, NyPos + 3, "pierce", 0);
+			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "pirs", 0);
 		}
-		if (Enabled)
+		if (pressed)
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "redcross", 0);
+			DrawGuiIcon(this.xPosition + 1, NyPos + 1, "redcross", 0);
 		}
-		if (GuiRemover.Iselected[0] == true && !Enabled)
+		if (GuiRemover.Iselected[0] == true && !pressed)
 		{
-			DrawGuiIcon(this.xPosition + 115, NyPos + 7, "redstar", 0);
+			DrawGuiIcon(this.xPosition + 114, NyPos + 6, "redstar", 0);
 		}
 		
-	}
-	
-	/**
-	 * Fired when the mouse button is dragged. Equivalent of
-	 * MouseListener.mouseDragged(MouseEvent e).
-	 */
-	protected void mouseDragged(Minecraft p_146119_1_, int p_146119_2_, int p_146119_3_)
-	{
-	}
-	
-	/**
-	 * Fired when the mouse button is released. Equivalent of
-	 * MouseListener.mouseReleased(MouseEvent e).
-	 */
-	public void mouseReleased(int p_146118_1_, int p_146118_2_)
-	{
 	}
 	
 	/**
 	 * Returns true if the mouse has been pressed on this control. Equivalent of
 	 * MouseListener.mousePressed(MouseEvent e).
 	 */
-	public boolean mousePressed(Minecraft p_146116_1_, int p_146116_2_, int p_146116_3_)
+	public boolean mousePressed(Minecraft mc, int x, int y)
 	{
-		return this.enabled && this.visible && p_146116_2_ >= this.xPosition && p_146116_3_ >= NyPos && p_146116_2_ < this.xPosition + this.width
-				&& p_146116_3_ < NyPos + this.height;
-	}
-	
-	public int getButtonWidth()
-	{
-		return this.width;
+		return this.enabled && this.visible && x >= this.xPosition && y >= NyPos && x < this.xPosition + this.width && y < NyPos + this.height;
 	}
 	
 	public void DrawGuiIcon(int x, int y, String name, int rot)
 	{
 		GuiIconsUtil.initMap();
 		
-		int[] Iconpos = GuiIconsUtil.Icons.get(name + "_" + rot);
-		int[] Iconsize = new int[] { 16, 16 };
-		if (name.equals("redcross"))
+		if (GuiIconsUtil.Icons.containsKey(name + "_" + rot))
 		{
-			Iconsize = new int[] { 18, 18 };
-		} else if (name.equals("redstar"))
-		{
-			Iconsize = new int[] { 9, 9 };
+			
+			int[] Iconpos = GuiIconsUtil.Icons.get(name + "_" + rot);
+			int[] Iconsize = new int[] { 16, 16 };
+			if (name.equals("redcross"))
+			{
+				Iconsize = new int[] { 18, 18 };
+			} else if (name.equals("redstar"))
+			{
+				Iconsize = new int[] { 9, 9 };
+			}
+			this.drawTexturedModalRect(x, y, Iconpos[0], Iconpos[1], Iconsize[0], Iconsize[1]);
 		}
-		this.drawTexturedModalRect(x, y, Iconpos[0], Iconpos[1], Iconsize[0], Iconsize[1]);
-		
 	}
 	
 }

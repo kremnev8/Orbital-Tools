@@ -22,6 +22,7 @@ public class OpenGuiPacket implements IMessage {
 	private List<Structure> addObjects = new ArrayList<Structure>();
 	private List<Structure> ChildObjects = new ArrayList<Structure>();
 	private boolean isRemover;
+	private BlockPos tilePos;
 	
 	public OpenGuiPacket()
 	{
@@ -33,6 +34,7 @@ public class OpenGuiPacket implements IMessage {
 		addObjects = te.AddObjects;
 		ChildObjects = te.ChildObjects;
 		this.isRemover = isRemover;
+		this.tilePos = te.getPos();
 	}
 	
 	public OpenGuiPacket(Structure str, List<Structure> addObj, List<Structure> childobj, boolean isRemover)
@@ -43,11 +45,26 @@ public class OpenGuiPacket implements IMessage {
 		this.isRemover = isRemover;
 	}
 	
+	public OpenGuiPacket(Structure str, List<Structure> addObj, List<Structure> childobj, BlockPos tilePos)
+	{
+		object = str;
+		addObjects = addObj;
+		ChildObjects = childobj;
+		this.isRemover = false;
+		this.tilePos = tilePos;
+	}
+	
 	@Override
 	public void fromBytes(ByteBuf buf)
 	{
 		NBTTagCompound tag = ByteBufUtils.readTag(buf);
 		isRemover = tag.getBoolean("REMOVER");
+		
+		if (tag.getBoolean("TPOS"))
+		{
+			tilePos = new BlockPos(tag.getInteger("X"), tag.getInteger("Y"), tag.getInteger("Z"));
+		}
+		
 		if (tag.getBoolean("OBJWRT"))
 		{
 			object = Structure.FindStructure(tag.getString("OBJ"));
@@ -117,6 +134,18 @@ public class OpenGuiPacket implements IMessage {
 	{
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setBoolean("REMOVER", isRemover);
+		
+		if (tilePos != null)
+		{
+			tag.setInteger("X", tilePos.getX());
+			tag.setInteger("Y", tilePos.getY());
+			tag.setInteger("Z", tilePos.getZ());
+			tag.setBoolean("TPOS", true);
+		} else
+		{
+			tag.setBoolean("TPOS", false);
+		}
+		
 		if (object != null)
 		{
 			tag.setBoolean("OBJWRT", true);
@@ -217,6 +246,7 @@ public class OpenGuiPacket implements IMessage {
 				GuiModificator.object = pkt.object;
 				GuiModificator.addObjects = pkt.addObjects;
 				GuiModificator.ChildObjects = pkt.ChildObjects;
+				GuiModificator.pos = pkt.tilePos;
 			}
 			return null;
 		}

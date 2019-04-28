@@ -22,6 +22,7 @@ import net.orbitallabs.network.packets.GravityChangePacket;
 import net.orbitallabs.network.packets.InvScalePacket;
 import net.orbitallabs.network.packets.JetpackFueluseSync;
 import net.orbitallabs.network.packets.LaunchRocketPacket;
+import net.orbitallabs.network.packets.ModificatorSavePacket;
 import net.orbitallabs.network.packets.MountPacket;
 import net.orbitallabs.network.packets.OpenBuilderGuiPacket;
 import net.orbitallabs.network.packets.OpenGuiOnServerPacket;
@@ -29,8 +30,10 @@ import net.orbitallabs.network.packets.OpenGuiPacket;
 import net.orbitallabs.network.packets.OpenRocketFuelGuiPacket;
 import net.orbitallabs.network.packets.OtherPlayerAnimationPacket;
 import net.orbitallabs.network.packets.PlayerChatMessagePacket;
+import net.orbitallabs.network.packets.RequestBoundingBox;
 import net.orbitallabs.network.packets.RocketControlsPacket;
 import net.orbitallabs.network.packets.SendUUIDPacket;
+import net.orbitallabs.network.packets.SendboundingBoxData;
 import net.orbitallabs.network.packets.SetThirdPersonPacket;
 import net.orbitallabs.network.packets.StartChoreoClientPacket;
 import net.orbitallabs.network.packets.SwapArmorPacket;
@@ -45,46 +48,52 @@ public final class PacketHandler {
 	
 	public static void register()
 	{
-		HANDLER.registerMessage(BuildPacket.Handler.class, BuildPacket.class, 0, Side.SERVER);
-		HANDLER.registerMessage(OpenGuiPacket.Handler.class, OpenGuiPacket.class, 1, Side.CLIENT);
-		HANDLER.registerMessage(DeconstructPacket.Handler.class, DeconstructPacket.class, 2, Side.SERVER);
-		HANDLER.registerMessage(SetThirdPersonPacket.Handler.class, SetThirdPersonPacket.class, 3, Side.CLIENT);
-		HANDLER.registerMessage(InvScalePacket.Handler.class, InvScalePacket.class, 4, Side.CLIENT);
-		HANDLER.registerMessage(DockItemSyncPacket.Handler.class, DockItemSyncPacket.class, 5, Side.CLIENT);
-		HANDLER.registerMessage(DismountPacket.Handler.class, DismountPacket.class, 6, Side.SERVER);
-		HANDLER.registerMessage(SendUUIDPacket.Handler.class, SendUUIDPacket.class, 7, Side.CLIENT);
-		HANDLER.registerMessage(MountPacket.Handler.class, MountPacket.class, 8, Side.SERVER);
-		HANDLER.registerMessage(LaunchRocketPacket.Handler.class, LaunchRocketPacket.class, 9, Side.SERVER);
-		HANDLER.registerMessage(SyncRocketTierPacket.Handler.class, SyncRocketTierPacket.class, 10, Side.CLIENT);
-		HANDLER.registerMessage(RocketControlsPacket.Handler.class, RocketControlsPacket.class, 11, Side.CLIENT);
-		HANDLER.registerMessage(OpenRocketFuelGuiPacket.Handler.class, OpenRocketFuelGuiPacket.class, 12, Side.SERVER);
-		HANDLER.registerMessage(StartChoreoClientPacket.Handler.class, StartChoreoClientPacket.class, 13, Side.CLIENT);
+		int i = 0;
+		HANDLER.registerMessage(BuildPacket.Handler.class, BuildPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(OpenGuiPacket.Handler.class, OpenGuiPacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(DeconstructPacket.Handler.class, DeconstructPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(SetThirdPersonPacket.Handler.class, SetThirdPersonPacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(InvScalePacket.Handler.class, InvScalePacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(DockItemSyncPacket.Handler.class, DockItemSyncPacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(DismountPacket.Handler.class, DismountPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(SendUUIDPacket.Handler.class, SendUUIDPacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(MountPacket.Handler.class, MountPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(LaunchRocketPacket.Handler.class, LaunchRocketPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(SyncRocketTierPacket.Handler.class, SyncRocketTierPacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(RocketControlsPacket.Handler.class, RocketControlsPacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(OpenRocketFuelGuiPacket.Handler.class, OpenRocketFuelGuiPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(StartChoreoClientPacket.Handler.class, StartChoreoClientPacket.class, i++, Side.CLIENT);
 		
-		HANDLER.registerMessage(GetWorldGravityDataPacket.Handler.class, GetWorldGravityDataPacket.class, 14, Side.SERVER);
-		HANDLER.registerMessage(ClientGravityDataRecivePacket.Handler.class, ClientGravityDataRecivePacket.class, 15, Side.CLIENT);
+		HANDLER.registerMessage(GetWorldGravityDataPacket.Handler.class, GetWorldGravityDataPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(ClientGravityDataRecivePacket.Handler.class, ClientGravityDataRecivePacket.class, i++, Side.CLIENT);
 		
-		HANDLER.registerMessage(SyncPlayerFallPacket.Handler.class, SyncPlayerFallPacket.class, 16, Side.SERVER);
-		HANDLER.registerMessage(SyncPressedKeysPacket.Handler.class, SyncPressedKeysPacket.class, 17, Side.SERVER);
+		HANDLER.registerMessage(SyncPlayerFallPacket.Handler.class, SyncPlayerFallPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(SyncPressedKeysPacket.Handler.class, SyncPressedKeysPacket.class, i++, Side.SERVER);
 		
 		//HANDLER.registerMessage(JetpackUseFuelPacket.Handler.class, JetpackUseFuelPacket.class, 18, Side.SERVER);
-		HANDLER.registerMessage(JetpackFueluseSync.Handler.class, JetpackFueluseSync.class, 18, Side.SERVER);
+		HANDLER.registerMessage(JetpackFueluseSync.Handler.class, JetpackFueluseSync.class, i++, Side.SERVER);
 		
-		HANDLER.registerMessage(OpenBuilderGuiPacket.Handler.class, OpenBuilderGuiPacket.class, 19, Side.CLIENT);
+		HANDLER.registerMessage(OpenBuilderGuiPacket.Handler.class, OpenBuilderGuiPacket.class, i++, Side.CLIENT);
 		
-		HANDLER.registerMessage(OpenGuiOnServerPacket.Handler.class, OpenGuiOnServerPacket.class, 20, Side.SERVER);
+		HANDLER.registerMessage(OpenGuiOnServerPacket.Handler.class, OpenGuiOnServerPacket.class, i++, Side.SERVER);
 		
-		HANDLER.registerMessage(CloseScreenPacket.Handler.class, CloseScreenPacket.class, 21, Side.CLIENT);
-		HANDLER.registerMessage(BuildPointSyncPacket.Handler.class, BuildPointSyncPacket.class, 22, Side.CLIENT);
+		HANDLER.registerMessage(CloseScreenPacket.Handler.class, CloseScreenPacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(BuildPointSyncPacket.Handler.class, BuildPointSyncPacket.class, i++, Side.CLIENT);
 		
-		HANDLER.registerMessage(SwapArmorPacket.Handler.class, SwapArmorPacket.class, 23, Side.SERVER);
+		HANDLER.registerMessage(SwapArmorPacket.Handler.class, SwapArmorPacket.class, i++, Side.SERVER);
 		
-		HANDLER.registerMessage(AnimationTellServerPacket.Handler.class, AnimationTellServerPacket.class, 24, Side.SERVER);
-		HANDLER.registerMessage(OtherPlayerAnimationPacket.Handler.class, OtherPlayerAnimationPacket.class, 25, Side.CLIENT);
+		HANDLER.registerMessage(AnimationTellServerPacket.Handler.class, AnimationTellServerPacket.class, i++, Side.SERVER);
+		HANDLER.registerMessage(OtherPlayerAnimationPacket.Handler.class, OtherPlayerAnimationPacket.class, i++, Side.CLIENT);
 		
-		HANDLER.registerMessage(ArmorStandItemSyncPacket.Handler.class, ArmorStandItemSyncPacket.class, 26, Side.CLIENT);
-		HANDLER.registerMessage(PlayerChatMessagePacket.Handler.class, PlayerChatMessagePacket.class, 27, Side.CLIENT);
+		HANDLER.registerMessage(ArmorStandItemSyncPacket.Handler.class, ArmorStandItemSyncPacket.class, i++, Side.CLIENT);
+		HANDLER.registerMessage(PlayerChatMessagePacket.Handler.class, PlayerChatMessagePacket.class, i++, Side.CLIENT);
 		
-		HANDLER.registerMessage(GravityChangePacket.Handler.class, GravityChangePacket.class, 28, Side.SERVER);
+		HANDLER.registerMessage(GravityChangePacket.Handler.class, GravityChangePacket.class, i++, Side.SERVER);
+		
+		HANDLER.registerMessage(RequestBoundingBox.Handler.class, RequestBoundingBox.class, i++, Side.SERVER);
+		HANDLER.registerMessage(SendboundingBoxData.Handler.class, SendboundingBoxData.class, i++, Side.CLIENT);
+		
+		HANDLER.registerMessage(ModificatorSavePacket.Handler.class, ModificatorSavePacket.class, i++, Side.SERVER);
 	}
 	
 	public static Packet getMCPacket(IMessage message)

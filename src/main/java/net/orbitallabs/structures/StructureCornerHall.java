@@ -10,8 +10,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.blocks.BlockContainerMod;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.FacingUtils;
@@ -2821,9 +2824,17 @@ public class StructureCornerHall extends StructureRotatable {
 	}
 	
 	@Override
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		ArrayList<AxisAlignedBB> list = new ArrayList<>();
+		list.add(createBoundingBox(dir, pos, new int[] { 5, 5, 5, 2, -2, 2 }));
+		return list;
+	}
+	
+	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos pos, int meta)
 	{
-		if (meta != 0 && meta != 1 && meta != -1)
+		if (meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -3004,13 +3015,13 @@ public class StructureCornerHall extends StructureRotatable {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
-		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 48, 7), "plateTin"));
+		NonNullList<OreDictItemStack> items = NonNullList.create();
+		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 38, 7), "plateTin"));
 		items.add(new OreDictItemStack(new ItemStack(Items.GLOWSTONE_DUST, 8)));
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 1, 13)));
-		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 24, ItemMod.scaffold_meta)));
+		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 38, ItemMod.scaffold_meta)));
 		
 		return items;
 	}

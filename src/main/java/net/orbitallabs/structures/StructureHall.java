@@ -10,8 +10,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.orbitallabs.blocks.BlockBuildPoint.EnumBlockPointStates;
 import net.orbitallabs.items.ItemMod;
 import net.orbitallabs.utils.OreDictItemStack;
 
@@ -827,10 +830,10 @@ public class StructureHall extends Structure {
 			BuildHandler.setBlock(world, x + -5, y + -1, z + -2, block4, 4, 2);
 			BuildHandler.setBlock(world, x + -5, y + -1, z + 2, block4, 4, 2);
 			
-			BuildHandler.buildBuildPoint(world, x - 5, y, z - 2, 3);
-			BuildHandler.buildBuildPoint(world, x - 5, y, z + 2, 3);
+			BuildHandler.buildBuildPoint(world, x - 5, y, z - 2, EnumBlockPointStates.WINDOWS0);
+			BuildHandler.buildBuildPoint(world, x - 5, y, z + 2, EnumBlockPointStates.WINDOWS0);
 			
-			BuildHandler.buildBuildPoint(world, x - 5, y + 2, z, 4);
+			BuildHandler.buildBuildPoint(world, x - 5, y + 2, z, EnumBlockPointStates.SOLARPANELS);
 			
 			BuildHandler.setBlock(world, x + -5, y + 1, z + -2, block4, 4, 2);
 			BuildHandler.setBlock(world, x + -5, y + 1, z + 2, block4, 4, 2);
@@ -991,10 +994,10 @@ public class StructureHall extends Structure {
 			BuildHandler.setBlock(world, x + 5, y + -1, z + -2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 5, y + -1, z + 2, block3, 4, 2);
 			
-			BuildHandler.buildBuildPoint(world, x + 5, y, z - 2, 3);
-			BuildHandler.buildBuildPoint(world, x + 5, y, z + 2, 3);
+			BuildHandler.buildBuildPoint(world, x + 5, y, z - 2, EnumBlockPointStates.WINDOWS0);
+			BuildHandler.buildBuildPoint(world, x + 5, y, z + 2, EnumBlockPointStates.WINDOWS0);
 			
-			BuildHandler.buildBuildPoint(world, x + 5, y + 2, z, 4);
+			BuildHandler.buildBuildPoint(world, x + 5, y + 2, z, EnumBlockPointStates.SOLARPANELS);
 			
 			BuildHandler.setBlock(world, x + 5, y + 1, z + -2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + 5, y + 1, z + 2, block3, 4, 2);
@@ -1103,10 +1106,10 @@ public class StructureHall extends Structure {
 			BuildHandler.setBlock(world, x + -2, y + 0, z + 2, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -2, y + 0, z + 3, block3, 4, 2);
 			
-			BuildHandler.buildBuildPoint(world, x - 2, y, z + 4, 3);
-			BuildHandler.buildBuildPoint(world, x + 2, y, z + 4, 3);
+			BuildHandler.buildBuildPoint(world, x - 2, y, z + 4, EnumBlockPointStates.WINDOWS0);
+			BuildHandler.buildBuildPoint(world, x + 2, y, z + 4, EnumBlockPointStates.WINDOWS0);
 			
-			BuildHandler.buildBuildPoint(world, x, y + 2, z + 4, 4);
+			BuildHandler.buildBuildPoint(world, x, y + 2, z + 4, EnumBlockPointStates.SOLARPANELS);
 			
 			BuildHandler.setBlock(world, x + -2, y + 0, z + 5, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -2, y + 0, z + 6, block3, 4, 2);
@@ -1267,10 +1270,10 @@ public class StructureHall extends Structure {
 			BuildHandler.setBlock(world, x + -2, y + 0, z + -6, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -2, y + 0, z + -5, block3, 4, 2);
 			
-			BuildHandler.buildBuildPoint(world, x - 2, y, z - 4, 3);
-			BuildHandler.buildBuildPoint(world, x + 2, y, z - 4, 3);
+			BuildHandler.buildBuildPoint(world, x - 2, y, z - 4, EnumBlockPointStates.WINDOWS0);
+			BuildHandler.buildBuildPoint(world, x + 2, y, z - 4, EnumBlockPointStates.WINDOWS0);
 			
-			BuildHandler.buildBuildPoint(world, x, y + 2, z - 4, 4);
+			BuildHandler.buildBuildPoint(world, x, y + 2, z - 4, EnumBlockPointStates.SOLARPANELS);
 			
 			BuildHandler.setBlock(world, x + -2, y + 0, z + -3, block3, 4, 2);
 			BuildHandler.setBlock(world, x + -2, y + 0, z + -2, block3, 4, 2);
@@ -1495,9 +1498,17 @@ public class StructureHall extends Structure {
 	}
 	
 	@Override
+	public List<AxisAlignedBB> getBoundingBox(EnumFacing dir, BlockPos pos)
+	{
+		ArrayList<AxisAlignedBB> list = new ArrayList<>();
+		list.add(createBoundingBox(dir, pos, new int[] { 5, 5, 5, 2, -2, 2 }));
+		return list;
+	}
+	
+	@Override
 	public boolean Check(World world, EnumFacing dir, BlockPos pos, int meta)
 	{
-		if (meta != 0 && meta != 1 && meta != -1)
+		if (meta != EnumBlockPointStates.EVERYTHING.getMeta() && meta != EnumBlockPointStates.UNKNOWN)
 		{
 			return false;
 		}
@@ -1524,13 +1535,13 @@ public class StructureHall extends Structure {
 	}
 	
 	@Override
-	public List<OreDictItemStack> getRequiredItems()
+	public NonNullList<OreDictItemStack> getRequiredItems()
 	{
-		List<OreDictItemStack> items = new ArrayList();
-		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 54, 7), "plateTin"));
+		NonNullList<OreDictItemStack> items = NonNullList.create();
+		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 40, 7), "plateTin"));
 		items.add(new OreDictItemStack(new ItemStack(Items.GLOWSTONE_DUST, 8)));
 		items.add(new OreDictItemStack(new ItemStack(GCItems.basicItem, 4, 13)));
-		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 32, ItemMod.scaffold_meta)));
+		items.add(new OreDictItemStack(new ItemStack(ItemMod.ironScaffold, 40, ItemMod.scaffold_meta)));
 		
 		return items;
 	}
