@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.orbitallabs.items.ItemBlockMod;
@@ -41,9 +42,10 @@ public class BlockMod extends Block implements IDescrObject {
 		this.setRegistryName(uln);
 		if (reg)
 		{
-			GameRegistry.register(this);
+			ForgeRegistries.BLOCKS.register(this);
+			//GameRegistry.register(this);
 			ItemBlockMod ItemBM = new ItemBlockMod(this);
-			GameRegistry.register(ItemBM);
+			ForgeRegistries.ITEMS.register(ItemBM);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			{
 				ModelLoader.setCustomModelResourceLocation(ItemBM, 0, new ModelResourceLocation(OrbitalModInfo.MOD_ID + ":" + uln, "inventory"));
@@ -62,15 +64,15 @@ public class BlockMod extends Block implements IDescrObject {
 		this.setCreativeTab(CreativeTabs.DECORATIONS);
 		if (reg)
 		{
-			GameRegistry.register(this);
+			ForgeRegistries.BLOCKS.register(this);
 			ItemBlockMod ItemBM = new ItemBlockMod(this);
-			GameRegistry.register(ItemBM);
+			ForgeRegistries.ITEMS.register(ItemBM);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			{
 				if (HasSubtypes())
 				{
 					NonNullList<ItemStack> list = NonNullList.create();
-					this.getSubBlocks(ItemBM, this.getCreativeTabToDisplayOn(), list);
+					this.getSubBlocks(this.getCreativeTabToDisplayOn(), list);
 					for (int i = 0; i < list.size(); i++)
 					{
 						ModelLoader.setCustomModelResourceLocation(ItemBM, list.get(i).getMetadata(), new ModelResourceLocation(OrbitalModInfo.MOD_ID + ":" + uln, "inventory"));

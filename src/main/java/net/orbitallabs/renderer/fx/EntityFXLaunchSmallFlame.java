@@ -7,7 +7,7 @@ import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
@@ -46,7 +46,7 @@ public class EntityFXLaunchSmallFlame extends Particle {
 	}
 	
 	@Override
-	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
 	{
 		GL11.glDepthMask(false);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -73,7 +73,7 @@ public class EntityFXLaunchSmallFlame extends Particle {
 	{
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
+		this.prevPosZ = this.posZ;  
 		
 		if (this.particleAge++ >= this.particleMaxAge)
 		{

@@ -64,12 +64,12 @@ public class ItemsToolTips {
 			{
 				if (!obj.getDescription(stack.getItemDamage()).equals(""))
 				{
-					event.getToolTip().addAll(FMLClientHandler.instance().getClient().fontRendererObj.listFormattedStringToWidth(obj.getDescription(stack.getItemDamage()), 150));
+					event.getToolTip().addAll(FMLClientHandler.instance().getClient().fontRenderer.listFormattedStringToWidth(obj.getDescription(stack.getItemDamage()), 150));
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 				{
 					event.getToolTip()
-							.addAll(FMLClientHandler.instance().getClient().fontRendererObj.listFormattedStringToWidth(obj.getShiftDescription(stack.getItemDamage()), 150));
+							.addAll(FMLClientHandler.instance().getClient().fontRenderer.listFormattedStringToWidth(obj.getShiftDescription(stack.getItemDamage()), 150));
 				} else
 				{
 					if (!obj.getShiftDescription(stack.getItemDamage()).equals(""))

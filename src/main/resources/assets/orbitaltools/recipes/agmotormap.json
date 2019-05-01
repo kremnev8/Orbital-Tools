@@ -1,0 +1,36 @@
+{
+    "type": "minecraft:crafting_shaped",
+	"conditions": [
+	    {
+		    "type": "forge:not",
+		    "value": {
+		        "type": "forge:mod_loaded",
+		        "modid": "ic2"
+	        }
+	    }
+	],
+    "pattern": [
+        "121",
+        "232",
+        "121"
+    ],
+    "key": {
+        "1": {
+            "item": "galacticraftcore:basic_item",
+            "data": 8
+
+        },
+        "2": {
+            "item": "galacticraftcore:basic_item",
+            "data": 9
+
+        },
+        "3": {
+            "item": "orbitaltools:altmotor"
+        }
+    },
+    "result": {
+        "item": "orbitaltools:agmotormap",
+        "count": 1
+    }
+}

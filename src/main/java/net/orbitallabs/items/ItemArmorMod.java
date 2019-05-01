@@ -10,6 +10,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,7 +34,7 @@ public class ItemArmorMod extends ItemArmor implements IDescrObject {
 		this.name = uln;
 		this.setRegistryName(uln);
 		this.setCreativeTab(tab);
-		GameRegistry.register(this);
+		ForgeRegistries.ITEMS.register(this);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 		{
 			ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(OrbitalModInfo.MOD_ID + ":" + uln, "inventory"));

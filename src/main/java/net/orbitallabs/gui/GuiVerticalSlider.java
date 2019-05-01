@@ -100,9 +100,9 @@ public class GuiVerticalSlider extends GuiButtonExt {
 	}
 	
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY)
+	public void drawButton(Minecraft mc, int mouseX, int mouseY, float ticks)
 	{
-		this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+		this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 		// GuiUtils.drawContinuousTexturedBox(buttonTextures, this.xPosition, this.yPosition, 0, 46 + k * 20, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(slidertex);
 		mouseDragged(mc, mouseX, mouseY);
@@ -138,7 +138,7 @@ public class GuiVerticalSlider extends GuiButtonExt {
 		
 		if (this.dragging)
 		{
-			this.sliderValue = (par3 - (this.yPosition + 4)) / (float) (this.height);
+			this.sliderValue = (par3 - (this.y + 4)) / (float) (this.height);
 			updateSlider();
 		}
 		
@@ -148,15 +148,15 @@ public class GuiVerticalSlider extends GuiButtonExt {
 		{
 			if ((k == 1 || k == 0))
 			{
-				this.drawTexturedModalRect(this.xPosition, this.yPosition + (int) (this.sliderValue * (float) (this.height - 15)) + 1, 158, 15, 10, 15);
+				this.drawTexturedModalRect(this.x, this.y + (int) (this.sliderValue * (float) (this.height - 15)) + 1, 158, 15, 10, 15);
 			} else
 			{
 				if (!dragging)
 				{
-					this.drawTexturedModalRect(this.xPosition, this.yPosition + (int) (this.sliderValue * (float) (this.height - 15)) + 1, 169, 15, 10, 15);
-				} else this.drawTexturedModalRect(this.xPosition, this.yPosition + (int) (this.sliderValue * (float) (this.height - 15)) + 1, 158, 15, 10, 15);
+					this.drawTexturedModalRect(this.x, this.y + (int) (this.sliderValue * (float) (this.height - 15)) + 1, 169, 15, 10, 15);
+				} else this.drawTexturedModalRect(this.x, this.y + (int) (this.sliderValue * (float) (this.height - 15)) + 1, 158, 15, 10, 15);
 			}
-		} else this.drawTexturedModalRect(this.xPosition, this.yPosition + 1, 158, 31, 10, 15);
+		} else this.drawTexturedModalRect(this.x, this.y + 1, 158, 31, 10, 15);
 		// this.drawTexturedModalRect(this.xPosition +4, this.yPosition +
 		// (int)(this.sliderValue * (float)(this.height - 22)) +1, 196, 66, 4,
 		// 20);
@@ -170,11 +170,11 @@ public class GuiVerticalSlider extends GuiButtonExt {
 	@Override
 	public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3)
 	{
-		boolean superr = this.enabled && par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
+		boolean superr = this.enabled && par2 >= this.x && par3 >= this.y && par2 < this.x + this.width && par3 < this.y + this.height;
 		
 		if (superr)
 		{
-			this.sliderValue = (float) (par3 - (this.yPosition)) / (float) (this.height - 8);
+			this.sliderValue = (float) (par3 - (this.y)) / (float) (this.height - 8);
 			updateSlider();
 			this.dragging = true;
 			return true;

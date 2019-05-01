@@ -1,0 +1,32 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "121",
+        "343",
+        "212"
+    ],
+    "key": {
+        "1": {
+            "item": "galacticraftcore:basic_item",
+            "data": 9
+
+        },
+        "2": {
+            "item": "orbitaltools:agmotormap"
+        },
+        "3": {
+            "item": "galacticraftcore:basic_item",
+            "data": 14
+
+        },
+        "4": {
+            "item": "galacticraftcore:aluminum_wire",
+            "data": 1
+
+        }
+    },
+    "result": {
+        "item": "orbitaltools:artificialgsource",
+        "count": 1
+    }
+}

@@ -29,7 +29,7 @@ public class OpenRocketFuelGuiPacket implements IMessage {
 	
 	@Override
 	public void toBytes(ByteBuf buf)
-	{
+	{ 
 		buf.writeInt(entId);
 	}
 	
@@ -37,9 +37,9 @@ public class OpenRocketFuelGuiPacket implements IMessage {
 		@Override
 		public IMessage onMessage(OpenRocketFuelGuiPacket pkt, MessageContext ctx)
 		{
-			if (ctx.getServerHandler().playerEntity != null)
+			if (ctx.getServerHandler().player != null)
 			{
-				EntityPlayer player = ctx.getServerHandler().playerEntity;
+				EntityPlayer player = ctx.getServerHandler().player;
 				if (player.world.getEntityByID(pkt.entId) != null)
 				{
 					EntityRocketFakeTiered rocket = (EntityRocketFakeTiered) player.world.getEntityByID(pkt.entId);

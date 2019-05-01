@@ -20,17 +20,17 @@ public class SmallGuiButton extends GuiButton {
 	{
 		if (this.visible)
 		{
-			FontRenderer fontrenderer = mc.fontRendererObj;
+			FontRenderer fontrenderer = mc.fontRenderer;
 			mc.getTextureManager().bindTexture(buttonTextures);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			int i = this.getHoverState(this.hovered);
 			GlStateManager.enableBlend();
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
 					GlStateManager.DestFactor.ZERO);
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			this.drawTexturedModalRect(this.xPosition, this.yPosition, 138, 167 + i * 15, this.width / 2, this.height);
-			this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 254 - this.width / 2, 167 + i * 15, this.width / 2, this.height);
+			this.drawTexturedModalRect(this.x, this.y, 138, 167 + i * 15, this.width / 2, this.height);
+			this.drawTexturedModalRect(this.x + this.width / 2, this.y, 254 - this.width / 2, 167 + i * 15, this.width / 2, this.height);
 			this.mouseDragged(mc, mouseX, mouseY);
 			int j = 14737632;
 			
@@ -45,7 +45,7 @@ public class SmallGuiButton extends GuiButton {
 				j = 16777120;
 			}
 			
-			this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, j);
+			this.drawCenteredString(fontrenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, j);
 		}
 	}
 	

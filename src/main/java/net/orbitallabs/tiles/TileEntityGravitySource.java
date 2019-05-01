@@ -1,6 +1,7 @@
 package net.orbitallabs.tiles;
 
 import java.util.EnumSet;
+
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
 import micdoodle8.mods.galacticraft.core.util.RedstoneUtil;
@@ -15,10 +16,10 @@ public class TileEntityGravitySource extends TileBaseElectricBlock {
 	public double gravityAddition = 0F;
 	@NetworkedField(targetSide = Side.CLIENT)
 	public double SettedGA = 1.0F;
-	
+	 
 	public TileEntityGravitySource()
 	{
-		storage.setCapacity(4000F);
+		storage.setCapacity(4000F); 
 		storage.setMaxExtract(500F);
 	}
 	

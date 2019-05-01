@@ -29,9 +29,9 @@ public class DismountPacket implements IMessage {
 		public IMessage onMessage(DismountPacket pkt, MessageContext ctx)
 		{
 			
-			if (ctx.getServerHandler().playerEntity != null)
+			if (ctx.getServerHandler().player != null)
 			{
-				EntityPlayer player = ctx.getServerHandler().playerEntity;
+				EntityPlayer player = ctx.getServerHandler().player;
 				
 				if (player.getRidingEntity() instanceof EntityRocketFakeTiered)
 				{

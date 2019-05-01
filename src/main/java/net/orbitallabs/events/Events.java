@@ -19,8 +19,8 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -79,7 +79,7 @@ public class Events {
 				if (((EntityRocketFakeTiered) player.getRidingEntity()).canBreath())
 				{
 					event.setCanceled(true);
-				}
+				} 
 			}
 		}
 	}
@@ -365,7 +365,7 @@ public class Events {
 		float f = 0.00390625F;
 		float f1 = 0.00390625F;
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buf = tessellator.getBuffer();
+		BufferBuilder buf = tessellator.getBuffer();
 		buf.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buf.pos((double) (x + 0), (double) (y + height), (double) 1).tex((double) ((float) (textureX + 0) * 0.00390625F), (double) ((float) (textureY + height) * 0.00390625F))
 				.endVertex();
@@ -396,7 +396,7 @@ public class Events {
 		
 		if (!mc.gameSettings.showDebugInfo && Config.showCoordinatesAndlookDirection)
 		{
-			FontRenderer fontRendererObj = mc.fontRendererObj;
+			FontRenderer fontRendererObj = mc.fontRenderer;
 			
 			Entity entity = mc.getRenderViewEntity();
 			EnumFacing enumfacing = entity.getHorizontalFacing();

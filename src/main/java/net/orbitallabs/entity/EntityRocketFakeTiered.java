@@ -511,18 +511,18 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource source, float par2)
 	{
-		if (!this.isDead && !par1DamageSource.isFireDamage())
+		if (!this.isDead && !source.isFireDamage())
 		{
-			boolean flag = par1DamageSource.getEntity() instanceof EntityPlayer && ((EntityPlayer) par1DamageSource.getEntity()).capabilities.isCreativeMode;
-			Entity e = par1DamageSource.getEntity();
-			if (this.isEntityInvulnerable(par1DamageSource) || this.posY > 300 || (e instanceof EntityLivingBase && !(e instanceof EntityPlayer)))
+			boolean flag = source.getImmediateSource() instanceof EntityPlayer && ((EntityPlayer) source.getImmediateSource()).capabilities.isCreativeMode;
+			Entity e = source.getImmediateSource();
+			if (this.isEntityInvulnerable(source) || this.posY > 300 || (e instanceof EntityLivingBase && !(e instanceof EntityPlayer)))
 			{
 				return false;
 			} else
 			{
-				this.setBeenAttacked();
+				//this.setBeenAttacked();
 				this.shipDamage += par2 * 10;
 				
 				if (e instanceof EntityPlayer && ((EntityPlayer) e).capabilities.isCreativeMode)
@@ -567,7 +567,7 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 			
 			if (item.hasTagCompound())
 			{
-				entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
+				entityItem.getItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
 			}
 		}
 	}
@@ -669,7 +669,7 @@ public class EntityRocketFakeTiered extends Entity implements IIgnoreShift, ICam
 		{
 			if (this.posY < 0.0D)
 			{
-				this.kill();
+				this.setDead();
 			}
 			
 		}

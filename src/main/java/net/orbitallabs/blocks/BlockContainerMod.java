@@ -14,6 +14,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.orbitallabs.items.ItemBlockMod;
@@ -60,9 +61,9 @@ public class BlockContainerMod extends BlockContainer implements IDescrObject {
 		this.setRegistryName(uln);
 		if (reg)
 		{
-			GameRegistry.register(this);
+			ForgeRegistries.BLOCKS.register(this);
 			ItemBlockMod ItemBM = new ItemBlockMod(this);
-			GameRegistry.register(ItemBM);
+			ForgeRegistries.ITEMS.register(ItemBM);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			{
 				ModelLoader.setCustomModelResourceLocation(ItemBM, 0, new ModelResourceLocation(OrbitalModInfo.MOD_ID + ":" + uln, "inventory"));
@@ -81,9 +82,9 @@ public class BlockContainerMod extends BlockContainer implements IDescrObject {
 		this.setCreativeTab(CreativeTabs.DECORATIONS);
 		if (reg)
 		{
-			GameRegistry.register(this);
+			ForgeRegistries.BLOCKS.register(this);
 			ItemBlockMod ItemBM = new ItemBlockMod(this);
-			GameRegistry.register(ItemBM);
+			ForgeRegistries.ITEMS.register(ItemBM);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			{
 				ModelLoader.setCustomModelResourceLocation(ItemBM, 0, new ModelResourceLocation(OrbitalModInfo.MOD_ID + ":" + uln, "inventory"));

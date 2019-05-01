@@ -54,17 +54,17 @@ public class BlockBuildPoint extends BlockMod {
 	 * pierce
 	 */
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list)
 	{
 		if (!hasSubtypes)
 		{
 			for (int i = 0; i < 6; i++)
 			{
-				list.add(new ItemStack(item, 1, i));
+				list.add(new ItemStack(this, 1, i));
 			}
 		} else
-		{
-			list.add(new ItemStack(item, 1, 0));
+		{ 
+			list.add(new ItemStack(this, 1, 0));
 		}
 	}
 	

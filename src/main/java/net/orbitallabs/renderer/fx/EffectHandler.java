@@ -28,7 +28,7 @@ public class EffectHandler {
 			double viewDistance = 64.0D;
 			
 			if (particleID.equals("whiteShortSmokeIdle"))
-			{
+			{ 
 				particle = new EntityFXSmoke(mc.world, position, motion, 1.0F, true, 5);
 			} else if (particleID.equals("launchFlameSmall"))
 			{

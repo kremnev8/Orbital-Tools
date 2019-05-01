@@ -18,7 +18,7 @@ public class AbstractSteve extends AbstractClientPlayer {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int getBrightnessForRender(float p_70070_1_)
+	public int getBrightnessForRender()
 	{
 		return 15728880;
 	}

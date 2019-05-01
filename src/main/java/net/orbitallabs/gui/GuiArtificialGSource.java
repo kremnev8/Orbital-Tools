@@ -62,7 +62,7 @@ public class GuiArtificialGSource extends GuiContainerGC implements ISlider {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		this.fontRendererObj.drawString(GCCoreUtil.translate("container.inventory"), 8, this.ySize - 118 + 2 + 28, 4210752);
+		this.fontRenderer.drawString(GCCoreUtil.translate("container.inventory"), 8, this.ySize - 118 + 2 + 28, 4210752);
 	}
 	
 	@Override

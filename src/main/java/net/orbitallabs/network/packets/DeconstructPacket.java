@@ -100,7 +100,7 @@ public class DeconstructPacket implements IMessage {
 			if (pkt.objects != null && pkt.objects.size() > 0)
 			{
 				OTLoger.logInfo("Deconstruct Packet Sucsessfuly recived!");
-				EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+				EntityPlayerMP player = ctx.getServerHandler().player;
 				if (player == null) return null;
 				World world = player.world;
 				

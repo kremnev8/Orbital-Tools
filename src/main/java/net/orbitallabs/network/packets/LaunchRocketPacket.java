@@ -40,9 +40,9 @@ public class LaunchRocketPacket implements IMessage {
 		public IMessage onMessage(LaunchRocketPacket pkt, MessageContext ctx)
 		{
 			
-			if (ctx.getServerHandler().playerEntity != null)
+			if (ctx.getServerHandler().player != null)
 			{
-				EntityPlayer player = ctx.getServerHandler().playerEntity;
+				EntityPlayer player = ctx.getServerHandler().player;
 				
 				if (!player.isDead && player.getRidingEntity() != null && !player.getRidingEntity().isDead && player.getRidingEntity() instanceof EntityRocketFakeTiered)
 				{

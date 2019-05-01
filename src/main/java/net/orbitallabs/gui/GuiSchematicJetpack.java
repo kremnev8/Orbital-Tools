@@ -52,8 +52,8 @@ public class GuiSchematicJetpack extends GuiContainer implements ISchematicResul
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		this.fontRendererObj.drawString(ItemMod.spaceJetpack.getItemStackDisplayName(new ItemStack(ItemMod.spaceJetpack, 1, 0)), 7, -20 + 27 + 25, 4210752);
-		this.fontRendererObj.drawString(GCCoreUtil.translate("container.inventory"), 8, 220 - 104 + 2 + 27 - 16, 4210752);
+		this.fontRenderer.drawString(ItemMod.spaceJetpack.getItemStackDisplayName(new ItemStack(ItemMod.spaceJetpack, 1, 0)), 7, -20 + 27 + 25, 4210752);
+		this.fontRenderer.drawString(GCCoreUtil.translate("container.inventory"), 8, 220 - 104 + 2 + 27 - 16, 4210752);
 	}
 	
 	@Override

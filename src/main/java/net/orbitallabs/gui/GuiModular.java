@@ -97,7 +97,7 @@ public class GuiModular extends GuiContainer {
 	protected void drawPlayerInventoryName()
 	{
 		String localizedName = Minecraft.getMinecraft().player.inventory.getName();
-		this.fontRendererObj.drawString(localizedName, 8, this.ySize - 96 + 2, 0x404040);
+		this.fontRenderer.drawString(localizedName, 8, this.ySize - 96 + 2, 0x404040);
 	}
 	
 	@Override

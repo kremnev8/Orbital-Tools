@@ -66,11 +66,11 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 	
 	public void initButtons(Structure str)
 	{
-		int xpos = xPosition;
-		int ypos = yPosition;
+		int xpos = x;
+		int ypos = y;
 		elementList.clear();
 		
-		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRenderer;
 		
 		elementList.add(new GuiElementTextBox(0, this, xpos + 30, ypos + 26, 20, 10, "", true, 3, true) {
 			@Override
@@ -206,11 +206,11 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 	/**
 	 * Draws this button to the screen.
 	 */
-	public void drawButton(Minecraft mine, int x, int y)
+	public void drawButton(Minecraft mine, int x, int y, float ticks)
 	{
 		int move_mod = 10;
 		
-		NyPos = this.yPosition - (move_mod * GuiModificator.move);
+		NyPos = this.y - (move_mod * GuiModificator.move);
 		if (visSelf)
 		{
 			if (NyPos < ZeroPos - 25 || NyPos > ZeroPos + 157)
@@ -221,44 +221,44 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 		if (this.visible)
 		{
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
-			FontRenderer fontrenderer = mine.fontRendererObj;
+			FontRenderer fontrenderer = mine.fontRenderer;
 			mine.getTextureManager().bindTexture(buttonTextures);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			this.hovered = x >= this.xPosition && y >= NyPos && x < this.xPosition + this.width && y < NyPos + this.height;
+			this.hovered = x >= this.x && y >= NyPos && x < this.x + this.width && y < NyPos + this.height;
 			int k = this.getHoverState(this.hovered);
 			GL11.glEnable(GL11.GL_BLEND);
 			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			this.drawTexturedModalRect(this.xPosition, NyPos, 0, 181, this.width, this.height);
+			this.drawTexturedModalRect(this.x, NyPos, 0, 181, this.width, this.height);
 			
 			boolean covered = y > ZeroPos + 157;
 			
-			boolean onPlusSign = x >= this.xPosition + 110 && y >= NyPos + 3 && x < this.xPosition + 110 + 16 && y < NyPos + 3 + 16 && !covered;
+			boolean onPlusSign = x >= this.x + 110 && y >= NyPos + 3 && x < this.x + 110 + 16 && y < NyPos + 3 + 16 && !covered;
 			if (onPlusSign)
 			{
-				this.drawTexturedModalRect(this.xPosition + 110, NyPos + 3, 202, 2, 16, 16);//+sign
+				this.drawTexturedModalRect(this.x + 110, NyPos + 3, 202, 2, 16, 16);//+sign
 			} else
 			{
-				this.drawTexturedModalRect(this.xPosition + 110, NyPos + 3, 184, 2, 16, 16);//+sign
+				this.drawTexturedModalRect(this.x + 110, NyPos + 3, 184, 2, 16, 16);//+sign
 			}
 			
-			boolean onRstSign = x >= this.xPosition + 2 && y >= NyPos + 20 && x < this.xPosition + 2 + 20 && y < NyPos + 20 + 17 && !covered;
+			boolean onRstSign = x >= this.x + 2 && y >= NyPos + 20 && x < this.x + 2 + 20 && y < NyPos + 20 + 17 && !covered;
 			if (onRstSign)
 			{
-				this.drawTexturedModalRect(this.xPosition + 2, NyPos + 20, 205, 20, 20, 17);//rst sign
+				this.drawTexturedModalRect(this.x + 2, NyPos + 20, 205, 20, 20, 17);//rst sign
 			} else
 			{
-				this.drawTexturedModalRect(this.xPosition + 2, NyPos + 20, 184, 20, 20, 17);//rst sign
+				this.drawTexturedModalRect(this.x + 2, NyPos + 20, 184, 20, 20, 17);//rst sign
 			}
 			if (!disableDel)
 			{
-				boolean onDelSign = x >= this.xPosition + 113 && y >= NyPos + 23 && x < this.xPosition + 116 + 10 && y < NyPos + 23 + 13 && !covered;
+				boolean onDelSign = x >= this.x + 113 && y >= NyPos + 23 && x < this.x + 116 + 10 && y < NyPos + 23 + 13 && !covered;
 				if (onDelSign)
 				{
-					this.drawTexturedModalRect(this.xPosition + 113, NyPos + 23, 200, 41, 13, 13);//rst sign
+					this.drawTexturedModalRect(this.x + 113, NyPos + 23, 200, 41, 13, 13);//rst sign
 				} else
 				{
-					this.drawTexturedModalRect(this.xPosition + 113, NyPos + 23, 185, 41, 13, 13);//rst sign
+					this.drawTexturedModalRect(this.x + 113, NyPos + 23, 185, 41, 13, 13);//rst sign
 				}
 			}
 			
@@ -282,24 +282,24 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 			//	   break;
 			// }
 			//  }
-			fontrenderer.drawString(ButStr.getName(), this.xPosition + 22, NyPos + 2, l, false);
+			fontrenderer.drawString(ButStr.getName(), this.x + 22, NyPos + 2, l, false);
 			
-			fontrenderer.drawString(I18n.format("modificator.direction.name"), this.xPosition + 22, NyPos + 12, l, false);
+			fontrenderer.drawString(I18n.format("modificator.direction.name"), this.x + 22, NyPos + 12, l, false);
 			
-			fontrenderer.drawString(I18n.format("modificator.rotation.name"), this.xPosition + 78, NyPos + 12, l, false);
+			fontrenderer.drawString(I18n.format("modificator.rotation.name"), this.x + 78, NyPos + 12, l, false);
 			
-			fontrenderer.drawString("x:", this.xPosition + 22, NyPos + 27, l, false);
-			fontrenderer.drawString("y:", this.xPosition + 52, NyPos + 27, l, false);
-			fontrenderer.drawString("z:", this.xPosition + 82, NyPos + 27, l, false);
+			fontrenderer.drawString("x:", this.x + 22, NyPos + 27, l, false);
+			fontrenderer.drawString("y:", this.x + 52, NyPos + 27, l, false);
+			fontrenderer.drawString("z:", this.x + 82, NyPos + 27, l, false);
 			
 			for (k = 0; k < this.elementList.size(); ++k)
 			{
 				if (this.elementList.get(k) instanceof GuiButton)
 				{
-					int old = ((GuiButton) this.elementList.get(k)).yPosition;
-					((GuiButton) this.elementList.get(k)).yPosition -= (move_mod * GuiModificator.move);
-					((GuiButton) this.elementList.get(k)).drawButton(mine, x, y);
-					((GuiButton) this.elementList.get(k)).yPosition = old;
+					int old = ((GuiButton) this.elementList.get(k)).y;
+					((GuiButton) this.elementList.get(k)).y -= (move_mod * GuiModificator.move);
+					((GuiButton) this.elementList.get(k)).drawButton(mine, x, y, ticks);
+					((GuiButton) this.elementList.get(k)).y = old;
 				}
 			}
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -315,139 +315,139 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 		EnumFacing dir = ButStr.placementDir;
 		if (strName.equals(Structure.HOLLID))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "hall", 0);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "hall", 0);
 		} else if (strName.equals(Structure.CORNERID))
 		{
 			if (dir == EnumFacing.WEST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
-				} else DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 1);
+				} else DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 0);
 			} else if (dir == EnumFacing.EAST)
 			{
 				if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 0);
 				}
 			} else if (dir == EnumFacing.NORTH)
 			{
 				if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 0);
 				}
 			} else if (dir == EnumFacing.SOUTH)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 0);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 0);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
-				} else DrawGuiIcon(this.xPosition + 2, NyPos + 2, "corner", 1);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 1);
+				} else DrawGuiIcon(this.x + 2, NyPos + 2, "corner", 1);
 			}
 		} else if (strName.equals(Structure.CROSSROADID))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "crossroad", 0);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "crossroad", 0);
 		} else if (strName.equals(Structure.HALLAIRLOCKID))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "airlock", 0);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "airlock", 0);
 		} else if (strName.equals(Structure.WINDOWID))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "window", rot);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "window", rot);
 		} else if (strName.equals(Structure.CUPOLAID))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "cupola", 0);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "cupola", 0);
 		} else if (strName.equals(Structure.DOCKPORTID))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "dockport", 0);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "dockport", 0);
 		} else if (strName.equals(Structure.SOLARPANELID))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "solarpanel", rot);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "solarpanel", rot);
 		} else if (strName.equals(Structure.THALLID))
 		{
 			if (dir == EnumFacing.WEST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 1);
 				}
 			} else if (dir == EnumFacing.EAST)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 1);
 				}
 			} else if (dir == EnumFacing.NORTH)
 			{
 				if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 2)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 1);
 				} else
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 3);
 				}
 			} else if (dir == EnumFacing.SOUTH)
 			{
 				if (rot == 0)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 3);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 3);
 				} else if (rot == 1)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 2);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 2);
 				} else if (rot == 3)
 				{
-					DrawGuiIcon(this.xPosition + 2, NyPos + 2, "thall", 1);
+					DrawGuiIcon(this.x + 2, NyPos + 2, "thall", 1);
 				}
 			}
 		} else if (strName.equals(Structure.BIGHHALL))
 		{
 			if (rot == 1)
 			{
-				DrawGuiIcon(this.xPosition + 2, NyPos + 2, "bighall_normal", 2);
+				DrawGuiIcon(this.x + 2, NyPos + 2, "bighall_normal", 2);
 			} else if (rot == 0)
 			{
-				DrawGuiIcon(this.xPosition + 2, NyPos + 2, "bighall_normal", 3);
+				DrawGuiIcon(this.x + 2, NyPos + 2, "bighall_normal", 3);
 			}
 		} else if (strName.equals(Structure.GREENHOUSE))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "greenhouse", 0);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "greenhouse", 0);
 		} else if (strName.equals(Structure.PIRS))
 		{
-			DrawGuiIcon(this.xPosition + 2, NyPos + 2, "pirs", 0);
+			DrawGuiIcon(this.x + 2, NyPos + 2, "pirs", 0);
 		}
 		
 	}
@@ -525,14 +525,14 @@ public class GuiButtonModificator extends GuiButton implements IDropboxCallback,
 		}
 		boolean covered = y > ZeroPos + 157;
 		
-		boolean onRstSign = x >= this.xPosition + 2 && y >= NyPos + 20 && x < this.xPosition + 2 + 20 && y < NyPos + 20 + 17 && !covered;
+		boolean onRstSign = x >= this.x + 2 && y >= NyPos + 20 && x < this.x + 2 + 20 && y < NyPos + 20 + 17 && !covered;
 		if (onRstSign)
 		{
 			this.ButStr = OrgStr.copy();
 			initButtons(ButStr);
 		}
-		boolean onDelSign = x >= this.xPosition + 113 && y >= NyPos + 23 && x < this.xPosition + 113 + 13 && y < NyPos + 23 + 13 && !disableDel && !covered;
-		boolean onPlusSign = x >= this.xPosition + 110 && y >= NyPos + 3 && x < this.xPosition + 110 + 16 && y < NyPos + 3 + 16 && !covered;
+		boolean onDelSign = x >= this.x + 113 && y >= NyPos + 23 && x < this.x + 113 + 13 && y < NyPos + 23 + 13 && !disableDel && !covered;
+		boolean onPlusSign = x >= this.x + 110 && y >= NyPos + 3 && x < this.x + 110 + 16 && y < NyPos + 3 + 16 && !covered;
 		
 		this.isDelSign = onDelSign;
 		return this.enabled && this.visible && (onPlusSign || onDelSign);

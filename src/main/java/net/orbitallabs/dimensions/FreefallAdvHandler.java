@@ -94,7 +94,7 @@ public class FreefallAdvHandler extends FreefallHandler {
 				{
 					BlockPos offsetPos = new BlockPos(xx, playerFeetOnY, zz);
 					AxisAlignedBB collisionBox = b.getCollisionBoundingBox(player.world.getBlockState(offsetPos), player.world, offsetPos);
-					if (collisionBox != null && collisionBox.intersectsWith(player.getEntityBoundingBox()))
+					if (collisionBox != null && collisionBox.intersects(player.getEntityBoundingBox()))
 					{
 						player.posY -= player.getEntityBoundingBox().minY - blockYmax;
 						player.setEntityBoundingBox(player.getEntityBoundingBox().offset(0, blockYmax - player.getEntityBoundingBox().minY, 0));
@@ -179,7 +179,7 @@ public class FreefallAdvHandler extends FreefallHandler {
 			{
 				xreach = -0.2D;
 			}
-			AxisAlignedBB playerReach = p.getEntityBoundingBox().addCoord(xreach, 0, zreach);
+			AxisAlignedBB playerReach = p.getEntityBoundingBox().offset(xreach, 0, zreach);
 			
 			boolean checkBlockWithinReach;
 			if (worldProvider instanceof WorldProviderSpaceStation)

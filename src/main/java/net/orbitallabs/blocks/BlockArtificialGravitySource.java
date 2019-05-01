@@ -36,14 +36,14 @@ public class BlockArtificialGravitySource extends BlockContainerMod {
 		player.openGui(OrbitalTools.instance, GuiHandler.GRAVITYSOURCEGUI, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
-	
-	@Override
+	 
+	@Override 
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state)
 	{
 		if (!world.isRemote)
 		{
 			
-			if (world.provider instanceof WorldProviderOrbitModif)
+			if (world.provider instanceof WorldProviderOrbitModif) 
 			{
 				DockingPortSaveData savef = DockingPortSaveData.forWorld(world);
 				savef.GraviySources.add(pos);

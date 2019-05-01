@@ -49,7 +49,7 @@ import net.orbitallabs.network.packets.SendUUIDPacket;
 import net.orbitallabs.utils.ChatUtils;
 
 public class TileEntityDockingPort extends TileEntityAdvanced implements IInventorySettable, IPacketReceiver, IScaleableFuelLevel, ISidedInventory, IItemHandler {
-	private final int tankCapacity = 5000;
+	private final int tankCapacity = 5000; 
 	@NetworkedField(targetSide = Side.CLIENT)
 	public FluidTank fuelTank = new FluidTank(this.tankCapacity);
 	

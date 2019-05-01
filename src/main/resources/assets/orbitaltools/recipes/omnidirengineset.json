@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "1 1",
+        " 2 ",
+        "1 1"
+    ],
+    "key": {
+        "1": {
+            "item": "orbitaltools:smallengine"
+        },
+        "2": {
+            "item": "galacticraftcore:basic_item",
+            "data": 13
+
+        }
+    },
+    "result": {
+        "item": "orbitaltools:omnidirengineset",
+        "count": 1
+    }
+}

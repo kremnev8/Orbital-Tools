@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "314",
+        "121",
+        "413"
+    ],
+    "key": {
+        "1": {
+            "item": "minecraft:paper"
+        },
+        "2": {
+            "item": "orbitaltools:filledidea"
+        },
+        "3": {
+            "item": "minecraft:dye",
+            "data": 0
+
+        },
+        "4": {
+            "item": "minecraft:dye",
+            "data": 14
+
+        }
+    },
+    "result": {
+        "item": "orbitaltools:schematicjetpack",
+        "count": 1
+    }
+}

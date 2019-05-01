@@ -44,9 +44,9 @@ public class AnimationTellServerPacket implements IMessage {
 		public IMessage onMessage(AnimationTellServerPacket pkt, MessageContext ctx)
 		{
 			
-			if (ctx.getServerHandler().playerEntity != null)
+			if (ctx.getServerHandler().player != null)
 			{
-				EntityPlayer player = ctx.getServerHandler().playerEntity;
+				EntityPlayer player = ctx.getServerHandler().player;
 				ItemStack stack = player.inventory.armorInventory.get(2);
 				//IAnimationCapability cap = stack.getCapability(AnimationCapabilityProvider.AnimCap, EnumFacing.UP);
 				//if (cap == null) return null;

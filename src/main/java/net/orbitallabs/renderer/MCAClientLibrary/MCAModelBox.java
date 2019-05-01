@@ -4,8 +4,7 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TexturedQuad;
-import net.minecraft.client.renderer.VertexBuffer;
-
+import net.minecraft.client.renderer.BufferBuilder;
 /**
  * Coords values are set following a right-handed system with no
  * transformations(ie. a default one, with +Z which goes out of the screen).
@@ -87,7 +86,7 @@ public class MCAModelBox extends ModelBox {
 	}
 	
 	@Override
-	public void render(VertexBuffer renderer, float scale)
+	public void render(BufferBuilder renderer, float scale)
 	{
 		for (int i = 0; i < this.MCAquadList.length; ++i)
 		{

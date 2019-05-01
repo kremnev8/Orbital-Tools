@@ -21,7 +21,7 @@ public class SchematicsUtil {
 	
 	public static List<INasaWorkbenchRecipe> getJetpackRecipes()
 	{
-		return jetpackRecipes;
+		return jetpackRecipes; 
 	}
 	
 	public static ItemStack findMatchingJetpackRecipe(InventorySchematicJetpack craftMatrix)

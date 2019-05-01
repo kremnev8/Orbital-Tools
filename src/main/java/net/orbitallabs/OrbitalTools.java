@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.orbitallabs.utils.OrbitalModInfo;
 
-@Mod(modid = OrbitalModInfo.MOD_ID, name = OrbitalModInfo.MOD_NAME, version = OrbitalModInfo.Version, acceptedMinecraftVersions = "[1.11]", dependencies = "required-after:"
+@Mod(modid = OrbitalModInfo.MOD_ID, name = OrbitalModInfo.MOD_NAME, version = OrbitalModInfo.Version, acceptedMinecraftVersions = "[1.12]", dependencies = "required-after:"
 		+ Constants.MOD_ID_CORE + "@[4.0,);" + "required-after:" + Constants.MOD_ID_PLANETS + "@[4.0,);")
 public class OrbitalTools {
 	
@@ -22,7 +22,7 @@ public class OrbitalTools {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
-	{
+	{ 
 		proxy.preInit(event);
 		//		try
 		//		{

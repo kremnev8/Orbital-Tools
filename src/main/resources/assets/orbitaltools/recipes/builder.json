@@ -1,0 +1,35 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "121",
+        "343",
+        "151"
+    ],
+    "key": {
+        "1": {
+            "item": "galacticraftcore:basic_item",
+            "data": 11
+
+        },
+        "2": {
+            "item": "galacticraftcore:basic_item",
+            "data": 0
+
+        },
+        "3": {
+            "item": "minecraft:stone_button"
+        },
+        "4": {
+            "item": "galacticraftcore:basic_item",
+            "data": 14
+
+        },
+        "5": {
+            "item": "galacticraftcore:battery"
+        }
+    },
+    "result": {
+        "item": "orbitaltools:builder",
+        "count": 1
+    }
+}

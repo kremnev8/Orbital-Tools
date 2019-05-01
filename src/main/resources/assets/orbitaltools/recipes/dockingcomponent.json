@@ -1,0 +1,34 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "121",
+        "342",
+        "131"
+    ],
+    "key": {
+        "1": {
+            "item": "galacticraftcore:basic_item",
+            "data": 7
+
+        },
+        "2": {
+            "item": "galacticraftcore:aluminum_wire",
+            "data": 1
+
+        },
+        "3": {
+            "item": "galacticraftcore:basic_item",
+            "data": 9
+
+        },
+        "4": {
+            "item": "galacticraftcore:basic_item",
+            "data": 14
+
+        }
+    },
+    "result": {
+        "item": "orbitaltools:dockingcomponent",
+        "count": 1
+    }
+}

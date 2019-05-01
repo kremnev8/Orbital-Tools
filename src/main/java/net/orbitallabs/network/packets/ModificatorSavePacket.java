@@ -212,7 +212,7 @@ public class ModificatorSavePacket implements IMessage {
 			
 			if (pkt.tilePos != null)
 			{
-				World world = ctx.getServerHandler().playerEntity.world;
+				World world = ctx.getServerHandler().player.world;
 				if (world.getTileEntity(pkt.tilePos) != null && world.getTileEntity(pkt.tilePos) instanceof TileEntityInfo)
 				{
 					TileEntityInfo info = (TileEntityInfo) world.getTileEntity(pkt.tilePos);

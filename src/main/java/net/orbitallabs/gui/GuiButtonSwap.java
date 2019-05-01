@@ -71,14 +71,14 @@ public class GuiButtonSwap extends GuiButton {
 	/**
 	 * Draws this button to the screen.
 	 */
-	public void drawButton(Minecraft p_146112_1_, int p_146112_2_, int p_146112_3_)
+	public void drawButton(Minecraft mc, int x, int y, float ticks)
 	{
 		if (this.visible)
 		{
-			p_146112_1_.getTextureManager().bindTexture(buttonTextures);
+			mc.getTextureManager().bindTexture(buttonTextures);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.field_146123_n = p_146112_2_ >= this.xPosition && p_146112_3_ >= this.yPosition && p_146112_2_ < this.xPosition + this.width
-					&& p_146112_3_ < this.yPosition + this.height;
+			this.field_146123_n = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width
+					&& y < this.yPosition + this.height;
 			
 			GL11.glEnable(GL11.GL_BLEND);
 			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
@@ -95,7 +95,7 @@ public class GuiButtonSwap extends GuiButton {
 				this.drawTexturedModalRect(this.xPosition, this.yPosition, 179, 102, this.width, this.height);//hover
 			} else this.drawTexturedModalRect(this.xPosition, this.yPosition, 179, 87, this.width, this.height);//disable
 			this.drawTexturedModalRect(this.xPosition, this.yPosition, 179, 117, this.width, this.height);
-			this.mouseDragged(p_146112_1_, p_146112_2_, p_146112_3_);
+			this.mouseDragged(mc, x, y);
 			
 		}
 	}

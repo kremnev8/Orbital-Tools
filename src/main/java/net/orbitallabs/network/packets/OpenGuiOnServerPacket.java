@@ -48,9 +48,9 @@ public class OpenGuiOnServerPacket implements IMessage {
 		@Override
 		public IMessage onMessage(OpenGuiOnServerPacket pkt, MessageContext ctx)
 		{
-			if (ctx.getServerHandler().playerEntity != null)
+			if (ctx.getServerHandler().player != null)
 			{
-				EntityPlayer player = ctx.getServerHandler().playerEntity;
+				EntityPlayer player = ctx.getServerHandler().player;
 				player.openGui(OrbitalTools.instance, pkt.guiId, player.world, pkt.x, pkt.y, pkt.z);
 				
 			}

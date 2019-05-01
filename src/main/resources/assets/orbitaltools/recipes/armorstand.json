@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " 1 ",
+        " 1 ",
+        "222"
+    ],
+    "key": {
+        "1": {
+            "item": "galacticraftcore:steel_pole"
+        },
+        "2": {
+            "item": "galacticraftcore:landing_pad",
+            "data": 0
+
+        }
+    },
+    "result": {
+        "item": "orbitaltools:armorstand",
+        "count": 1
+    }
+}

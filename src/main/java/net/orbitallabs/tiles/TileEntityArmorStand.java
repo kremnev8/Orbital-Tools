@@ -40,14 +40,14 @@ import net.orbitallabs.items.SpaceJetpackStorage.ISpaceJetpackState;
 import net.orbitallabs.network.PacketHandler;
 import net.orbitallabs.network.packets.ArmorStandItemSyncPacket;
 
-public class TileEntityArmorStand extends TileBaseElectricBlockWithInventory implements IMultiBlock, IFuelable {
-	@NetworkedField(targetSide = Side.CLIENT)
-	
+public class TileEntityArmorStand extends TileBaseElectricBlockWithInventory implements IMultiBlock, IFuelable { 
+	@NetworkedField(targetSide = Side.CLIENT)  
+	 
 	public NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
-	
+	 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getRenderBoundingBox()
+	public AxisAlignedBB getRenderBoundingBox() 
 	{
 		return new AxisAlignedBB(pos.getX() - 1, pos.getY(), pos.getZ() - 1, pos.getX() + 2, pos.getY() + 2, pos.getZ() + 2);
 		

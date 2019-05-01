@@ -8,7 +8,7 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.orbitallabs.utils.OrbitalModInfo;
 
@@ -20,10 +20,26 @@ public class JetpackCraftCategory extends BlankRecipeCategory {
 	@Nonnull
 	private final String localizedName;
 	
+	public String translate(String key)
+    {
+        String result = I18n.format(key);
+        int comment = result.indexOf('#');
+        String ret = (comment > 0) ? result.substring(0, comment).trim() : result;
+        for (int i = 0; i < key.length(); ++i)
+        {
+            Character c = key.charAt(i);
+            if (Character.isUpperCase(c))
+            {
+                System.err.println(ret);
+            }
+        }
+        return ret;
+    }
+	
 	public JetpackCraftCategory(IGuiHelper guiHelper)
 	{
 		this.background = guiHelper.createDrawable(jetpackGuiTexture, 7, 42, 160, 90);
-		this.localizedName = GCCoreUtil.translate("tile.rocket_workbench.name");
+		this.localizedName = translate("tile.rocket_workbench.name");
 		
 	}
 	

@@ -4,39 +4,35 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "${minecraft_version}-${advSS_version}"
-group= "java.net" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "AdvancedSSmod"
+version = "${minecraft_version}-${ot_version}"
+group = "java.net" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "orbitaltools"
 
-sourceCompatibility = targetCompatibility = "1.7" // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.7"
-}
-
-tasks.withType(JavaCompile) {
-  options.encoding = "UTF-8"
+    sourceCompatibility = targetCompatibility = '1.8'
 }
 
 minecraft {
     version = "${minecraft_version}-${forge_version}"
     runDir = "run"
-
-    replace "@VERSION@", project.version
-    replaceIn "GliderModInfo.java"
+	
+	replace "@VERSION@", project.version
+    replaceIn "OrbitalModInfo.java"
     
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20161220"
+    mappings = "snapshot_20171003"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -44,58 +40,42 @@ jar {
   manifest {
       attributes 'FMLCorePlugin': 'net.orbitallabs.hooks.OrbitalHookLoader'
       attributes 'FMLCorePluginContainsFMLMod': 'true'
-	  attributes 'FMLAT': 'orbat.cfg'
+	  attributes 'FMLAT': 'orbitaltools_at.cfg'
   }
   
 }
 
 repositories {
-  maven {
-    // location of the maven that hosts JEI files
-    name = "Progwml6 maven"
-    url = "http://dvs1.progwml6.com/files/maven"
-  }
-  maven {
-    // location of a maven mirror for JEI files, as a fallback
-    name = "ModMaven"
-    url = "modmaven.k-4u.nl"
-  }
-  maven {
-		name = "Covers Maven"
+
+    maven {
+		name = "CoFH Maven"
 		url = "http://maven.covers1624.net"
-  }
-  maven {
-        url = "http://maven.cil.li/" 
-  }
-  maven {
+	}
+	maven {
+		name = "ChickenBones Maven"
 		url = "http://chickenbones.net/maven/"
-  }
-  maven {
-    // location of the maven that hosts JEI files
-    name = "Progwml6 maven"
-    url = "https://dvs1.progwml6.com/files/maven/"
-  }
-  maven {
-    // location of a maven mirror for JEI files, as a fallback
-    name = "ModMaven"
-    url = "https://modmaven.k-4u.nl"
-  }
+	}
+	maven {
+		name = "JEI Maven"
+		url = "http://dvs1.progwml6.com/files/maven"
+    }
 }
 
-
 dependencies {
-
-	deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
-	compile "cofh:CoFHCore:${minecraft_version}-${cofhcore_version}:deobf"
-	compile "cofh:ThermalDynamics:${minecraft_version}-${td_version}:deobf"
+    deobfProvided  "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
+	
+	
+	deobfCompile "cofh:RedstoneFlux:${mc_version}-${rf_version}:deobf"
+	deobfCompile "cofh:CoFHCore:${minecraft_version}-${cofhcore_version}:deobf"
+	deobfCompile "cofh:CoFHWorld:${minecraft_version}-${chw_version}:deobf"
+    deobfCompile "cofh:ThermalFoundation:${minecraft_version}-${tf_version}:deobf"
+	deobfCompile  "cofh:ThermalDynamics:${minecraft_version}-${td_version}:deobf"
+	
+	deobfCompile "codechicken:CodeChickenLib:${minecraft_version}-${ccl_version}:deobf"
 
 	// at runtime, use the full JEI jar
 	runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
-	runtime "cofh:ThermalFoundation:${minecraft_version}-${tf_version}:deobf"
 	runtime "cofh:ThermalExpansion:${minecraft_version}-${te_version}:deobf"
-	
-	compile "li.cil.oc:OpenComputers:MC1.11.2-1.7.+"
-
 }
 
 processResources {
@@ -115,4 +95,5 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+	
 }

@@ -34,7 +34,7 @@ public class GuiHandler implements IGuiHandler {
 			if (te != null)
 			{
 				return new ContainerDockingPort(player.inventory, (TileEntityDockingPort) te);
-			}
+			} 
 		case ARMORSTANDGUI:
 			if (te != null)
 			{

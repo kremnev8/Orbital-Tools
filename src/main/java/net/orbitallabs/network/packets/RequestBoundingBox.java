@@ -47,9 +47,9 @@ public class RequestBoundingBox implements IMessage {
 		@Override
 		public IMessage onMessage(RequestBoundingBox pkt, MessageContext ctx)
 		{
-			if (ctx.getServerHandler().playerEntity != null)
+			if (ctx.getServerHandler().player != null)
 			{
-				EntityPlayer player = ctx.getServerHandler().playerEntity;
+				EntityPlayer player = ctx.getServerHandler().player;
 				World world = player.world;
 				TileEntity tile = world.getTileEntity(new BlockPos(pkt.x, pkt.y, pkt.z));
 				if (tile != null && tile instanceof TileEntityInfo)

@@ -39,7 +39,7 @@ public class ClientProxy extends CommonProxy {
 	public void init(FMLInitializationEvent event)
 	{
 		super.init(event);
-		model = new ModelJetpack();
+		model = new ModelJetpack(); 
 		
 		//	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRemoveInfo.class, new TileEntityRemoveInfoRenderer());
 		//	MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockContainerMod.BlockRemoveInfo), new ItemRenderRemoveInfo());

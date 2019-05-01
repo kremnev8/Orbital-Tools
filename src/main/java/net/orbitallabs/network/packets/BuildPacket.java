@@ -109,7 +109,7 @@ public class BuildPacket implements IMessage {
 			if (pkt.Fname != "")
 			{
 				// GLoger.logInfo("Build Packet Sucsessfuly recived!");
-				EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+				EntityPlayerMP player = ctx.getServerHandler().player;
 				if (player == null) return null;
 				World world = player.world;
 				boolean items = BuildHandler.CheckItems(world, pkt.Fname, pkt.list, player, pkt.rot);

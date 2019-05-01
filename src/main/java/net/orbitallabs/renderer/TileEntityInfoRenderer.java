@@ -31,7 +31,7 @@ public class TileEntityInfoRenderer extends TileEntitySpecialRenderer<TileEntity
 	{
 	}
 	
-	public void renderTileEntityAt(TileEntityInfo te, double x, double y, double z, float partialTicks, int destroyStage)
+	public void render(TileEntityInfo te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
 	{
 		if (Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND) != null
 				&& Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem() == ItemMod.DebugTool)
@@ -59,7 +59,7 @@ public class TileEntityInfoRenderer extends TileEntitySpecialRenderer<TileEntity
 						{
 							AxisAlignedBB box2 = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX + 1, axisalignedbb.maxY + 1,
 									axisalignedbb.maxZ + 1);
-							RenderGlobal.drawSelectionBoundingBox(box2.expandXyz(0.005D).offset(-renderPosX, -renderPosY, -renderPosZ), 1.0F, 1.0F, 1.0F, 1.0F);
+							RenderGlobal.drawSelectionBoundingBox(box2.expand(0.005D, 0.005D, 0.005D).offset(-renderPosX, -renderPosY, -renderPosZ), 1.0F, 1.0F, 1.0F, 1.0F);
 						}
 					}
 				}

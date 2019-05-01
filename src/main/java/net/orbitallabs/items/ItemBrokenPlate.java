@@ -36,13 +36,13 @@ public class ItemBrokenPlate extends ItemMod {
 	}
 	
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems)
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems)
 	{
 		if (tab == CreativeTabs.MATERIALS)
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				subItems.add(new ItemStack(item, 1, i));
+				subItems.add(new ItemStack(this, 1, i));
 			}
 		}
 	}

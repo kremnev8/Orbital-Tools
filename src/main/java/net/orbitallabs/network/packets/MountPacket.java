@@ -64,9 +64,9 @@ public class MountPacket implements IMessage {
 			
 			if (pkt.entUUID != null)
 			{
-				if (ctx.getServerHandler().playerEntity != null)
+				if (ctx.getServerHandler().player != null)
 				{
-					EntityPlayer player = ctx.getServerHandler().playerEntity;
+					EntityPlayer player = ctx.getServerHandler().player;
 					
 					List<Entity> Entlist = player.world.loadedEntityList;
 					

@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+	"conditions": [
+	    {
+		    "type": "forge:not",
+		    "value": {
+		        "type": "forge:mod_loaded",
+		        "modid": "ic2"
+	        }
+	    }
+	],
+    "pattern": [
+        "11 ",
+        "22 ",
+        "11 "
+    ],
+    "key": {
+        "1": {
+            "item": "galacticraftcore:basic_item",
+            "data": 8
+
+        },
+        "2": {
+            "item": "galacticraftcore:steel_pole"
+        }
+    },
+    "result": {
+        "item": "orbitaltools:ironscaffold",
+        "count": 16
+    }
+}

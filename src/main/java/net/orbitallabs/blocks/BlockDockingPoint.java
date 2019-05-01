@@ -43,7 +43,7 @@ public class BlockDockingPoint extends BlockContainerMod {
 			player.openGui(OrbitalTools.instance, GuiHandler.DOCKINGPORTGUI, world, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
-	}
+	} 
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state)
@@ -55,7 +55,7 @@ public class BlockDockingPoint extends BlockContainerMod {
 			{
 				DockingPortSaveData savef = DockingPortSaveData.forWorld(world);
 				savef.DockingPorts.add(pos);
-				savef.markDirty();
+				savef.markDirty(); 
 			}
 		}
 	}
@@ -98,40 +98,40 @@ public class BlockDockingPoint extends BlockContainerMod {
 			{
 				IInventory inventory = (IInventory) tileEntity;
 				
-				for (int var6 = 0; var6 < inventory.getSizeInventory(); ++var6)
+				for (int i = 0; i < inventory.getSizeInventory(); ++i)
 				{
-					ItemStack var7 = inventory.getStackInSlot(var6);
+					ItemStack slot = inventory.getStackInSlot(i);
 					
-					if (var7 != null)
+					if (slot != null)
 					{
 						Random random = new Random();
-						float var8 = random.nextFloat() * 0.8F + 0.1F;
-						float var9 = random.nextFloat() * 0.8F + 0.1F;
-						float var10 = random.nextFloat() * 0.8F + 0.1F;
+						float f1 = random.nextFloat() * 0.8F + 0.1F;
+						float f2 = random.nextFloat() * 0.8F + 0.1F;
+						float f3 = random.nextFloat() * 0.8F + 0.1F;
 						
-						while (var7.getCount() > 0)
+						while (slot.getCount() > 0)
 						{
-							int var11 = random.nextInt(21) + 10;
+							int f4 = random.nextInt(21) + 10;
 							
-							if (var11 > var7.getCount())
+							if (f4 > slot.getCount())
 							{
-								var11 = var7.getCount();
+								f4 = slot.getCount();
 							}
 							
-							var7.shrink(var11);
-							EntityItem var12 = new EntityItem(world, pos.getX() + var8, pos.getY() + var9, pos.getZ() + var10,
-									new ItemStack(var7.getItem(), var11, var7.getItemDamage()));
+							slot.shrink(f4);
+							EntityItem ent = new EntityItem(world, pos.getX() + f1, pos.getY() + f2, pos.getZ() + f3,
+									new ItemStack(slot.getItem(), f4, slot.getItemDamage()));
 							
-							if (var7.hasTagCompound())
+							if (slot.hasTagCompound())
 							{
-								var12.getEntityItem().setTagCompound((NBTTagCompound) var7.getTagCompound().copy());
+								ent.getItem().setTagCompound((NBTTagCompound) slot.getTagCompound().copy());
 							}
 							
 							float var13 = 0.05F;
-							var12.motionX = (float) random.nextGaussian() * var13;
-							var12.motionY = (float) random.nextGaussian() * var13 + 0.2F;
-							var12.motionZ = (float) random.nextGaussian() * var13;
-							world.spawnEntity(var12);
+							ent.motionX = (float) random.nextGaussian() * var13;
+							ent.motionY = (float) random.nextGaussian() * var13 + 0.2F;
+							ent.motionZ = (float) random.nextGaussian() * var13;
+							world.spawnEntity(ent);
 						}
 					}
 				}

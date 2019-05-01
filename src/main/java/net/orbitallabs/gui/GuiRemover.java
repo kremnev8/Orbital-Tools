@@ -332,7 +332,7 @@ public class GuiRemover extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int MouseX, int MouseY)
 	{
 		
-		fontRendererObj.drawString(I18n.format("remover.name"), (int) (xSize / 4.5D) - (fontRendererObj.getStringWidth(I18n.format("remover.name")) / 2) + 15, 25, 4210752, false);
+		fontRenderer.drawString(I18n.format("remover.name"), (int) (xSize / 4.5D) - (fontRenderer.getStringWidth(I18n.format("remover.name")) / 2) + 15, 25, 4210752, false);
 		
 		if (hasChilds)
 		{
@@ -343,7 +343,7 @@ public class GuiRemover extends GuiContainer {
 			String lastLine = "";
 			for (int i = 0; i < words.length; i++)
 			{
-				if (fontRendererObj.getStringWidth(lastLine + " " + words[i]) > 125)
+				if (fontRenderer.getStringWidth(lastLine + " " + words[i]) > 125)
 				{
 					finalW.add(lastLine);
 					lastLine = words[i];
@@ -355,7 +355,7 @@ public class GuiRemover extends GuiContainer {
 			finalW.add(lastLine);
 			for (int i = 0; i < finalW.size(); i++)
 			{
-				fontRendererObj.drawString(finalW.get(i), (int) (125 / 4.5D) - fontRendererObj.getStringWidth(finalW.get(i)) / 2 + 32, 50 + (i * 9), 14737632, true);
+				fontRenderer.drawString(finalW.get(i), (int) (125 / 4.5D) - fontRenderer.getStringWidth(finalW.get(i)) / 2 + 32, 50 + (i * 9), 14737632, true);
 			}
 			
 		}

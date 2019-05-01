@@ -1,9 +1,14 @@
 package net.orbitallabs;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
-import ic2.api.item.IC2Items;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
@@ -25,6 +30,8 @@ import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -39,6 +46,8 @@ import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -105,57 +114,118 @@ public class CommonProxy {
 		});
 		ItemMod.init();
 		EntityMod.init(Side.SERVER);
+
+	}
+	
+	private static String path = "D:\\ProgramsData\\forge\\OrbitalTools-1.12.2\\src\\main\\resources\\assets\\orbitaltools\\recipes\\";
+	
+	private void createRecipeFile(ItemStack result, Object[] obj)
+	{
+		Path file = Paths.get(path+result.getItem().getRegistryName().getResourcePath()+".json");
+		List<String> lines = new ArrayList<>();
+		lines.add("{");
+		lines.add("    \"type\": \"minecraft:crafting_shaped\",");
+		lines.add("    \"pattern\": [");
+		lines.add("        \""+obj[0]+"\",");
+		lines.add("        \""+obj[1]+"\",");
+		lines.add("        \""+obj[2]+"\"");
+		lines.add("    ],");
+		lines.add("    \"key\": {");
+		int len = (obj.length-3)/2;
+		for (int i = 0; i < len; i++)
+		{
+			lines.add("        \""+obj[i*2+3]+"\": {");
+			Object item = obj[i*2+4];
+			if (item instanceof ItemStack)
+			{
+				ItemStack stack = (ItemStack)item;
+				if (stack.getHasSubtypes())
+				{
+					lines.add("            \"item\": \"" + stack.getItem().getRegistryName().toString()+ "\",");
+					lines.add("            \"data\": "+stack.getMetadata()+"\n");
+				}else
+				{
+					lines.add("            \"item\": \"" + stack.getItem().getRegistryName().toString()+ "\"");
+				}
+			}else if (item instanceof Block)
+			{
+				Block block = (Block)item;
+				lines.add("            \"item\": \"" + block.getRegistryName().toString()+ "\"");
+			}else if (item instanceof Item)
+			{
+				Item item1 = (Item)item;
+				lines.add("            \"item\": \"" + item1.getRegistryName().toString()+ "\"");
+			}
+			lines.add("        }"+(i+1 == len ? "" : ",")+"");
+		}
+		lines.add("    },");
+		lines.add("    \"result\": {");
+		lines.add("        \"item\": \"" +result.getItem().getRegistryName().toString()+"\",");
+		if (result.getHasSubtypes())
+		{
+			lines.add("        \"data\": "+result.getMetadata()+",");
+		}
+		lines.add("        \"count\": "+result.getCount()+"");
+		lines.add("    }");
+		lines.add("}");
+		
+		try {
+			Files.write(file, lines, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void init(FMLInitializationEvent event)
 	{
 		NetworkRegistry.INSTANCE.registerGuiHandler(OrbitalTools.instance, new GuiHandler());
 		
-		SchematicRegistry.registerSchematicRecipe(new SchematicJetpack());
-		GameRegistry.addRecipe(new ItemStack(ItemMod.smallEngine, 1), new Object[] { "012", "343", "353", '1', Items.FLINT_AND_STEEL, '2', Blocks.STONE_BUTTON, '3',
+		SchematicRegistry.registerSchematicRecipe(new SchematicJetpack()); 
+		
+		/*createRecipeFile(new ItemStack(ItemMod.smallEngine, 1), new Object[] { "012", "343", "353", '1', Items.FLINT_AND_STEEL, '2', Blocks.STONE_BUTTON, '3',
 				new ItemStack(GCItems.basicItem, 1, 9), '4', GCItems.canister, '5', GCItems.oxygenVent });
 		
-		GameRegistry.addRecipe(new ItemStack(ItemMod.OD_engines_set, 1),
+		createRecipeFile(new ItemStack(ItemMod.OD_engines_set, 1),
 				new Object[] { "101", "020", "101", '1', ItemMod.smallEngine, '2', new ItemStack(GCItems.basicItem, 1, 13) });
 		
-		GameRegistry.addRecipe(new ItemStack(ItemMod.Builder, 1), new Object[] { "121", "343", "151", '1', new ItemStack(GCItems.basicItem, 1, 11), '2',
+		createRecipeFile(new ItemStack(ItemMod.Builder, 1), new Object[] { "121", "343", "151", '1', new ItemStack(GCItems.basicItem, 1, 11), '2',
 				new ItemStack(GCItems.basicItem, 1, 0), '3', Blocks.STONE_BUTTON, '4', new ItemStack(GCItems.basicItem, 1, 14), '5', GCItems.battery });
 		
-		GameRegistry.addRecipe(new ItemStack(BlockContainerMod.BlockArmorStand, 1),
+		createRecipeFile(new ItemStack(BlockContainerMod.BlockArmorStand, 1),
 				new Object[] { "010", "010", "222", '1', GCItems.flagPole, '2', new ItemStack(GCBlocks.landingPad, 1, 0) });
 		
-		GameRegistry.addRecipe(new ItemStack(ItemMod.dockingPortComp, 1), new Object[] { "121", "342", "131", '1', new ItemStack(GCItems.basicItem, 1, 7), '2',
+		createRecipeFile(new ItemStack(ItemMod.dockingPortComp, 1), new Object[] { "121", "342", "131", '1', new ItemStack(GCItems.basicItem, 1, 7), '2',
 				new ItemStack(GCBlocks.aluminumWire, 1, 1), '3', new ItemStack(GCItems.basicItem, 1, 9), '4', new ItemStack(GCItems.basicItem, 1, 14) });
 		
-		GameRegistry.addRecipe(new ItemStack(ItemMod.emptyIdea, 1), new Object[] { "010", "101", "020", '1', Blocks.GLASS, '2', Items.IRON_INGOT });
+		createRecipeFile(new ItemStack(ItemMod.emptyIdea, 1), new Object[] { "010", "101", "020", '1', Blocks.GLASS, '2', Items.IRON_INGOT });
 		
-		GameRegistry.addRecipe(new ItemStack(ItemMod.filledIdea, 1), new Object[] { "415", "232", "617", '1', Blocks.GOLD_BLOCK, '2', Blocks.IRON_BLOCK, '3', ItemMod.emptyIdea,
+		createRecipeFile(new ItemStack(ItemMod.filledIdea, 1), new Object[] { "415", "232", "617", '1', Blocks.GOLD_BLOCK, '2', Blocks.IRON_BLOCK, '3', ItemMod.emptyIdea,
 				'4', new ItemStack(GCItems.basicItem, 1, 14), '5', new ItemStack(GCItems.basicItem, 1, 9), '6', ItemMod.smallEngine, '7', ItemMod.OD_engines_set });
 		
-		GameRegistry.addRecipe(new ItemStack(ItemMod.schematicjetpack, 1),
+		createRecipeFile(new ItemStack(ItemMod.schematicjetpack, 1),
 				new Object[] { "314", "121", "413", '1', Items.PAPER, '2', ItemMod.filledIdea, '3', new ItemStack(Items.DYE, 1, 0), '4', new ItemStack(Items.DYE, 1, 14) });
 		
 		if (Loader.isModLoaded("ic2"))
 		{
-			GameRegistry.addRecipe(new ItemStack(ItemMod.rotatingRing, 1), new Object[] { "121", "232", "121", '1', new ItemStack(GCItems.basicItem, 1, 8), '2',
+			createRecipeFile(new ItemStack(ItemMod.rotatingRing, 1), new Object[] { "121", "232", "121", '1', new ItemStack(GCItems.basicItem, 1, 8), '2',
 					new ItemStack(GCItems.basicItem, 1, 9), '3', IC2Items.getItem("crafting", "electric_motor") });
 		} else
 		{
-			GameRegistry.addRecipe(new ItemStack(ItemMod.rotatingRing, 1),
+			createRecipeFile(new ItemStack(ItemMod.rotatingRing, 1),
 					new Object[] { "121", "232", "121", '1', new ItemStack(GCItems.basicItem, 1, 8), '2', new ItemStack(GCItems.basicItem, 1, 9), '3', ItemMod.motor });
 			
-			GameRegistry.addRecipe(new ItemStack(ItemMod.coil, 1), new Object[] { "010", "121", "010", '1', new ItemStack(GCItems.basicItem, 1, 3), '2', GCItems.flagPole });
+			createRecipeFile(new ItemStack(ItemMod.coil, 1), new Object[] { "010", "121", "010", '1', new ItemStack(GCItems.basicItem, 1, 3), '2', GCItems.flagPole });
 			
-			GameRegistry.addRecipe(new ItemStack(ItemMod.motor, 1),
+			createRecipeFile(new ItemStack(ItemMod.motor, 1),
 					new Object[] { "010", "323", "010", '1', new ItemStack(GCItems.basicItem, 1, 7), '2', GCItems.flagPole, '3', ItemMod.coil });
 			
-			GameRegistry.addRecipe(new ItemStack(ItemMod.ironScaffold, 16, 2),
+			createRecipeFile(new ItemStack(ItemMod.ironScaffold, 16, 2),
 					new Object[] { "110", "220", "110", '1', new ItemStack(GCItems.basicItem, 1, 8), '2', GCItems.flagPole });
 		}
 		
-		GameRegistry.addRecipe(new ItemStack(BlockContainerMod.BlockArticialGsource, 1), new Object[] { "121", "343", "212", '1', new ItemStack(GCItems.basicItem, 1, 9), '2',
+		createRecipeFile(new ItemStack(BlockContainerMod.BlockArticialGsource, 1), new Object[] { "121", "343", "212", '1', new ItemStack(GCItems.basicItem, 1, 9), '2',
 				ItemMod.rotatingRing, '3', new ItemStack(GCItems.basicItem, 1, 14), '4', new ItemStack(GCBlocks.aluminumWire, 1, 1) });
-		
+		*/
 		GameRegistry.addSmelting(ItemMod.brokenTin, new ItemStack(GCItems.basicItem, 1, 4), 0);
 		GameRegistry.addSmelting(ItemMod.brokenSteel, new ItemStack(ItemMod.ingSteel, 1, ItemMod.ingSteelMeta), 0);
 		GameRegistry.addSmelting(ItemMod.brokenAluminum, new ItemStack(GCItems.basicItem, 1, 5), 0);
@@ -188,16 +258,16 @@ public class CommonProxy {
 		
 		input.put(21, new ItemStack(GCItems.flagPole));
 		input.put(22, new ItemStack(GCItems.flagPole));
-		input.put(23, new ItemStack(GCItems.flagPole));
-		input.put(24, new ItemStack(GCItems.flagPole));
-		
+		input.put(23, new ItemStack(GCItems.flagPole)); 
+		input.put(24, new ItemStack(GCItems.flagPole));  
+		 
 		SchematicsUtil.addJetpackRecipe(new NasaWorkbenchRecipe(new ItemStack(ItemMod.spaceJetpack), input));
 		
-		GameRegistry.registerTileEntity(TileEntityInfo.class, "Info");
-		GameRegistry.registerTileEntity(TileEntityRemoveInfo.class, "RemoveInfo");
-		GameRegistry.registerTileEntity(TileEntityDockingPort.class, "DockingPort");
-		GameRegistry.registerTileEntity(TileEntityGravitySource.class, "GravitySource");
-		GameRegistry.registerTileEntity(TileEntityArmorStand.class, "ArmorStand");
+		GameRegistry.registerTileEntity(TileEntityInfo.class, new ResourceLocation(OrbitalModInfo.MOD_ID, "Info"));
+		GameRegistry.registerTileEntity(TileEntityRemoveInfo.class, new ResourceLocation(OrbitalModInfo.MOD_ID, "RemoveInfo"));
+		GameRegistry.registerTileEntity(TileEntityDockingPort.class, new ResourceLocation(OrbitalModInfo.MOD_ID, "DockingPort"));
+		GameRegistry.registerTileEntity(TileEntityGravitySource.class, new ResourceLocation(OrbitalModInfo.MOD_ID, "GravitySource"));
+		GameRegistry.registerTileEntity(TileEntityArmorStand.class, new ResourceLocation(OrbitalModInfo.MOD_ID, "ArmorStand"));
 		
 		satelliteMarsSpaceStation = (Satellite) new Satellite("orbitaltools.mars").setParentBody(MarsModule.planetMars).setRelativeSize(0.2667F)
 				.setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(10F, 10F)).setRelativeOrbitTime(1 / 0.055F);
@@ -253,6 +323,8 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new ItemsToolTips());
 	}
 	
+
+	
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		final HashMap<Object, Integer> inputMap = new HashMap<Object, Integer>();
@@ -275,7 +347,7 @@ public class CommonProxy {
 				.registerSpaceStation(new SpaceStationType(Config.idDimensionMarsSpaceStation, MarsModule.planetMars.getDimensionID(), new SpaceStationRecipe(inputMap)));
 		GalacticraftRegistry.replaceSpaceStationRecipe(ConfigManagerCore.idDimensionOverworldOrbit, inputMap);
 		
-		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		/*List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
 		
 		for (int i = 0; i < recipes.size(); i++)
 		{
@@ -290,7 +362,7 @@ public class CommonProxy {
 		RecipeUtil.addRecipe(new ItemStack(GCBlocks.basicBlock, 4, 3), new Object[] { "   ", " XY", "   ", 'X', new ItemStack(ItemMod.ironScaffold, 1, 2), 'Y', "compressedTin" });
 		
 		RecipeUtil.addRecipe(new ItemStack(GCBlocks.basicBlock, 4, 4), new Object[] { "   ", " X ", " Y ", 'X', new ItemStack(ItemMod.ironScaffold, 1, 2), 'Y', "compressedTin" });
-		
+		*/
 	}
 	
 	public void spawnParticle(String particleID, Vector3 position, Vector3 motion, Object[] otherInfo)
@@ -302,7 +374,7 @@ public class CommonProxy {
 	 */
 	public EntityPlayer getPlayerEntity(MessageContext ctx)
 	{
-		return ctx.getServerHandler().playerEntity;
+		return ctx.getServerHandler().player;
 	}
 	
 }

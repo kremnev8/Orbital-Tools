@@ -70,7 +70,7 @@ public class GuiModificatorSide extends GuiModule implements IGUISliderControlle
 					{
 						name = "airlock";
 					}
-					DrawGuiIcon(this.xPosition + 2, this.NyPos + 2, name, 0);
+					DrawGuiIcon(this.x + 2, this.NyPos + 2, name, 0);
 				}
 			});
 		}
@@ -186,7 +186,7 @@ public class GuiModificatorSide extends GuiModule implements IGUISliderControlle
 	
 	public void simpleText(String text, int x, int y)
 	{// StatCollector.translateToLocal("builder.name")
-		fontRendererObj.drawString(text, x, y, 4210752, false);
+		fontRenderer.drawString(text, x, y, 4210752, false);
 	}
 	
 	@Override

@@ -84,6 +84,11 @@ public class ItemSpaceJetpack extends ItemArmorMod implements ISpaceJetpack {
 		
 	}
 	
+    public boolean getShareTag()
+    {
+        return true;
+    }
+	
 	@Override
 	public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
 	{

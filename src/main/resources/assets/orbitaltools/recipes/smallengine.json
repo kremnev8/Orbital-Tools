@@ -1,0 +1,32 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " 12",
+        "343",
+        "353"
+    ],
+    "key": {
+        "1": {
+            "item": "minecraft:flint_and_steel"
+        },
+        "2": {
+            "item": "minecraft:stone_button"
+        },
+        "3": {
+            "item": "galacticraftcore:basic_item",
+            "data": 9
+
+        },
+        "4": {
+            "item": "galacticraftcore:canister",
+			"data": 0
+        },
+        "5": {
+            "item": "galacticraftcore:air_vent"
+        }
+    },
+    "result": {
+        "item": "orbitaltools:smallengine",
+        "count": 1
+    }
+}

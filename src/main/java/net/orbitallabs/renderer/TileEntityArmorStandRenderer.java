@@ -6,7 +6,6 @@ import org.lwjgl.opengl.GL12;
 import cofh.thermaldynamics.block.BlockDuct;
 import cofh.thermaldynamics.duct.tiles.TileDuctEnergy;
 import cofh.thermaldynamics.duct.tiles.TileDuctItem;
-import cofh.thermaldynamics.duct.tiles.TileEnergyDuctSuper;
 import ic2.core.block.wiring.TileEntityCable;
 import micdoodle8.mods.galacticraft.core.GCBlocks;
 import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
@@ -70,7 +69,7 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 	private int degreeAngle;
 	public static final ResourceLocation GLINT_PNG = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 	
-	public void renderTileEntityAt(TileEntityArmorStand te, double x, double y, double z, float partialTicks, int destroyStage)
+	public void render(TileEntityArmorStand te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
 	{
 		GL11.glTranslatef(0, 0.01F, 0);
 		GL11.glDisable(GL11.GL_CULL_FACE);
@@ -396,7 +395,7 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 			
 			TileEntity ent = world.getTileEntity(
 					new BlockPos(te.getPos().getX() + (o == 0 || o == 2 ? o == 2 ? 1 : -1 : 0), te.getPos().getY(), te.getPos().getZ() + (o == 1 || o == 3 ? o == 3 ? 1 : -1 : 0)));
-			if (bl == GCBlocks.fuelLoader)
+			if (bl == GCBlocks.fuelLoader) 
 			{
 				model.render("fuel", l + 3 > 3 ? (l - 4) + 3 : l + 3);
 			}
@@ -420,7 +419,7 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 						model.render("wire", l + 3 > 3 ? (l - 4) + 3 : l + 3);
 					}
 				}*/
-			if (Loader.isModLoaded("thermaldynamics") && bl instanceof BlockDuct)
+			/*if (Loader.isModLoaded("thermaldynamics") && bl instanceof BlockDuct)
 			{
 				TileEntity te2 = world.getTileEntity(new BlockPos(te.getPos().getX() + (o == 0 || o == 2 ? o == 2 ? 1 : -1 : 0), te.getPos().getY(),
 						te.getPos().getZ() + (o == 1 || o == 3 ? o == 3 ? 1 : -1 : 0)));
@@ -431,7 +430,7 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 				{
 					model.render("fuel", l + 3 > 3 ? (l - 4) + 3 : l + 3);
 				}
-			}
+			}*/
 			/*if (Loader.isModLoaded("EnderIO") && bl instanceof BlockConduitBundle)
 			{
 				TileConduitBundle te2 = (TileConduitBundle) world.getTileEntity(te.xCoord + (o == 0 || o == 2 ? o == 2 ? 1 : -1 : 0), te.yCoord,
@@ -458,12 +457,12 @@ public class TileEntityArmorStandRenderer extends TileEntitySpecialRenderer<Tile
 			GL11.glRotatef(this.degreeAngle - 180, 0.0F, 1.0F, 0.0F);
 			
 			float f = steve.prevRotationYaw + (steve.rotationYaw - steve.prevRotationYaw) * partialTicks;
-			int i = steve.getBrightnessForRender(partialTicks);
+			int i = steve.getBrightnessForRender();
 			
 			int j = i % 65536;
 			int k = i / 65536;
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			mng.doRenderEntity(steve, 0, 0, 0, f, partialTicks, true);
+			mng.renderEntity(steve, 0, 0, 0, f, partialTicks, true);
 			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();

@@ -11,8 +11,8 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
@@ -587,7 +587,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
 				if (this.strikethroughStyle)
 				{
 					tessellator = Tessellator.getInstance();
-					VertexBuffer vertexbuffer = tessellator.getBuffer();
+					BufferBuilder vertexbuffer = tessellator.getBuffer();
 					GL11.glDisable(GL11.GL_TEXTURE_2D);
 					vertexbuffer.begin(7, DefaultVertexFormats.POSITION);
 					vertexbuffer.pos(this.posX, this.posY + this.FONT_HEIGHT / 2, 0.0D).endVertex();
@@ -601,7 +601,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
 				if (this.underlineStyle)
 				{
 					tessellator = Tessellator.getInstance();
-					VertexBuffer vertexbuffer = tessellator.getBuffer();
+					BufferBuilder vertexbuffer = tessellator.getBuffer();
 					GL11.glDisable(GL11.GL_TEXTURE_2D);
 					vertexbuffer.begin(7, DefaultVertexFormats.POSITION);
 					int l = this.underlineStyle ? -1 : 0;

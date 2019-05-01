@@ -1,16 +1,22 @@
-/bin
-/eclipse
-/libs/other
-/libs/temp
-/src/main/resources/assets/computronics
-/src/main/resources/assets/galacticraftasteroids
-/src/main/resources/assets/galacticraftcore
-/src/main/resources/assets/galacticraftmars
-/src/main/resources/assets/galacticraftmoon
-/src/main/resources/assets/projecte
-/build
-.gradle
+# eclipse
+bin
+*.launch
 .settings
-.project
+.metadata
 .classpath
-/run
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run

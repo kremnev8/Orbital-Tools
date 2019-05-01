@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.orbitallabs.CommonProxy;
@@ -44,7 +44,7 @@ public class WorldProviderOrbitModif extends WorldProviderOverworldOrbit {
 	{
 		return world;
 	}
-	
+	 
 	@Override
 	public void setDimension(int var1)
 	{
